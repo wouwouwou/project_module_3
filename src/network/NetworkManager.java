@@ -11,41 +11,65 @@ import java.net.UnknownHostException;
  */
 public class NetworkManager {
     private MulticastSocket socket;
+    private PacketHandler packetHandler;
+    private InetAddress group;
 
     public static void main(String[] args){
         NetworkManager networkManager = new NetworkManager();
     }
 
-    public NetworkManager(){
-        // join a Multicast group and send the group salutations
-        String msg = "Hello2";
-        InetAddress group = null;
+    public NetworkManager() {
+        //Get the group address
         try {
-            group = InetAddress.getByName("228.2.2.2");
-            //group = InetAddress.getByName("255.255.255.255");
+            group = InetAddress.getByName(Protocol.GROUP_ADDRESS);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        MulticastSocket s = null;
+
+        //Create the Multicast socket
         try {
-            s = new MulticastSocket(6789);
-            s.joinGroup(group);
-            DatagramPacket hi = new DatagramPacket(msg.getBytes(), msg.length(),
-                    group, 6789);
-            s.send(hi);
-            // get their responses!
-            byte[] buf = new byte[1000];
-            DatagramPacket recv = new DatagramPacket(buf, buf.length);
-            for (int i = 0; i < 2; i++) {
-                s.receive(recv);
-                System.out.println(new String(recv.getData()));
-            }
-            // OK, I'm done talking - leave the group...
-            s.leaveGroup(group);
+            socket = new MulticastSocket(Protocol.GROUP_PORT);
+
+            //Join the multicast group
+            socket.joinGroup(group);
+
+            //Create and start the PacketHandler
+            packetHandler = new PacketHandler(socket, 1000);
+
+
+            /**
+             DatagramPacket hi = new DatagramPacket(msg.getBytes(), msg.length(),
+             group, 6789);
+             s.send(hi);
+             // get their responses!
+             byte[] buf = new byte[1000];
+             DatagramPacket recv = new DatagramPacket(buf, buf.length);
+             for (int i = 0; i < 2; i++) {
+             s.receive(recv);
+             System.out.println(new String(recv.getData()));
+             }
+
+             // OK, I'm done talking - leave the group...
+             s.leaveGroup(group);
+             **/
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
+    public void send(Packet packet){
+        DatagramPacket p = new DatagramPacket(packet.getData(), packet.getData().length,
+                group, Protocol.GROUP_PORT);
+        try {
+            socket.send(p);
+        } catch (IOException e) {
+            System.err.println("The packet could not be sent!");
+            e.printStackTrace();
+        }
+    }
+
+
+    public PacketHandler getPacketHandler() {
+        return packetHandler;
+    }
 }
