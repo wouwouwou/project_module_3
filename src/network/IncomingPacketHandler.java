@@ -10,19 +10,19 @@ import java.util.ArrayList;
 /**
  * Created by gerben on 7-4-15.
  */
-public class PacketHandler implements Runnable {
+public class IncomingPacketHandler implements Runnable {
     private ArrayList<PacketListener> listeners;
     private byte[] buffer;
     private MulticastSocket socket;
     private Thread thread;
 
     /**
-     * Constructs a new PacketHandler, this is done by the NetworkHandler.
-     * The PacketHandler is then started in a new Thread
+     * Constructs a new IncomingPacketHandler, this is done by the NetworkHandler.
+     * The IncomingPacketHandler is then started in a new Thread
      * @param socket
      * @param buffersize
      */
-    public PacketHandler(MulticastSocket socket, int buffersize){
+    public IncomingPacketHandler(MulticastSocket socket, int buffersize){
         this.socket = socket;
         this.buffer = new byte[buffersize];
         this.listeners = new ArrayList<PacketListener>();
