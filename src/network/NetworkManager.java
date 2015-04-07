@@ -13,7 +13,8 @@ import java.net.UnknownHostException;
  */
 public class NetworkManager {
     private MulticastSocket socket;
-    private IncomingPacketHandler packetHandler;
+    private IncomingPacketHandler incomingPacketHandler;
+    private OutgoingPacketHandler outgoingPacketHandler;
     private InetAddress group;
 
     public static void main(String[] args){
@@ -36,7 +37,10 @@ public class NetworkManager {
             socket.joinGroup(group);
 
             //Create and start the IncomingPacketHandler
-            packetHandler = new IncomingPacketHandler(socket, 1000);
+            incomingPacketHandler = new IncomingPacketHandler(socket, 1000);
+
+            //Create and start the OutgoingPacketHandler
+            outgoingPacketHandler = new OutgoingPacketHandler(socket);
 
 
             /**
@@ -60,18 +64,14 @@ public class NetworkManager {
     }
 
     public void send(Packet packet){
-        DatagramPacket p = new DatagramPacket(packet.getData(), packet.getData().length,
-                group, Protocol.GROUP_PORT);
-        try {
-            socket.send(p);
-        } catch (IOException e) {
-            System.err.println("The packet could not be sent!");
-            e.printStackTrace();
-        }
+
+
+        outgoingPacketHandler.send(packet, group);
+
     }
 
 
-    public IncomingPacketHandler getPacketHandler() {
-        return packetHandler;
+    public IncomingPacketHandler getIncomingPacketHandler() {
+        return incomingPacketHandler;
     }
 }

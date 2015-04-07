@@ -22,4 +22,8 @@ public class FloatingPacket extends Packet {
     public long getSentOn(){
         return sentOn;
     }
+
+    public void setSentOn(long sentOn) {
+        this.sentOn = sentOn;
+    }
 }

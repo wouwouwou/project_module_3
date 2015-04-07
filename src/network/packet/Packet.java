@@ -9,6 +9,7 @@ public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
     private byte[] data;
     private long sequenceNumber;
+    private byte destination;
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
@@ -34,6 +35,31 @@ public class Packet {
      */
     public byte[] getData() {
         return this.data;
+    }
+
+
+    public byte[] getSequenceBytes(){
+        byte[] out = new byte[4];
+        out[0] = (byte) (sequenceNumber >> 24);
+        out[1] = (byte) (sequenceNumber >> 16);
+        out[2] = (byte) (sequenceNumber >> 8);
+        out[3] = (byte) (sequenceNumber);
+        return out;
+    }
+
+    /**
+     * Generates a key for use in the map of Floating packets in OutgoingPacketHandler
+     * @return key for use in the outgoing packet handler
+     */
+    public byte[] getFloatingKey(){
+        byte[] out = new byte[5];
+        System.arraycopy(getSequenceBytes(), 0, out, 0, 4);
+        out[4] = destination;
+        return out;
+    }
+
+    public byte getDestination(){
+        return destination;
     }
 
     public byte[] toBytes(){

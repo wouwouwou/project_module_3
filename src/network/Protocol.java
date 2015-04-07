@@ -19,6 +19,11 @@ public class Protocol {
      */
     public static final int GROUP_PORT = 6789;
 
+    /**
+     * This is the Timeout before a packet is resent.
+     */
+    public static final int TIMEOUT = 500;
+
 
 
     // -----<=>-----< Queries >-----<=>----- \\
