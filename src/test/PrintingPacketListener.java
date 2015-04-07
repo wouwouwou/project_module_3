@@ -9,7 +9,7 @@ import network.PacketListener;
 public class PrintingPacketListener implements PacketListener{
 
     @Override
-    public void onRecieve(Packet packet) {
+    public void onReceive(Packet packet) {
         System.out.println(new String(packet.getData()));
     }
 }

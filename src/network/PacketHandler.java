@@ -61,7 +61,7 @@ public class PacketHandler implements Runnable {
                 socket.receive(recv);
                 packet = new Packet(recv.getData());
                 for(PacketListener listener: listeners){
-                    listener.onRecieve(packet);
+                    listener.onReceive(packet);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
