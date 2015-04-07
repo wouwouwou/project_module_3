@@ -1,6 +1,7 @@
 package network;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Holds constants used in the Protocol and network.
@@ -18,4 +19,15 @@ public class Protocol {
      */
     public static final int GROUP_PORT = 6789;
 
+
+
+    // -----<=>-----< Queries >-----<=>----- \\
+    /**
+     * Getter for the InetAddress of the multicast network
+     * @return InetAddress of the group from the GROUP_ADDRESS String
+     * @throws UnknownHostException
+     */
+    public InetAddress getGroupAddress() throws UnknownHostException {
+        return InetAddress.getByName(GROUP_ADDRESS);
+    }
 }
