@@ -21,7 +21,7 @@ public class NetworkManager {
         String msg = "Hello2";
         InetAddress group = null;
         try {
-            group = InetAddress.getByName("228.5.6.7");
+            group = InetAddress.getByName("228.2.2.2");
             //group = InetAddress.getByName("255.255.255.255");
         } catch (UnknownHostException e) {
             e.printStackTrace();
