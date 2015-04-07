@@ -1,5 +1,8 @@
 package network;
 
+import network.packet.FloatingPacket;
+import network.packet.Packet;
+
 import java.net.MulticastSocket;
 import java.util.HashMap;
 
