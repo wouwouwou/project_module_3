@@ -6,11 +6,11 @@ package network;
  * Created by tim on 7-4-15.
  */
 public class Packet {
-    // -----<=>-----< Fields >-----<=>-----
+    // -----<=>-----< Fields >-----<=>----- \\
     private byte[] dt;
 
 
-    // -----<=>-----< Constructors >-----<=>-----
+    // -----<=>-----< Constructors >-----<=>----- \\
 
     public Packet() {}
 
@@ -18,7 +18,7 @@ public class Packet {
         this.dt = dt;
     }
 
-
+    // -----<=>-----< Methods >-----<=>----- \\
     /**
      * Prints the data in a packet to the standart out (as a String)
      */
@@ -26,6 +26,8 @@ public class Packet {
         System.out.println(new String(this.getData()));
     }
 
+
+    // -----<=>-----< Queries >-----<=>----- \\
     /**
      * Getter for the data field (byte[]) of a packet
      * @return byte[] with the data of the packet
