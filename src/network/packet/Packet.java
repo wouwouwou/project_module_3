@@ -8,7 +8,7 @@ package network.packet;
 public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
     private byte[] dt;
-    private byte src; //Not used yet
+
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
@@ -36,11 +36,4 @@ public class Packet {
         return this.dt;
     }
 
-    /**
-     * Getter for the source field (String) of this packet
-     * @return String the source address of this packet
-     */
-    public byte getSource() {
-        return this.src;
-    }
 }
