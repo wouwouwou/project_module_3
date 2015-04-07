@@ -8,7 +8,6 @@ package network;
 public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
     private byte[] data;
-    private String src; //Not used yet
     private long sequenceNumber;
 
     // -----<=>-----< Constructors >-----<=>----- \\
@@ -35,18 +34,6 @@ public class Packet {
      */
     public byte[] getData() {
         return this.data;
-    }
-
-    /**
-     * Getter for the source field (String) of this packet
-     * @return String the source address of this packet
-     */
-    public String getSource() {
-        return this.src;
-    }
-
-    public long getSequenceNumber(){
-        return sequenceNumber;
     }
 
     public byte[] toBytes(){

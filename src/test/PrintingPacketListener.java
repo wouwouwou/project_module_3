@@ -1,6 +1,6 @@
 package test;
 
-import network.Packet;
+import network.packet.Packet;
 import network.PacketListener;
 
 /**
