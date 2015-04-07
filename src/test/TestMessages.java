@@ -4,6 +4,7 @@ import network.NetworkManager;
 import network.Packet;
 
 /**
+ * Tests the multicast adhoc network, sending 10 numbers to all subscribers
  * Created by gerben on 7-4-15.
  */
 public class TestMessages {
