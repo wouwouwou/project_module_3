@@ -1,7 +1,7 @@
 package test;
 
 import network.NetworkManager;
-import network.Packet;
+import network.packet.Packet;
 
 /**
  * Tests the multicast adhoc network, sending 10 numbers to all subscribers

@@ -1,5 +1,7 @@
 package network;
 
+import network.packet.Packet;
+
 /**
  * Created by gerben on 7-4-15.
  */

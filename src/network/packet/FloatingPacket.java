@@ -1,4 +1,4 @@
-package network;
+package network.packet;
 
 /**
  * Extends Packet, a floating packet has a timestamp.
