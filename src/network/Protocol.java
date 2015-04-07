@@ -30,4 +30,8 @@ public class Protocol {
     public InetAddress getGroupAddress() throws UnknownHostException {
         return InetAddress.getByName(GROUP_ADDRESS);
     }
+
+    public int getId() {
+        return 0; //TODO return the Id of this client
+    }
 }
