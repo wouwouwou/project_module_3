@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
  */
 public class NetworkManager {
     private MulticastSocket socket;
-    private PacketHandler packetHandler;
+    private IncomingPacketHandler packetHandler;
     private InetAddress group;
 
     public static void main(String[] args){
@@ -33,8 +33,8 @@ public class NetworkManager {
             //Join the multicast group
             socket.joinGroup(group);
 
-            //Create and start the PacketHandler
-            packetHandler = new PacketHandler(socket, 1000);
+            //Create and start the IncomingPacketHandler
+            packetHandler = new IncomingPacketHandler(socket, 1000);
 
 
             /**
@@ -69,7 +69,7 @@ public class NetworkManager {
     }
 
 
-    public PacketHandler getPacketHandler() {
+    public IncomingPacketHandler getPacketHandler() {
         return packetHandler;
     }
 }
