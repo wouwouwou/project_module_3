@@ -7,15 +7,16 @@ package network;
  */
 public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
-    private byte[] dt;
+    private byte[] data;
     private String src; //Not used yet
+    private long sequenceNumber;
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
     public Packet() {}
 
-    public Packet(byte[] dt) {
-        this.dt = dt;
+    public Packet(byte[] data) {
+        this.data = data;
     }
 
     // -----<=>-----< Methods >-----<=>----- \\
@@ -33,7 +34,7 @@ public class Packet {
      * @return byte[] with the data of the packet
      */
     public byte[] getData() {
-        return this.dt;
+        return this.data;
     }
 
     /**
@@ -42,5 +43,15 @@ public class Packet {
      */
     public String getSource() {
         return this.src;
+    }
+
+    public long getSequenceNumber(){
+        return sequenceNumber;
+    }
+
+    public byte[] toBytes(){
+        //Shape the packet
+        //TODO: Put the whole packet in a byte[]
+        return this.data;
     }
 }
