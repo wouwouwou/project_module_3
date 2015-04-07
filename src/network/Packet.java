@@ -8,7 +8,7 @@ package network;
 public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
     private byte[] dt;
-
+    private String src; //Not used yet
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
@@ -20,7 +20,7 @@ public class Packet {
 
     // -----<=>-----< Methods >-----<=>----- \\
     /**
-     * Prints the data in a packet to the standart out (as a String)
+     * Prints the data in a packet to the standard out (as a String)
      */
     public void print() {
         System.out.println(new String(this.getData()));
@@ -29,10 +29,18 @@ public class Packet {
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**
-     * Getter for the data field (byte[]) of a packet
+     * Getter for the data field (byte[]) of this packet
      * @return byte[] with the data of the packet
      */
     public byte[] getData() {
         return this.dt;
+    }
+
+    /**
+     * Getter for the source field (String) of this packet
+     * @return String the source address of this packet
+     */
+    public String getSource() {
+        return this.src;
     }
 }
