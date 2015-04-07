@@ -18,11 +18,17 @@ public class TestMessages {
         String message;
 
         //Send packets
-
-        for (int i = 0; i < 10; i++) {
-            message = String.format("Number: %s", i);
-            packet = new Packet(message.getBytes());
-            networkManager.send(packet);
+        while(true) {
+            for (int i = 0; i < 10000; i++) {
+                message = String.format("Number: %s", i);
+                packet = new Packet(message.getBytes());
+                networkManager.send(packet);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
