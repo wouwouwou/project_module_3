@@ -1,17 +1,36 @@
 package network;
 
 /**
+ * Represents a packet
  * Sets up a basic packet, for easy construction and reading
- * Created by root on 7-4-15.
+ * Created by tim on 7-4-15.
  */
 public class Packet {
+    // -----<=>-----< Fields >-----<=>-----
+    private byte[] dt;
 
-    public Packet() {
 
-    }
+    // -----<=>-----< Constructors >-----<=>-----
+
+    public Packet() {}
 
     public Packet(byte[] dt) {
-
+        this.dt = dt;
     }
 
+
+    /**
+     * Prints the data in a packet to the standart out (as a String)
+     */
+    public void print() {
+        System.out.println(new String(this.getData()));
+    }
+
+    /**
+     * Getter for the data field (byte[]) of a packet
+     * @return byte[] with the data of the packet
+     */
+    public byte[] getData() {
+        return this.dt;
+    }
 }
