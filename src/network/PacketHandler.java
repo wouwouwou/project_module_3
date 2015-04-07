@@ -14,10 +14,20 @@ public class PacketHandler implements Runnable {
     private ArrayList<PacketListener> listeners;
     private byte[] buffer;
     private MulticastSocket socket;
+    private Thread thread;
 
+    /**
+     * Constructs a new PacketHandler, this is done by the NetworkHandler.
+     * The PacketHandler is then started in a new Thread
+     * @param socket
+     * @param buffersize
+     */
     public PacketHandler(MulticastSocket socket, int buffersize){
         this.socket = socket;
         this.buffer = new byte[buffersize];
+        this.listeners = new ArrayList<PacketListener>();
+        this.thread = new Thread(this);
+        thread.start();
     }
 
     public void addListener(PacketListener listener){
@@ -26,6 +36,18 @@ public class PacketHandler implements Runnable {
 
     public void removeListener(PacketListener listener){
         listeners.remove(listener);
+    }
+
+    public Thread getThread(){
+        return thread;
+    }
+
+    public ArrayList<PacketListener> getListeners(){
+        return listeners;
+    }
+
+    public byte[] getBuffer(){
+        return buffer;
     }
 
     @Override
