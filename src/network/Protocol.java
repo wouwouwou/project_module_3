@@ -31,6 +31,10 @@ public class Protocol {
         return InetAddress.getByName(GROUP_ADDRESS);
     }
 
+    /**
+     * Getter for the Client id
+     * @return int The Identifier of this client
+     */
     public int getId() {
         return 0; //TODO return the Id of this client
     }
