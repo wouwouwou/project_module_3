@@ -20,12 +20,26 @@ public class NetworkManager {
 
     // -----<=>-----< Main >-----<=>----- \\
 
+    /**
+     * Main method, to be changed
+     * @param args
+     */
     public static void main(String[] args){
         NetworkManager networkManager = new NetworkManager();
     }
 
     // -----<=>-----< Constructor >-----<=>----- \\
 
+    /**
+     * Builds a network manager
+     * <p>
+     *     Initializes the network manager.
+     *      - Sets the multicast group address
+     *      - Sets up the multicast group socket via the multicast group port
+     *      - Sets the Protocol.CLIENT_ID
+     *      - Joins the multicast group and sets up its handlers
+     * </p>
+     */
     public NetworkManager() {
         //Get the group address
         try {
@@ -75,8 +89,11 @@ public class NetworkManager {
 
     // -----<=>-----< Methods >-----<=>----- \\
 
+    /**
+     * Sends a packet via the broadcast socket
+     * @param packet Packet
+     */
     public void send(Packet packet){
-
 
         outgoingPacketHandler.send(packet, group);
 
