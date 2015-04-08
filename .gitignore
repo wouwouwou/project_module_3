@@ -1,4 +1,4 @@
-*.class
+out/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -13,3 +13,9 @@ hs_err_pid*
 
 # IntelliJ IDEA 14.1.1 #
 .idea/
+
+# Visual Paradigm annoying files
+*.vpp.working
+*.vpp~2
+*.vpp~3
+*.vpp~4
