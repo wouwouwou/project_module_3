@@ -69,6 +69,10 @@ public class IncomingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Prints an array to the standard out
+     * @param objects Object[] Array to be printed
+     */
     public static void printArray(Object[] objects){
         String out = "[";
         for (Object b: objects){
@@ -78,6 +82,10 @@ public class IncomingPacketHandler extends PacketHandler {
         System.out.println(out);
     }
 
+    /**
+     * Prints an byte[] to the standard out
+     * @param objects byte[] to be printed
+     */
     public static void printArray(byte[] objects){
         String out = "[";
         for (Object b: objects){
@@ -87,6 +95,13 @@ public class IncomingPacketHandler extends PacketHandler {
         System.out.println(out);
     }
 
+    /**
+     * Handles an incoming packet
+     * <p>
+     *     Discern which type the incoming packet is, and calls the appropriate handler method.
+     * </p>
+     * @param packet byte[] A received packet
+     */
     public void handle(byte[] packet){
         switch (packet[0]){
             case Protocol.DISCOVERY_PACKET:
@@ -102,6 +117,13 @@ public class IncomingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Handler for packets of the Protocol.DISCOVERY_PACKET type
+     * <p>
+     *     Reads a discovery packet, editing the forwarding table if necessary or dropping it
+     * </p>
+     * @param packet byte[] The packet to be handled
+     */
     public void handleDiscovery(byte[] packet){
         short seq = (short) ((Packet.fixSign(packet[2]) << 8) + Packet.fixSign(packet[3]));
         byte length = packet[1];
