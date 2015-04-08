@@ -55,6 +55,7 @@ public class IncomingPacketHandler extends PacketHandler {
         while(true){
             try {
                 socket.receive(recv);
+                handle(recv.getData());
                 packet = new Packet(recv.getData());
                 for(PacketListener listener: listeners){
                     listener.onReceive(packet);
@@ -77,6 +78,7 @@ public class IncomingPacketHandler extends PacketHandler {
     public void handle(byte[] packet){
         switch (packet[0]){
             case Protocol.DISCOVERY_PACKET:
+                System.out.println("New Discovery Packet recieved");
                 handleDiscovery(packet);
                 break;
             case Protocol.COMMUNICATION_PACKET:
@@ -102,7 +104,7 @@ public class IncomingPacketHandler extends PacketHandler {
             forward = true;
 
             //Add all the new entries
-            for(int i = 0; i < length; i+=3){
+            for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < length; i+=3){
                 networkManager.addTableEntry(new byte[]{packet[i], (byte) (packet[i+1] + 1), packet[i+2]});
             }
 
@@ -110,7 +112,7 @@ public class IncomingPacketHandler extends PacketHandler {
         } else if (seq == networkManager.getDiscoverySequenceNum()){
             //If this is just an addition to the existing table
 
-            for(int i = 0; i < length; i+=3){
+            for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < length; i+=3){
 
                 //if the cost if the new entry is lower, use it and forward it
                 if(networkManager.getTableEntryByDestination(packet[0]) != null && packet[i+1] > networkManager.getTableEntryByDestination(packet[i])[1] + 1) {
