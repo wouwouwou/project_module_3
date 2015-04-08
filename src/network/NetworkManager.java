@@ -24,6 +24,7 @@ public class NetworkManager {
     private ArrayList<Byte> routingTable;
     private short discoverySequenceNum = 0;
     private int sequenceNum;
+    private long lastTableDrop = 0;
 
     // -----<=>-----< Main >-----<=>----- \\
     /**
@@ -215,6 +216,7 @@ public class NetworkManager {
      */
     public void dropTable(){
         //Clear the table and
+        lastTableDrop = System.currentTimeMillis();
         routingTable.clear();
         routingTable.add((byte) Protocol.CLIENT_ID);
         routingTable.add((byte) 0);
@@ -229,7 +231,7 @@ public class NetworkManager {
 
         packet[1] = (byte) routingTable.size();
 
-        packet[2] = (byte) (discoverySequenceNum >> 8);
+        packet[2] = (byte) (discoverySequenceNum << 8);
 
         packet[3] = (byte) discoverySequenceNum;
 
@@ -259,6 +261,11 @@ public class NetworkManager {
     }
 
     // -----<=>-----< Getters & Setters >-----<=>----- \\
+
+    public long getLastTableDrop(){
+        return lastTableDrop;
+    }
+
     public IncomingPacketHandler getIncomingPacketHandler() {
         return incomingPacketHandler;
     }

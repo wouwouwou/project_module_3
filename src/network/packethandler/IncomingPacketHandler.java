@@ -143,6 +143,7 @@ public class IncomingPacketHandler extends PacketHandler {
             System.out.println("Dropping tables");
             //D-D-D-D-D-Drop that bass, ehh... table ;D
             networkManager.dropTable();
+            networkManager.setDiscoverySequenceNum(seq);
 
             //This an update, so we have to forward
             forward = true;
@@ -195,7 +196,8 @@ public class IncomingPacketHandler extends PacketHandler {
             } else if(packet[8] == Protocol.Flags.ACK){
 
                 try {
-                    networkManager.getOutgoingPacketHandler().handleACK(new Packet(packet));
+                    Packet original = networkManager.getOutgoingPacketHandler().handleACK(new Packet(packet));
+                    notifyAckListeners(original);
                 } catch (InvalidPacketException e) {
                     e.printStackTrace();
                 }
