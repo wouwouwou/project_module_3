@@ -1,6 +1,10 @@
-package network;
+package network.packethandler;
 
+import network.NetworkManager;
+import network.PacketListener;
+import network.Protocol;
 import network.packet.Packet;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;

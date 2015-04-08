@@ -1,6 +1,8 @@
 package network;
 
 import network.packet.Packet;
+import network.packethandler.IncomingPacketHandler;
+import network.packethandler.OutgoingPacketHandler;
 
 import java.io.IOException;
 import java.net.*;

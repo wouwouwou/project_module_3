@@ -1,7 +1,10 @@
-package network;
+package network.packethandler;
 
+import network.NetworkManager;
+import network.Protocol;
 import network.packet.FloatingPacket;
 import network.packet.Packet;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -12,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Gerben Meijer
  * @since 7-4-15
  */
-public class OutgoingPacketHandler extends PacketHandler{
+public class OutgoingPacketHandler extends PacketHandler {
 
     private final ConcurrentHashMap<byte[], FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
     private NetworkManager networkManager;
