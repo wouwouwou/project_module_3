@@ -1,7 +1,8 @@
 package network.packethandler;
 
+import network.AckListener;
 import network.NetworkManager;
-import network.PacketListener;
+import network.DataListener;
 import network.Protocol;
 import network.packet.Packet;
 
@@ -17,7 +18,8 @@ import java.util.ArrayList;
 public class IncomingPacketHandler extends PacketHandler {
 
     // Fields
-    private ArrayList<PacketListener> listeners;
+    private ArrayList<DataListener> dataListeners;
+    private ArrayList<AckListener> ackListeners;
     private byte[] buffer;
     private NetworkManager networkManager;
 
@@ -31,20 +33,29 @@ public class IncomingPacketHandler extends PacketHandler {
     public IncomingPacketHandler(MulticastSocket socket, NetworkManager networkManager, int buffersize){
         super(socket);
         this.buffer = new byte[buffersize];
-        this.listeners = new ArrayList<>();
+        this.dataListeners = new ArrayList<>();
+        this.ackListeners = new ArrayList<>();
         this.networkManager = networkManager;
     }
 
-    public void addListener(PacketListener listener){
-        listeners.add(listener);
+    public void addDataListener(DataListener listener){
+        dataListeners.add(listener);
     }
 
-    public void removeListener(PacketListener listener){
-        listeners.remove(listener);
+    public void addAckListener(AckListener listener){
+        ackListeners.add(listener);
     }
 
-    public ArrayList<PacketListener> getListeners(){
-        return listeners;
+    public void removeDataListener(DataListener listener){
+        dataListeners.remove(listener);
+    }
+
+    public void removeAckListener(AckListener listener){
+        ackListeners.remove(listener);
+    }
+
+    public ArrayList<DataListener> getDataListeners(){
+        return dataListeners;
     }
 
     public byte[] getBuffer(){
@@ -59,11 +70,7 @@ public class IncomingPacketHandler extends PacketHandler {
             try {
                 socket.receive(recv);
                 handle(recv.getData());
-                packet = new Packet(recv.getData());
-                for(PacketListener listener: listeners){
-                    listener.onReceive(packet);
-                }
-            } catch (IOException | Packet.InvalidPacketException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -150,18 +157,40 @@ public class IncomingPacketHandler extends PacketHandler {
 
     public void handleCommunication(byte[] packet){
         if(packet[3] == networkManager.getClientId()){
-            if (packet[8] == Protocol.flags.DATA){
+            if (packet[8] == Protocol.Flags.DATA){
+
                 try {
-                    Packet ack = networkManager.constructACK(new Packet(packet));
+                    Packet p = new Packet(packet);
+                    Packet ack = networkManager.constructACK(p);
                     networkManager.send(ack);
+                    notifyDataListeners(p);
 
                 } catch (Packet.InvalidPacketException e) {
                     e.printStackTrace();
                 }
-            } else if(packet[8] == Protocol.flags.ACK){
-                //Handle ACK
+
+            } else if(packet[8] == Protocol.Flags.ACK){
+
+                try {
+                    networkManager.getOutgoingPacketHandler().handleACK(new Packet(packet));
+                } catch (Packet.InvalidPacketException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
 
+    }
+
+    private void notifyDataListeners(Packet packet) {
+        for(DataListener listener: dataListeners){
+            listener.onReceive(packet);
+        }
+    }
+
+    private void notifyAckListeners(Packet packet) {
+        for(AckListener listener: ackListeners){
+            listener.onAck(packet);
+        }
     }
 }

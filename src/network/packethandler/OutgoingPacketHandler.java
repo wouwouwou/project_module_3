@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -18,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OutgoingPacketHandler extends PacketHandler {
 
     // Fields
-    private final ConcurrentHashMap<byte[], FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<List<Byte>, FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
     private NetworkManager networkManager;
 
     // Constructor(s)
@@ -63,7 +65,7 @@ public class OutgoingPacketHandler extends PacketHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(packet.getFlags() == Protocol.flags.DATA) {
+            if(packet.getFlags() == Protocol.Flags.DATA) {
                 try {
                     floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
                 } catch (Packet.InvalidPacketException e) {
@@ -73,26 +75,14 @@ public class OutgoingPacketHandler extends PacketHandler {
         }
     }
 
-    /**
-     * Updates the floatingPacketMap
-     * <p>
-     *     Loops over the whole floatingPacketMap
-     *     Checking if the @param packet has the same Sequence number
-     *     If a match is found, the tentative is removed from the map and the method stops.
-     * </p>
-     * @param packet Packet an Acknowledgment that has to be checked
-     * @return boolean if floatingPacketMap is updated
-     */
-    public boolean updateFloatingPacketMap(Packet packet) {
-        synchronized (floatingPacketMap) {
-            for (byte[] tentativeSeq : floatingPacketMap.keySet()) {
-                if (packet.getSequenceBytes() == tentativeSeq) {
-                    floatingPacketMap.remove(tentativeSeq);
-                    return true;
-                }
-            }
+    public void handleACK(Packet ackPacket){
+        System.out.println("Ack received!");
+        System.out.println(floatingPacketMap.containsKey(ackPacket.getFloatingKey()));
+        if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
+            System.out.println("Removing..");
+            floatingPacketMap.remove(ackPacket.getFloatingKey());
         }
-        return false;
     }
+
 
 }

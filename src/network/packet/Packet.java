@@ -2,6 +2,10 @@ package network.packet;
 
 import network.Protocol;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Represents a packet
  * Sets up a basic packet, for easy construction and reading
@@ -75,7 +79,7 @@ public class Packet {
 
         flags = packet[8];
 
-        int dataLength = (fixSign(packet[9]) <<8) + (fixSign(packet[10]));
+        int dataLength = (fixSign(packet[9]) << 8) + (fixSign(packet[10]));
 
         nextHop = packet[11];
 
@@ -160,13 +164,29 @@ public class Packet {
      * Generates a key for use in the map of Floating packets in OutgoingPacketHandler
      * @return key for use in the outgoing packet handler
      */
-    public byte[] getFloatingKey(){
-        byte[] out = new byte[5];
-        System.arraycopy(getSequenceBytes(), 0, out, 0, 4);
+    public List<Byte> getFloatingKey(){
+        Byte[] out = new Byte[5];
+        for (int i = 0; i < getSequenceBytes().length; i++) {
+            out[i] = getSequenceBytes()[i];
+        }
+
         out[4] = destination;
-        return out;
+        return Arrays.asList(out);
     }
 
+    public String toString(){
+        String out = "Packet: ";
+        out += String.format("\t type: %s\n", type);
+        out += String.format("\t data type: %s\n", dataType);
+        out += String.format("\t source: %s\n", source);
+        out += String.format("\t destination: %s\n", destination);
+        out += String.format("\t sequence number: %s\n", sequenceNumber);
+        out += String.format("\t flags: %s\n", flags);
+        out += String.format("\t data length: %s\n", data.length);
+        out += String.format("\t next hop: %s\n", nextHop);
+
+        return out;
+    }
 
     // -----<=>-----< Setters & Getters >-----<=>----- \\
     public void setData(byte[] data) {
