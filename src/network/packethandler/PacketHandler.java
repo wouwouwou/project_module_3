@@ -1,4 +1,4 @@
-package network;
+package network.packethandler;
 
 import java.net.MulticastSocket;
 
