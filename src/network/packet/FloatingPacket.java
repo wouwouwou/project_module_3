@@ -1,6 +1,8 @@
 package network.packet;
 
 
+import exceptions.network.InvalidPacketException;
+
 /**
  * Extends Packet, a floating packet has a timestamp.
  * <p>
@@ -33,7 +35,7 @@ public class FloatingPacket extends Packet {
      * @param data byte[]
      */
     //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
-    public FloatingPacket(byte[] data) {
+    public FloatingPacket(byte[] data) throws InvalidPacketException {
         super(data);
         this.sentOn = System.currentTimeMillis();
     }

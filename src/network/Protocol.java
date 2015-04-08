@@ -27,7 +27,7 @@ public class Protocol {
      */
     public static final int TIMEOUT = 5000;
 
-    public static final int COMMUNICATION_HEADER_LENGTH = 11;
+    public static final int COMMUNICATION_HEADER_LENGTH = 12;
     public static final int DISCOVERY_HEADER_LENGTH = 4;
 
     public static int CLIENT_ID = 0;
@@ -39,9 +39,15 @@ public class Protocol {
 
 
     //Internal classes
-    public static class flags{
+    public static class Flags {
         public static byte DATA = 1;
         public static byte ACK = 2;
+    }
+
+    public static class DataType{
+        public static byte PING = 1;
+        public static byte TEXT = 2;
+        public static byte FILE = 3;
     }
 
     // -----<=>-----< Queries >-----<=>----- \\

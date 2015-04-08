@@ -1,5 +1,6 @@
 package network;
 
+import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
@@ -22,7 +23,7 @@ public class NetworkManager {
     private InetAddress group;
     private ArrayList<Byte> routingTable;
     private short discoverySequenceNum = 0;
-    private int sequenceNum = Protocol.CLIENT_ID << 24;
+    private int sequenceNum;
 
     // -----<=>-----< Main >-----<=>----- \\
     /**
@@ -67,6 +68,7 @@ public class NetworkManager {
             //Get our client ID and set Protocol.CLIENT_ID
             Protocol.CLIENT_ID = this.getClientId();
             System.out.println("Init with client id: " + Protocol.CLIENT_ID);
+            sequenceNum = (Protocol.CLIENT_ID << 24);
 
 
             //Create and start the IncomingPacketHandler
@@ -78,7 +80,6 @@ public class NetworkManager {
             //Fill the table (by dropping it) and send it
             dropTable();
             sendTable();
-
 
             /**
              DatagramPacket hi = new DatagramPacket(msg.getBytes(), msg.length(),
@@ -220,6 +221,12 @@ public class NetworkManager {
         routingTable.add((byte) Protocol.CLIENT_ID);
     }
 
+    /**
+     * Broadcasts a Protocol.DISCOVERY_PACKET
+     * <p>
+     *     Constructs a Protocol.DISCOVERY_PACKET type packet that broadcasts the current routingTable
+     * </p>
+     */
     public void sendTable(){
         System.out.println("Sending table");
         byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
@@ -251,7 +258,15 @@ public class NetworkManager {
         }
     }
 
+    /**
+     * Increments the sequenceNumber
+     * <p>
+     *      Increments the sequenceNumber with one, and prints the old sequenceNumber to the standard out
+     * </p>
+     * @return int sequenceNumber + 1
+     */
     public int nextSequenceNum(){
+        System.out.println(sequenceNum);
         sequenceNum += 1;
         return sequenceNum;
     }
@@ -278,7 +293,7 @@ public class NetworkManager {
     }
 
 
-    public Packet constructPacket(byte destination, byte dataType, byte[] data){
+    public Packet constructPacket(byte destination, byte dataType, byte[] data) throws IOException {
         Packet packet = new Packet();
         packet.setDataType(dataType);
         packet.setData(data);
@@ -288,24 +303,34 @@ public class NetworkManager {
         packet.setSequenceNumber(nextSequenceNum());
         byte[] route = getTableEntryByDestination(destination);
         if(route == null){
-            return null;
+            throw new IOException(String.format("Destination %s unreachable.", destination));
         }
         packet.setNextHop(route[2]);
-        packet.setFlags(Protocol.flags.DATA);
+        packet.setFlags(Protocol.Flags.DATA);
         return packet;
     }
 
     public Packet constructACK(Packet packet){
-        packet.setData(new byte[0]);
-        packet.setDestination(packet.getSource());
-        packet.setSource((byte) Protocol.CLIENT_ID);
-        packet.setType(Protocol.COMMUNICATION_PACKET);
-        byte[] route = getTableEntryByDestination(packet.getDestination());
-        if(route == null){
-            return null;
+        try {
+            packet = new Packet(packet.toBytes());
+            packet.setData(new byte[0]);
+            packet.setDestination(packet.getSource());
+            packet.setSource((byte) Protocol.CLIENT_ID);
+            packet.setType(Protocol.COMMUNICATION_PACKET);
+            byte[] route = getTableEntryByDestination(packet.getDestination());
+            if(route == null){
+                return null;
+            }
+            packet.setNextHop(route[2]);
+            packet.setFlags(Protocol.Flags.ACK);
+            return packet;
+        } catch (InvalidPacketException e) {
+            e.printStackTrace();
         }
-        packet.setNextHop(route[2]);
-        packet.setFlags(Protocol.flags.ACK);
-        return packet;
+        return null;
+    }
+
+    public OutgoingPacketHandler getOutgoingPacketHandler() {
+        return outgoingPacketHandler;
     }
 }
