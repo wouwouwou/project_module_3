@@ -78,6 +78,15 @@ public class IncomingPacketHandler extends PacketHandler {
         System.out.println(out);
     }
 
+    public static void printArray(byte[] objects){
+        String out = "[";
+        for (Object b: objects){
+            out += b + " ";
+        }
+        out += "]";
+        System.out.println(out);
+    }
+
     public void handle(byte[] packet){
         switch (packet[0]){
             case Protocol.DISCOVERY_PACKET:
@@ -97,6 +106,7 @@ public class IncomingPacketHandler extends PacketHandler {
         short seq = (short) ((Packet.fixSign(packet[2]) << 8) + Packet.fixSign(packet[3]));
         byte length = packet[1];
         boolean forward = false;
+        IncomingPacketHandler.printArray(packet);
         System.out.printf("Discovery Packet: {seq: %s, length: %s}\n", seq, length);
 
         if(seq > networkManager.getDiscoverySequenceNum()){
@@ -120,7 +130,7 @@ public class IncomingPacketHandler extends PacketHandler {
             for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < length; i+=3){
 
                 //if the cost if the new entry is lower, use it and forward it
-                if(networkManager.getTableEntryByDestination(packet[0]) != null && packet[i+1] > networkManager.getTableEntryByDestination(packet[i])[1] + 1) {
+                if(networkManager.getTableEntryByDestination(packet[0]) == null || packet[i+1] > networkManager.getTableEntryByDestination(packet[i])[1] + 1) {
                     networkManager.addTableEntry(new byte[]{packet[i], (byte) (packet[i + 1] + 1), packet[i + 2]});
                     forward = true;
                 }

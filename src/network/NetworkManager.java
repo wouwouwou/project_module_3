@@ -138,6 +138,7 @@ public class NetworkManager {
 
     // Adds or replaces a table entry
     public void addTableEntry(byte[] entry){
+        System.out.println("Adding table entry");
         if(entry.length == 3){
             int index = getTableIndexByDestination(entry[0]);
             if(index == -1) {
@@ -202,7 +203,7 @@ public class NetworkManager {
 
         System.arraycopy(table, 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
 
-
+        IncomingPacketHandler.printArray(routingTable.toArray());
         try {
             socket.send(new DatagramPacket(packet, packet.length, group, Protocol.GROUP_PORT));
         } catch (IOException e) {
