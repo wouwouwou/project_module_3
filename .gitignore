@@ -13,6 +13,7 @@ hs_err_pid*
 
 # IntelliJ IDEA 14.1.1 #
 .idea/
+*.iml
 
 # Visual Paradigm annoying files
 *.vpp.working
