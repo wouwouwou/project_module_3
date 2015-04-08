@@ -14,8 +14,8 @@ import java.util.Enumeration;
  * @since 7-4-15
  */
 public class NetworkManager {
-    // -----<=>-----< Fields >-----<=>----- \\
 
+    // -----<=>-----< Fields >-----<=>----- \\
     private MulticastSocket socket;
     private IncomingPacketHandler incomingPacketHandler;
     private OutgoingPacketHandler outgoingPacketHandler;
@@ -24,17 +24,16 @@ public class NetworkManager {
     private short discoverySequenceNum = 0;
 
     // -----<=>-----< Main >-----<=>----- \\
-
     /**
      * Main method, to be changed
      * @param args
      */
+    //TODO Main method, to be changed
     public static void main(String[] args){
         NetworkManager networkManager = new NetworkManager();
     }
 
-    // -----<=>-----< Constructor >-----<=>----- \\
-
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * Builds a network manager
      * <p>
@@ -100,7 +99,6 @@ public class NetworkManager {
     }
 
     // -----<=>-----< Methods >-----<=>----- \\
-
     /**
      * Sends a packet via the broadcast socket
      * @param packet Packet
@@ -112,7 +110,6 @@ public class NetworkManager {
     }
 
     // -----<=>-----< Queries >-----<=>----- \\
-
     /**
      * Returns the client id, taken from the ip address
      * <p>
@@ -215,7 +212,6 @@ public class NetworkManager {
 
 
     // -----<=>-----< Getters & Setters >-----<=>----- \\
-
     public IncomingPacketHandler getIncomingPacketHandler() {
         return incomingPacketHandler;
     }
