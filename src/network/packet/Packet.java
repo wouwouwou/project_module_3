@@ -21,6 +21,7 @@ public class Packet {
     private byte source = 0;
     private byte destination = 0;
     private byte flags = 0;
+    private byte nextHop = 0;
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
@@ -84,6 +85,8 @@ public class Packet {
 
         int dataLength = (fixSign(packet[9]) <<8) + (fixSign(packet[10]));
 
+        nextHop = packet[11];
+
         data = new byte[dataLength];
 
         System.arraycopy(packet, Protocol.COMMUNICATION_HEADER_LENGTH, data, 0, dataLength);
@@ -119,6 +122,8 @@ public class Packet {
 
         out[9] = (byte) (data.length >> 8);
         out[10] = (byte) (data.length);
+
+        out[11] = nextHop;
 
         System.arraycopy(data, 0, out, Protocol.COMMUNICATION_HEADER_LENGTH, data.length);
 
@@ -222,5 +227,13 @@ public class Packet {
 
     public void setFlags(byte flags) {
         this.flags = flags;
+    }
+
+    public byte getNextHop() {
+        return nextHop;
+    }
+
+    public void setNextHop(byte nextHop) {
+        this.nextHop = nextHop;
     }
 }

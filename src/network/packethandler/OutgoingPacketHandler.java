@@ -34,7 +34,7 @@ public class OutgoingPacketHandler extends PacketHandler {
             synchronized (floatingPacketMap) {
                 for (FloatingPacket packet : floatingPacketMap.values()) {
                     if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
-                        this.send(packet, networkManager.getGroup());
+                        this.send(packet);
                         packet.setSentOn(System.currentTimeMillis());
                     }
                 }
@@ -48,14 +48,25 @@ public class OutgoingPacketHandler extends PacketHandler {
         }
     }
 
-    public void send(Packet packet, InetAddress group){
+    /**
+     * Broadcasts a packet over a Multicast group network
+     * <p>
+     *     Broadcasted packets will be added to a tentative list
+     *     As long as a tentative packet has not been received, it will be retransmitted
+     * </p>
+     * @param packet Packet the packet that will be broadcasted to the multicast network
+     */
+    public void send(Packet packet){
+        InetAddress group = networkManager.getGroup();
         synchronized (floatingPacketMap) {
             try {
                 socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+            if(packet.getFlags() == Protocol.flags.DATA) {
+                floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+            }
         }
     }
 
@@ -69,7 +80,7 @@ public class OutgoingPacketHandler extends PacketHandler {
      * @param packet Packet an Acknowledgment that has to be checked
      * @return boolean if floatingPacketMap is updated
      */
-    public boolean updateTentative(Packet packet) {
+    public boolean updateFloatingPacketMap(Packet packet) {
         synchronized (floatingPacketMap) {
             for (byte[] tentativeSeq : floatingPacketMap.keySet()) {
                 if (packet.getSequenceBytes() == tentativeSeq) {

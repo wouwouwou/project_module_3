@@ -70,6 +70,10 @@ public class IncomingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Prints an array to the standard out
+     * @param objects Object[] Array to be printed
+     */
     public static void printArray(Object[] objects){
         String out = "[";
         for (Object b: objects){
@@ -79,6 +83,10 @@ public class IncomingPacketHandler extends PacketHandler {
         System.out.println(out);
     }
 
+    /**
+     * Prints an byte[] to the standard out
+     * @param objects byte[] to be printed
+     */
     public static void printArray(byte[] objects){
         String out = "[";
         for (Object b: objects){
@@ -88,6 +96,13 @@ public class IncomingPacketHandler extends PacketHandler {
         System.out.println(out);
     }
 
+    /**
+     * Handles an incoming packet
+     * <p>
+     *     Discern which type the incoming packet is, and calls the appropriate handler method.
+     * </p>
+     * @param packet byte[] A received packet
+     */
     public void handle(byte[] packet){
         switch (packet[0]){
             case Protocol.DISCOVERY_PACKET:
@@ -103,6 +118,13 @@ public class IncomingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Handler for packets of the Protocol.DISCOVERY_PACKET type
+     * <p>
+     *     Reads a discovery packet, editing the forwarding table if necessary or dropping it
+     * </p>
+     * @param packet byte[] The packet to be handled
+     */
     public void handleDiscovery(byte[] packet){
         short seq = (short) ((Packet.fixSign(packet[2]) << 8) + Packet.fixSign(packet[3]));
         byte length = packet[1];
@@ -128,10 +150,10 @@ public class IncomingPacketHandler extends PacketHandler {
             System.out.println("Adding entries (if available)");
             //If this is just an addition to the existing table
 
-            for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < length; i+=3){
+            for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < Protocol.DISCOVERY_HEADER_LENGTH + length; i+=3){
 
                 //if the cost if the new entry is lower, use it and forward it
-                if(networkManager.getTableEntryByDestination(packet[0]) == null || packet[i+1] > networkManager.getTableEntryByDestination(packet[i])[1] + 1) {
+                if(networkManager.getTableEntryByDestination(packet[i]) == null || packet[i+1] > networkManager.getTableEntryByDestination(packet[i])[1] + 1) {
                     networkManager.addTableEntry(new byte[]{packet[i], (byte) (packet[i + 1] + 1), packet[i + 2]});
                     forward = true;
                 }
@@ -150,6 +172,19 @@ public class IncomingPacketHandler extends PacketHandler {
     }
 
     public void handleCommunication(byte[] packet){
+        if(packet[3] == networkManager.getClientId()){
+            if (packet[8] == Protocol.flags.DATA){
+                try {
+                    Packet ack = networkManager.constructACK(new Packet(packet));
+                    networkManager.send(ack);
+
+                } catch (Packet.InvalidPacketException e) {
+                    e.printStackTrace();
+                }
+            } else if(packet[8] == Protocol.flags.ACK){
+                //Handle ACK
+            }
+        }
 
     }
 }
