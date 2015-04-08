@@ -261,7 +261,7 @@ public class NetworkManager {
     /**
      * Increments the sequenceNumber
      * <p>
-     *      Increments the sequenceNumber with one, and prints the old sequenceNumber to the standard out
+     *      Increments the sequenceNumber with one, and prints the old sequenceNumber to the standard out and returns the new sequenceNumber
      * </p>
      * @return int sequenceNumber + 1
      */
@@ -292,7 +292,15 @@ public class NetworkManager {
         return routingTable.toArray();
     }
 
-
+    /**
+     * Constructs a packet with given variables
+     * @param destination   byte    destination for this packets, as a Protocol.CLIENT_ID
+     * @param dataType      byte    represents the type of packet
+     * @param data
+     * @return
+     * @throws IOException
+     */
+    //TODO Donder op met je Ad-Hoc Kobaldski
     public Packet constructPacket(byte destination, byte dataType, byte[] data) throws IOException {
         Packet packet = new Packet();
         packet.setDataType(dataType);
