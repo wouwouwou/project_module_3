@@ -87,24 +87,40 @@ public class IncomingPacketHandler extends PacketHandler {
     public void handleDiscovery(byte[] packet){
         short seq = (short) ((Packet.fixSign(packet[2]) << 8) + Packet.fixSign(packet[3]));
         byte length = packet[1];
-
+        boolean forward = false;
 
 
         if(seq > networkManager.getDiscoverySequenceNum()){
             //D-D-D-D-D-Drop that bass, ehh... table ;D
             networkManager.dropTable();
+
+            //This an update, so we have to forward
+            forward = true;
+
             //Add all the new entries
             for(int i = 0; i < length; i+=3){
                 networkManager.addTableEntry(new byte[]{packet[i], (byte) (packet[i+1] + 1), packet[i+2]});
             }
-            networkManager.sendTable();
+
+
         } else if (seq == networkManager.getDiscoverySequenceNum()){
+            //If this is just an addition to the existing table
+
             for(int i = 0; i < length; i+=3){
-                //if the cost if the new entry is lower, use it
+
+                //if the cost if the new entry is lower, use it and forward it
                 if(networkManager.getTableEntryByDestination(packet[0]) != null && packet[i+1] > networkManager.getTableEntryByDestination(packet[i])[1] + 1) {
                     networkManager.addTableEntry(new byte[]{packet[i], (byte) (packet[i + 1] + 1), packet[i + 2]});
+                    forward = true;
                 }
+
             }
+        }
+
+        //Forward this packet if we have to
+        if(forward){
+            networkManager.sendTable();
+            printArray(networkManager.getRoutingTable());
         }
 
 

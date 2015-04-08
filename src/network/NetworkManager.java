@@ -51,6 +51,9 @@ public class NetworkManager {
             e.printStackTrace();
         }
 
+        //Create the routingTable
+        routingTable = new ArrayList<>();
+
         //Create the Multicast socket
         try {
             socket = new MulticastSocket(Protocol.GROUP_PORT);
@@ -68,6 +71,10 @@ public class NetworkManager {
 
             //Create and start the OutgoingPacketHandler
             outgoingPacketHandler = new OutgoingPacketHandler(socket, this);
+
+            //Fill the table (by dropping it) and send it
+            dropTable();
+            sendTable();
 
 
             /**
@@ -185,7 +192,15 @@ public class NetworkManager {
 
         packet[3] = (byte) discoverySequenceNum;
 
-        System.arraycopy(routingTable.toArray(), 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
+        byte[] table = new byte[routingTable.size()];
+
+        for(int i = 0; i < routingTable.size(); i+= 3){
+            table[i] = routingTable.get(i);
+            table[i + 1] = routingTable.get(i+1);
+            table[i + 2] = (byte) Protocol.CLIENT_ID;
+        }
+
+        System.arraycopy(table, 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
 
 
         try {
@@ -214,4 +229,7 @@ public class NetworkManager {
         return discoverySequenceNum;
     }
 
+    public Object[] getRoutingTable() {
+        return routingTable.toArray();
+    }
 }
