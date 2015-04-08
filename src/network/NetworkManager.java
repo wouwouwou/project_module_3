@@ -11,15 +11,35 @@ import java.util.Enumeration;
  * Created by gerben on 7-4-15.
  */
 public class NetworkManager {
+    // -----<=>-----< Fields >-----<=>----- \\
+
     private MulticastSocket socket;
     private IncomingPacketHandler incomingPacketHandler;
     private OutgoingPacketHandler outgoingPacketHandler;
     private InetAddress group;
 
+    // -----<=>-----< Main >-----<=>----- \\
+
+    /**
+     * Main method, to be changed
+     * @param args
+     */
     public static void main(String[] args){
         NetworkManager networkManager = new NetworkManager();
     }
 
+    // -----<=>-----< Constructor >-----<=>----- \\
+
+    /**
+     * Builds a network manager
+     * <p>
+     *     Initializes the network manager.
+     *      - Sets the multicast group address
+     *      - Sets up the multicast group socket via the multicast group port
+     *      - Sets the Protocol.CLIENT_ID
+     *      - Joins the multicast group and sets up its handlers
+     * </p>
+     */
     public NetworkManager() {
         //Get the group address
         try {
@@ -67,24 +87,26 @@ public class NetworkManager {
         }
     }
 
-    public void send(Packet packet){
+    // -----<=>-----< Methods >-----<=>----- \\
 
+    /**
+     * Sends a packet via the broadcast socket
+     * @param packet Packet
+     */
+    public void send(Packet packet){
 
         outgoingPacketHandler.send(packet, group);
 
     }
 
-
-    public IncomingPacketHandler getIncomingPacketHandler() {
-        return incomingPacketHandler;
-    }
-
-    public InetAddress getGroup() {
-        return group;
-    }
+    // -----<=>-----< Queries >-----<=>----- \\
 
     /**
      * Returns the client id, taken from the ip address
+     * <p>
+     *     Builds an Enumeration of all NetworkInterfaces, checks their ip for the local address.
+     *     The last number of the local address is your ID.
+     * </p>
      * @return client id
      */
     public int getClientId(){
@@ -104,5 +126,16 @@ public class NetworkManager {
             return 0;
         }
         return addr.getAddress()[3];
+    }
+
+
+    // -----<=>-----< Getters & Setters >-----<=>----- \\
+
+    public IncomingPacketHandler getIncomingPacketHandler() {
+        return incomingPacketHandler;
+    }
+
+    public InetAddress getGroup() {
+        return group;
     }
 }
