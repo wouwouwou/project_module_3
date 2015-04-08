@@ -47,6 +47,15 @@ public class OutgoingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Broadcasts a packet over a Multicast group network
+     * <p>
+     *     Broadcasted packets will be added to a tentative list
+     *     As long as a tentative packet has not been received, it will be retransmitted
+     * </p>
+     * @param packet Packet the packet that will be broadcasted to the multicast network
+     * @param group InetAddress the multicast group address where you sent the packet to
+     */
     public void send(Packet packet, InetAddress group){
         synchronized (floatingPacketMap) {
             try {
