@@ -15,10 +15,13 @@ import java.util.ArrayList;
  * @since 7-4-15.
  */
 public class IncomingPacketHandler extends PacketHandler {
+
+    // -----<=>-----< Fields >-----<=>----- \\
     private ArrayList<PacketListener> listeners;
     private byte[] buffer;
     private NetworkManager networkManager;
 
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * Constructs a new IncomingPacketHandler, this is done by the NetworkHandler.
      * The IncomingPacketHandler is then started in a new Thread
@@ -55,6 +58,7 @@ public class IncomingPacketHandler extends PacketHandler {
         while(true){
             try {
                 socket.receive(recv);
+                handle(recv.getData());
                 packet = new Packet(recv.getData());
                 for(PacketListener listener: listeners){
                     listener.onReceive(packet);
@@ -77,6 +81,7 @@ public class IncomingPacketHandler extends PacketHandler {
     public void handle(byte[] packet){
         switch (packet[0]){
             case Protocol.DISCOVERY_PACKET:
+                System.out.println("New Discovery Packet recieved");
                 handleDiscovery(packet);
                 break;
             case Protocol.COMMUNICATION_PACKET:
@@ -91,24 +96,40 @@ public class IncomingPacketHandler extends PacketHandler {
     public void handleDiscovery(byte[] packet){
         short seq = (short) ((Packet.fixSign(packet[2]) << 8) + Packet.fixSign(packet[3]));
         byte length = packet[1];
-
+        boolean forward = false;
 
 
         if(seq > networkManager.getDiscoverySequenceNum()){
             //D-D-D-D-D-Drop that bass, ehh... table ;D
             networkManager.dropTable();
+
+            //This an update, so we have to forward
+            forward = true;
+
             //Add all the new entries
-            for(int i = 0; i < length; i+=3){
+            for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < length; i+=3){
                 networkManager.addTableEntry(new byte[]{packet[i], (byte) (packet[i+1] + 1), packet[i+2]});
             }
-            networkManager.sendTable();
+
+
         } else if (seq == networkManager.getDiscoverySequenceNum()){
-            for(int i = 0; i < length; i+=3){
-                //if the cost if the new entry is lower, use it
+            //If this is just an addition to the existing table
+
+            for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < length; i+=3){
+
+                //if the cost if the new entry is lower, use it and forward it
                 if(networkManager.getTableEntryByDestination(packet[0]) != null && packet[i+1] > networkManager.getTableEntryByDestination(packet[i])[1] + 1) {
                     networkManager.addTableEntry(new byte[]{packet[i], (byte) (packet[i + 1] + 1), packet[i + 2]});
+                    forward = true;
                 }
+
             }
+        }
+
+        //Forward this packet if we have to
+        if(forward){
+            networkManager.sendTable();
+            printArray(networkManager.getRoutingTable());
         }
 
 

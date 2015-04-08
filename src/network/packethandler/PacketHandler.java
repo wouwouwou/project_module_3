@@ -9,15 +9,18 @@ import java.net.MulticastSocket;
  */
 public abstract class PacketHandler implements Runnable {
 
+    // -----<=>-----< Fields >-----<=>----- \\
     MulticastSocket socket;
     Thread thread;
 
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     public PacketHandler(MulticastSocket socket) {
         this.socket = socket;
         this.thread = new Thread(this);
         this.thread.start();
     }
 
+    // -----<=>-----< Queries >-----<=>----- \\
     public Thread getThread(){
         return thread;
     }

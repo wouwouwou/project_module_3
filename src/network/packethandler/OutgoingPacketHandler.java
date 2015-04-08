@@ -17,15 +17,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class OutgoingPacketHandler extends PacketHandler {
 
+    // -----<=>-----< Fields >-----<=>----- \\
     private final ConcurrentHashMap<byte[], FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
     private NetworkManager networkManager;
 
-
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     public OutgoingPacketHandler(MulticastSocket socket, NetworkManager networkManager){
         super(socket);
         this.networkManager = networkManager;
     }
 
+    // -----<=>-----< Methods >-----<=>----- \\
     @Override
     public void run() {
         while (true){

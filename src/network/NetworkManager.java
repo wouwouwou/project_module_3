@@ -14,8 +14,8 @@ import java.util.Enumeration;
  * @since 7-4-15
  */
 public class NetworkManager {
-    // -----<=>-----< Fields >-----<=>----- \\
 
+    // -----<=>-----< Fields >-----<=>----- \\
     private MulticastSocket socket;
     private IncomingPacketHandler incomingPacketHandler;
     private OutgoingPacketHandler outgoingPacketHandler;
@@ -24,17 +24,16 @@ public class NetworkManager {
     private short discoverySequenceNum = 0;
 
     // -----<=>-----< Main >-----<=>----- \\
-
     /**
      * Main method, to be changed
      * @param args
      */
+    //TODO Main method, to be changed
     public static void main(String[] args){
         NetworkManager networkManager = new NetworkManager();
     }
 
-    // -----<=>-----< Constructor >-----<=>----- \\
-
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * Builds a network manager
      * <p>
@@ -53,6 +52,9 @@ public class NetworkManager {
             e.printStackTrace();
         }
 
+        //Create the routingTable
+        routingTable = new ArrayList<>();
+
         //Create the Multicast socket
         try {
             socket = new MulticastSocket(Protocol.GROUP_PORT);
@@ -70,6 +72,10 @@ public class NetworkManager {
 
             //Create and start the OutgoingPacketHandler
             outgoingPacketHandler = new OutgoingPacketHandler(socket, this);
+
+            //Fill the table (by dropping it) and send it
+            dropTable();
+            sendTable();
 
 
             /**
@@ -93,7 +99,6 @@ public class NetworkManager {
     }
 
     // -----<=>-----< Methods >-----<=>----- \\
-
     /**
      * Sends a packet via the broadcast socket
      * @param packet Packet
@@ -105,7 +110,6 @@ public class NetworkManager {
     }
 
     // -----<=>-----< Queries >-----<=>----- \\
-
     /**
      * Returns the client id, taken from the ip address
      * <p>
@@ -177,6 +181,7 @@ public class NetworkManager {
     }
 
     public void sendTable(){
+        System.out.println("Sending table");
         byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
 
         packet[0] = Protocol.DISCOVERY_PACKET;
@@ -187,7 +192,15 @@ public class NetworkManager {
 
         packet[3] = (byte) discoverySequenceNum;
 
-        System.arraycopy(routingTable.toArray(), 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
+        byte[] table = new byte[routingTable.size()];
+
+        for(int i = 0; i < routingTable.size(); i+= 3){
+            table[i] = routingTable.get(i);
+            table[i + 1] = routingTable.get(i+1);
+            table[i + 2] = (byte) Protocol.CLIENT_ID;
+        }
+
+        System.arraycopy(table, 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
 
 
         try {
@@ -199,7 +212,6 @@ public class NetworkManager {
 
 
     // -----<=>-----< Getters & Setters >-----<=>----- \\
-
     public IncomingPacketHandler getIncomingPacketHandler() {
         return incomingPacketHandler;
     }
@@ -216,4 +228,7 @@ public class NetworkManager {
         return discoverySequenceNum;
     }
 
+    public Object[] getRoutingTable() {
+        return routingTable.toArray();
+    }
 }
