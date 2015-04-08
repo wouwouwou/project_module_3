@@ -4,14 +4,20 @@ import java.util.Date;
 
 /**
  * Created by tristan on 7-4-15.
+ * A client that is connected to this client.
  */
 public class Client {
+
+    // The name of a client
     private final String name;
 
+    // The id of a client
     private final int id;
 
+    // The last time the client has been seen
     private Date date;
 
+    // Determines whether you've read the last messages of this client
     private Boolean read;
 
     // ------------------- Constructor -------------------

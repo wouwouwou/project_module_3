@@ -8,15 +8,23 @@ import java.util.HashMap;
 
 /**
  * Created by tristan on 8-4-15.
+ * Controls the GUI.
  */
 public class MessageController {
+    // The ID of this client
     private static final int OWN_ID = 1;
+
+    // The Gui that is used by this client
     private final Gui gui;
+
+    // The chatModel that is used to store all chats (in a HashMap). A DefaultListModel can easily be used to populate a JList.
     private HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
+
+    // The clientModel is used to store all clients. A DefaultListModel can easily be used to populate a JList.
     private DefaultListModel<Client> clientModel = new DefaultListModel<>();
 
     /**
-     *
+     *  Creates a new GUI that is linked to field <code>gui</code>.
      */
     public MessageController(){
         gui = new Gui(this);
@@ -26,7 +34,7 @@ public class MessageController {
     // ------------------- Actions that can be called ----------------------------------------------------------------------------
 
     /**
-     * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>
+     * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>.
      */
     public void sendMessage() {
         //TODO: send message to network with selected client (0 = broadcast)
@@ -38,7 +46,7 @@ public class MessageController {
     }
 
     /**
-     *  Receive a message and determine what to do.
+     *  Receive a message and determine what to do. Messages can by of type <code>PingMessage</code> and <code>ChatMessage</code>.
      */
     public void onReceive(Message message) {
         if(message instanceof PingMessage){
@@ -117,14 +125,26 @@ public class MessageController {
 
     // ------------------- Getters (mostly used by Gui) ---------------------------------------------------------
 
+    /**
+     * Returns the clientModel.
+     * @return clientModel
+     */
     public DefaultListModel<Client> getClientModel() {
         return clientModel;
     }
 
+    /**
+     * Returns the id of this client.
+     * @return OWN_ID
+     */
     public int getOwnID() {
         return OWN_ID;
     }
 
+    /**
+     * Returns the chatModel.
+     * @return chatModel
+     */
     public HashMap<Integer,DefaultListModel<ChatMessage>> getChatModel() {
         return chatModel;
     }

@@ -12,6 +12,7 @@ import java.util.Date;
 
 /**
  * Created by tristan on 7-4-15.
+ * Generates a ListCell based on a JLabel for use in an JList.
  */
 public class ListRenderer extends JLabel implements ListCellRenderer {
 
