@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 
 /**
- * Created by gerben on 7-4-15.
+ * @author Gerben Meijer
+ * @since 7-4-15
  */
 public class NetworkManager {
     // -----<=>-----< Fields >-----<=>----- \\
@@ -115,11 +116,10 @@ public class NetworkManager {
         InetAddress addr = null;
         try {
             Enumeration<InetAddress> addrs = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses();
-
+            //TODO Even naar kijken. Tweede deel (achter && ) returnt altijd true? | Woeter
             while (addrs.hasMoreElements() && (addr == null || addr.getAddress()[0] != 192)){
                 addr = addrs.nextElement();
             }
-
         } catch (SocketException e) {
             e.printStackTrace();
         }
