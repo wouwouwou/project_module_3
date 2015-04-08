@@ -10,6 +10,9 @@ package network.packet;
 public class FloatingPacket extends Packet {
     private long sentOn;
 
+    /**
+     *
+     */
     public FloatingPacket(){
         super();
         this.sentOn = System.currentTimeMillis();

@@ -18,8 +18,6 @@ public class Packet {
     private byte source = 0;
     private byte destination = 0;
     private byte flags = 0;
-    private static final int COMMUNICATION_HEADER_LENGTH = 11;
-    private static final int DISCOVERY_HEADER_LENGTH = 4;
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
@@ -47,13 +45,16 @@ public class Packet {
     }
 
     /**
-     *
+     * Constructs a (Packet) object from a byte[]
+     * <p>
+     *     This method will assign bytes from the byte[] to fields of the new Packet object following our design implementation
+     * </p>
      * @param packet byte[] (byte[]) packet you want to convert to a (Packet)
      * @throws InvalidPacketException if the packet does not follow our design implementation
      */
     //TODO proper exception handling, also with documenting (correctly refering to our implementation) - Woeter
     public void fromBytes(byte[] packet) throws InvalidPacketException {
-        if (packet.length < COMMUNICATION_HEADER_LENGTH){
+        if (packet.length < 9){
             throw new InvalidPacketException();
         }
 
@@ -82,7 +83,10 @@ public class Packet {
     }
 
     /**
-     * Converts the data of this packet to (byte)s, in a (byte[]), following our protocol implementation
+     * Converts this (Packet) object to a (byte[])
+     * <p>
+     *     Converts the data fields of this packet to (byte)s, in a (byte[]), following our protocol implementation
+     * </p>
      * @return byte[] The converted packet
      */
     public byte[] toBytes(){
@@ -160,6 +164,7 @@ public class Packet {
     }
 
 
+    // -----<=>-----< Setters & Getters >-----<=>----- \\
     public void setData(byte[] data) {
         this.data = data;
     }
