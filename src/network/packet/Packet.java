@@ -95,6 +95,11 @@ public class Packet {
         return out;
     }
 
+    /**
+     *
+     * @param data byte
+     * @return int
+     */
     public static int fixSign(byte data){
         //Function to fix signed stuff.
         long dataL = (long) data;
@@ -119,7 +124,10 @@ public class Packet {
         return this.data;
     }
 
-
+    /**
+     * Gives a byte[] representation of the sequenceNumber (long) field
+     * @return byte[] The sequence number converted to a byte array with 4 entries
+     */
     public byte[] getSequenceBytes(){
         byte[] out = new byte[4];
         out[0] = (byte) (sequenceNumber >> 24);
