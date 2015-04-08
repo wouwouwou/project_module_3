@@ -16,6 +16,7 @@ public class FloatingPacket extends Packet {
     // -----<=>-----< Fields >-----<=>----- \\
 
     private long sentOn;
+    //TODO maybe a maximum amount of retries/resents
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
