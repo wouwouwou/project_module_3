@@ -4,7 +4,7 @@ import java.net.MulticastSocket;
 
 /**
  * @author Wouter Bos
- * Created on 8-4-15.
+ * @since 8-4-15.
  */
 public abstract class PacketHandler implements Runnable {
 

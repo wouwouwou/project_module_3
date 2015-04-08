@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * @author Gerben Meijer
- * Created on 7-4-15.
+ * @since 7-4-15.
  */
 public class IncomingPacketHandler extends PacketHandler {
     private ArrayList<PacketListener> listeners;
