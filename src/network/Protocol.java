@@ -5,7 +5,8 @@ import java.net.UnknownHostException;
 
 /**
  * Holds constants used in the Protocol and network.
- * Created by tim on 7-4-15.
+ * @author Tim Hintzbergen
+ * @since 7-4-15
  */
 public class Protocol {
     // -----<=>-----< Fields >-----<=>----- \\

@@ -3,6 +3,7 @@ package network;
 import java.net.MulticastSocket;
 
 /**
+ * Abstract class for handling with packets.
  * @author Wouter Bos
  * @since 8-4-15.
  */

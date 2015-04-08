@@ -6,7 +6,7 @@ import network.Protocol;
  * Represents a packet
  * Sets up a basic packet, for easy construction and reading
  * @author Tim Hintzbergen
- * Created on 7-4-15.
+ * @since 7-4-15
  */
 public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
@@ -125,8 +125,7 @@ public class Packet {
     public static int fixSign(byte data){
         //Function to fix signed stuff.
         long dataL = (long) data;
-        int dataI = (int )dataL & 0xff;
-        return dataI;
+        return (int )dataL & 0xff;
     }
 
 
