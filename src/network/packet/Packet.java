@@ -3,7 +3,8 @@ package network.packet;
 /**
  * Represents a packet
  * Sets up a basic packet, for easy construction and reading
- * Created by tim on 7-4-15.
+ * @author Tim Hintzbergen
+ * Created on 7-4-15.
  */
 public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
@@ -12,7 +13,9 @@ public class Packet {
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
-    public Packet() {}
+    public Packet() {
+
+    }
 
     public Packet(byte[] data) {
         this.data = data;
