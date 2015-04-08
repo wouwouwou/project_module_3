@@ -17,7 +17,9 @@ public class TestMessages {
 
         NetworkManager networkManager = new NetworkManager();
         PrintingDataListener l = new PrintingDataListener();
+        PrintingAckListener pal = new PrintingAckListener();
         networkManager.getIncomingPacketHandler().addDataListener(l);
+        networkManager.getIncomingPacketHandler().addAckListener(pal);
 
 
         try {

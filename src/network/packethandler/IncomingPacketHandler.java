@@ -180,7 +180,7 @@ public class IncomingPacketHandler extends PacketHandler {
     }
 
     public void handleCommunication(byte[] packet){
-        if(packet[3] == networkManager.getClientId()){
+        if(packet[3] == Protocol.CLIENT_ID){
             if (packet[8] == Protocol.Flags.DATA){
 
                 try {
@@ -202,6 +202,8 @@ public class IncomingPacketHandler extends PacketHandler {
                     e.printStackTrace();
                 }
             }
+        } else if(packet[11] == Protocol.CLIENT_ID){
+
         }
 
     }

@@ -317,24 +317,19 @@ public class NetworkManager {
         return packet;
     }
 
-    public Packet constructACK(Packet packet){
-        try {
-            packet = new Packet(packet.toBytes());
-            packet.setData(new byte[0]);
-            packet.setDestination(packet.getSource());
-            packet.setSource((byte) Protocol.CLIENT_ID);
-            packet.setType(Protocol.COMMUNICATION_PACKET);
-            byte[] route = getTableEntryByDestination(packet.getDestination());
-            if(route == null){
-                return null;
-            }
-            packet.setNextHop(route[2]);
-            packet.setFlags(Protocol.Flags.ACK);
-            return packet;
-        } catch (InvalidPacketException e) {
-            e.printStackTrace();
+    public Packet constructACK(Packet packet) throws InvalidPacketException {
+        packet = new Packet(packet.toBytes());
+        packet.setData(new byte[0]);
+        packet.setDestination(packet.getSource());
+        packet.setSource((byte) Protocol.CLIENT_ID);
+        packet.setType(Protocol.COMMUNICATION_PACKET);
+        byte[] route = getTableEntryByDestination(packet.getDestination());
+        if(route == null){
+            return null;
         }
-        return null;
+        packet.setNextHop(route[2]);
+        packet.setFlags(Protocol.Flags.ACK);
+        return packet;
     }
 
     public OutgoingPacketHandler getOutgoingPacketHandler() {
