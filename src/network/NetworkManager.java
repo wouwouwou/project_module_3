@@ -1,5 +1,6 @@
 package network;
 
+import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
@@ -310,7 +311,7 @@ public class NetworkManager {
             packet.setNextHop(route[2]);
             packet.setFlags(Protocol.Flags.ACK);
             return packet;
-        } catch (Packet.InvalidPacketException e) {
+        } catch (InvalidPacketException e) {
             e.printStackTrace();
         }
         return null;

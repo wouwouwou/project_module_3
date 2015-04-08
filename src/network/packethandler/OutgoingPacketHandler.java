@@ -1,5 +1,6 @@
 package network.packethandler;
 
+import exceptions.network.InvalidPacketException;
 import network.NetworkManager;
 import network.Protocol;
 import network.packet.FloatingPacket;
@@ -66,8 +67,12 @@ public class OutgoingPacketHandler extends PacketHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(packet.getFlags() == Protocol.flags.DATA) {
-                floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+            if(packet.getFlags() == Protocol.Flags.DATA) {
+                try {
+                    floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+                } catch (InvalidPacketException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

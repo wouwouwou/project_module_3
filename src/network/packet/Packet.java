@@ -38,7 +38,7 @@ public class Packet {
      * Constructs a (Packet) from a (byte[])
      * @param packet byte[] Data to be constructed into a packet
      */
-    public Packet(byte[] packet) {
+    public Packet(byte[] packet) throws InvalidPacketException {
         fromBytes(packet);
     }
 
@@ -60,21 +60,16 @@ public class Packet {
      */
     //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
     //TODO Testing of Exceptions! Especially the e.getMessage()!
-    public void fromBytes(byte[] packet) {
-        try {
-            if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH) {
-                throw new InvalidCommunicationHeaderLengthException();
-            }
+    public void fromBytes(byte[] packet) throws InvalidPacketException{
 
-            type = packet[0];
+        if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH) {
+            throw new InvalidCommunicationHeaderLengthException();
+        }
 
-            if(type == Protocol.NULL_PACKET) {
-                throw new NullPacketException();
-            }
+        type = packet[0];
 
-        } catch (InvalidPacketException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+        if(type == Protocol.NULL_PACKET) {
+            throw new NullPacketException();
         }
 
         dataType = packet[1];

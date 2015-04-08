@@ -1,5 +1,6 @@
 package network.packethandler;
 
+import exceptions.network.InvalidPacketException;
 import network.AckListener;
 import network.NetworkManager;
 import network.DataListener;
@@ -186,19 +187,18 @@ public class IncomingPacketHandler extends PacketHandler {
                     Packet ack = networkManager.constructACK(p);
                     networkManager.send(ack);
                     notifyDataListeners(p);
-
-                } catch (Packet.InvalidPacketException e) {
+                } catch (InvalidPacketException e) {
                     e.printStackTrace();
                 }
+
 
             } else if(packet[8] == Protocol.Flags.ACK){
 
                 try {
                     networkManager.getOutgoingPacketHandler().handleACK(new Packet(packet));
-                } catch (Packet.InvalidPacketException e) {
+                } catch (InvalidPacketException e) {
                     e.printStackTrace();
                 }
-
             }
         }
 
