@@ -31,10 +31,9 @@ public class FloatingPacket extends Packet {
     /**
      * Constructing a packet from a (byte[])
      * @param data byte[]
-     * @throws InvalidPacketException
      */
     //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
-    public FloatingPacket(byte[] data) throws InvalidPacketException {
+    public FloatingPacket(byte[] data) {
         super(data);
         this.sentOn = System.currentTimeMillis();
     }
