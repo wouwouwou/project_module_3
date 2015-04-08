@@ -10,6 +10,7 @@ import network.Protocol;
  */
 public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
+
     private byte[] data = new byte[0];
     private int sequenceNumber;
     private byte type = Protocol.COMMUNICATION_PACKET;
@@ -20,10 +21,17 @@ public class Packet {
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
-    public Packet() {
+    /**
+     * Empty packet constructor
+     */
+    public Packet() {}
 
-    }
-
+    /**
+     * Constructs a (Packet) from a (byte[]), throws a exception if the (byte[]) does not statisfy our implementation
+     * @param packet byte[] Data to be constructed into a packet
+     * @throws InvalidPacketException
+     */
+    //TODO See other TODO about the InvalidPacketException
     public Packet(byte[] packet) throws InvalidPacketException {
         fromBytes(packet);
     }
@@ -36,6 +44,15 @@ public class Packet {
         System.out.println(new String(this.getData()));
     }
 
+    /**
+     * Constructs a (Packet) object from a byte[]
+     * <p>
+     *     This method will assign bytes from the byte[] to fields of the new Packet object following our design implementation
+     * </p>
+     * @param packet byte[] (byte[]) packet you want to convert to a (Packet)
+     * @throws InvalidPacketException if the packet does not follow our design implementation
+     */
+    //TODO proper exception handling, also with documenting (correctly refering to our implementation) - Woeter
     public void fromBytes(byte[] packet) throws InvalidPacketException {
         if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH){
             throw new InvalidPacketException();
@@ -65,6 +82,13 @@ public class Packet {
 
     }
 
+    /**
+     * Converts this (Packet) object to a (byte[])
+     * <p>
+     *     Converts the data fields of this packet to (byte)s, in a (byte[]), following our protocol implementation
+     * </p>
+     * @return byte[] The converted packet
+     */
     public byte[] toBytes(){
         //Create the new byte[]
 
@@ -90,24 +114,20 @@ public class Packet {
 
         System.arraycopy(data, 0, out, Protocol.COMMUNICATION_HEADER_LENGTH, data.length);
 
-
-
         return out;
     }
 
+    /**
+     * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java
+     * @param data byte
+     * @return int correctly converted data (byte) to (int)
+     */
     public static int fixSign(byte data){
         //Function to fix signed stuff.
         long dataL = (long) data;
         int dataI = (int )dataL & 0xff;
         return dataI;
     }
-
-
-
-
-
-
-
 
 
     // -----<=>-----< Queries >-----<=>----- \\
@@ -119,7 +139,10 @@ public class Packet {
         return this.data;
     }
 
-
+    /**
+     * Gives a byte[] representation of the sequenceNumber (long) field
+     * @return byte[] The sequence number converted to a byte array with 4 entries
+     */
     public byte[] getSequenceBytes(){
         byte[] out = new byte[4];
         out[0] = (byte) (sequenceNumber >> 24);
@@ -141,6 +164,7 @@ public class Packet {
     }
 
 
+    // -----<=>-----< Setters & Getters >-----<=>----- \\
     public void setData(byte[] data) {
         this.data = data;
     }
@@ -195,6 +219,7 @@ public class Packet {
 
     //-----------<=>---< Exceptions >---<=>-------------\\
 
+    //TODO proper exception handling and documentation
     public class InvalidPacketException extends Exception{
 
     }
