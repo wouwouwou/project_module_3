@@ -1,4 +1,4 @@
-package gui;
+package gui.controller;
 
 import java.util.Date;
 
@@ -10,11 +10,19 @@ public class Client {
 
     private final int id;
 
-    private final Date date;
+    private Date date;
+
     private Boolean read;
 
     // ------------------- Constructor -------------------
 
+    /**
+     * Construct a client, based on a id, name, last seen date and whether the messages of this client have been read.
+     * @param id
+     * @param name
+     * @param date
+     * @param read
+     */
     public Client(int id, String name, Date date, Boolean read) {
         this.id = id;
         this.name = name;
@@ -32,7 +40,7 @@ public class Client {
     }
 
     /**
-     * Returns the name of a client
+     * Returns the name of a client.
      * @return
      */
     public String getName() {
@@ -47,11 +55,27 @@ public class Client {
         return id;
     }
 
+    /**
+     * Sets the <code>read</code> to the given parameter.
+     * @param read
+     */
     public void setRead(Boolean read){
         this.read = read;
     }
 
+    /**
+     * Returns the <code>read</code> of a client (determines whether all messages of a client have been read.
+     * @return read
+     */
     public Boolean isRead() {
         return read;
     }
+
+    /**
+     * Sets the date to the current date.
+     */
+    public void setDate() {
+        this.date = new Date();
+    }
+
 }
