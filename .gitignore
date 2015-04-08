@@ -9,6 +9,14 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+# IntelliJ IDEA 14.1.1 #
+.idea/
 *.iml
+
+# Visual Paradigm annoying files
+*.vpp.working
+*.vpp~2
+*.vpp~3
+*.vpp~4
 
 out

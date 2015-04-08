@@ -223,6 +223,12 @@ public class NetworkManager {
         routingTable.add((byte) Protocol.CLIENT_ID);
     }
 
+    /**
+     * Broadcasts a Protocol.DISCOVERY_PACKET
+     * <p>
+     *     Constructs a Protocol.DISCOVERY_PACKET type packet that broadcasts the current routingTable
+     * </p>
+     */
     public void sendTable(){
         System.out.println("Sending table");
         byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
@@ -254,6 +260,13 @@ public class NetworkManager {
         }
     }
 
+    /**
+     * Increments the sequenceNumber
+     * <p>
+     *      Increments the sequenceNumber with one, and prints the old sequenceNumber to the standard out
+     * </p>
+     * @return int sequenceNumber + 1
+     */
     public int nextSequenceNum(){
         System.out.println(sequenceNum);
         sequenceNum += 1;
