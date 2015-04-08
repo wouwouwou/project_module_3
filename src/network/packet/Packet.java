@@ -1,6 +1,9 @@
 package network.packet;
 
+import exceptions.network.packet.InvalidCommunicationHeaderLengthException;
+import exceptions.network.packet.NullPacketException;
 import network.Protocol;
+import exceptions.network.InvalidPacketException;
 
 /**
  * Represents a packet
@@ -27,12 +30,10 @@ public class Packet {
     public Packet() {}
 
     /**
-     * Constructs a (Packet) from a (byte[]), throws a exception if the (byte[]) does not statisfy our implementation
+     * Constructs a (Packet) from a (byte[])
      * @param packet byte[] Data to be constructed into a packet
-     * @throws InvalidPacketException
      */
-    //TODO See other TODO about the InvalidPacketException
-    public Packet(byte[] packet) throws InvalidPacketException {
+    public Packet(byte[] packet) {
         fromBytes(packet);
     }
 
@@ -47,21 +48,28 @@ public class Packet {
     /**
      * Constructs a (Packet) object from a byte[]
      * <p>
-     *     This method will assign bytes from the byte[] to fields of the new Packet object following our design implementation
+     *     This method will assign bytes from the byte[] to fields of the new Packet object following our design implementation.
+     *     An InvalidPacketException is thrown and caught if the packet doesn't fulfill the requirements of our protocol.
      * </p>
      * @param packet byte[] (byte[]) packet you want to convert to a (Packet)
-     * @throws InvalidPacketException if the packet does not follow our design implementation
      */
-    //TODO proper exception handling, also with documenting (correctly refering to our implementation) - Woeter
-    public void fromBytes(byte[] packet) throws InvalidPacketException {
-        if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH){
-            throw new InvalidPacketException();
-        }
+    //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
+    //TODO Testing of Exceptions! Especially the e.getMessage()!
+    public void fromBytes(byte[] packet) {
+        try {
+            if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH) {
+                throw new InvalidCommunicationHeaderLengthException();
+            }
 
-        type = packet[0];
+            type = packet[0];
 
-        if(type == Protocol.NULL_PACKET){
-            throw new InvalidPacketException();
+            if(type == Protocol.NULL_PACKET) {
+                throw new NullPacketException();
+            }
+
+        } catch (InvalidPacketException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         dataType = packet[1];
@@ -214,12 +222,5 @@ public class Packet {
 
     public void setFlags(byte flags) {
         this.flags = flags;
-    }
-
-    //-----------<=>---< Exceptions >---<=>-------------\\
-
-    //TODO proper exception handling and documentation
-    public class InvalidPacketException extends Exception{
-
     }
 }

@@ -42,6 +42,7 @@ public class OutgoingPacketHandler extends PacketHandler {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -54,11 +55,7 @@ public class OutgoingPacketHandler extends PacketHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            try {
-                floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
-            } catch (Packet.InvalidPacketException e) {
-                e.printStackTrace();
-            }
+            floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
         }
     }
 

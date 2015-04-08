@@ -63,7 +63,8 @@ public class IncomingPacketHandler extends PacketHandler {
                 for(PacketListener listener: listeners){
                     listener.onReceive(packet);
                 }
-            } catch (IOException | Packet.InvalidPacketException e) {
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
                 e.printStackTrace();
             }
         }

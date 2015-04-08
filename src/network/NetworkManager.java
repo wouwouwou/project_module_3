@@ -49,6 +49,7 @@ public class NetworkManager {
         try {
             group = InetAddress.getByName(Protocol.GROUP_ADDRESS);
         } catch (UnknownHostException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
@@ -94,6 +95,7 @@ public class NetworkManager {
              s.leaveGroup(group);
              **/
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -127,6 +129,7 @@ public class NetworkManager {
                 addr = addrs.nextElement();
             }
         } catch (SocketException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
@@ -207,6 +210,7 @@ public class NetworkManager {
         try {
             socket.send(new DatagramPacket(packet, packet.length, group, Protocol.GROUP_PORT));
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
