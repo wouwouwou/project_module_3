@@ -10,11 +10,9 @@ import java.util.ArrayList;
  * @author Gerben Meijer
  * Created on 7-4-15.
  */
-public class IncomingPacketHandler implements Runnable {
+public class IncomingPacketHandler extends PacketHandler {
     private ArrayList<PacketListener> listeners;
     private byte[] buffer;
-    private MulticastSocket socket;
-    private Thread thread;
 
     /**
      * Constructs a new IncomingPacketHandler, this is done by the NetworkHandler.
@@ -23,11 +21,9 @@ public class IncomingPacketHandler implements Runnable {
      * @param buffersize
      */
     public IncomingPacketHandler(MulticastSocket socket, int buffersize){
-        this.socket = socket;
+        super(socket);
         this.buffer = new byte[buffersize];
-        this.listeners = new ArrayList<PacketListener>();
-        this.thread = new Thread(this);
-        thread.start();
+        this.listeners = new ArrayList<>();
     }
 
     public void addListener(PacketListener listener){
@@ -36,10 +32,6 @@ public class IncomingPacketHandler implements Runnable {
 
     public void removeListener(PacketListener listener){
         listeners.remove(listener);
-    }
-
-    public Thread getThread(){
-        return thread;
     }
 
     public ArrayList<PacketListener> getListeners(){
@@ -55,8 +47,6 @@ public class IncomingPacketHandler implements Runnable {
         DatagramPacket recv = new DatagramPacket(buffer, buffer.length);
         Packet packet;
         while(true){
-
-
             try {
                 socket.receive(recv);
                 packet = new Packet(recv.getData());
@@ -66,8 +56,6 @@ public class IncomingPacketHandler implements Runnable {
             } catch (IOException | Packet.InvalidPacketException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 
