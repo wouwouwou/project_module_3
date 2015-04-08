@@ -49,8 +49,8 @@ public class TestMessages {
 
 
 
-        //Send packets
-
+        //Send packets - Disabled at the moment
+        /**
         while(true) {
             for (int i = 0; i < 10000; i++) {
                 message = String.format("Number: %s", i);
@@ -65,6 +65,6 @@ public class TestMessages {
                 }
             }
         }
-
+    **/
     }
 }

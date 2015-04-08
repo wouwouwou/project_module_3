@@ -97,9 +97,10 @@ public class IncomingPacketHandler extends PacketHandler {
         short seq = (short) ((Packet.fixSign(packet[2]) << 8) + Packet.fixSign(packet[3]));
         byte length = packet[1];
         boolean forward = false;
-
+        System.out.printf("Discovery Packet: {seq: %s, length: %s}\n", seq, length);
 
         if(seq > networkManager.getDiscoverySequenceNum()){
+            System.out.println("Dropping tables");
             //D-D-D-D-D-Drop that bass, ehh... table ;D
             networkManager.dropTable();
 
@@ -113,6 +114,7 @@ public class IncomingPacketHandler extends PacketHandler {
 
 
         } else if (seq == networkManager.getDiscoverySequenceNum()){
+            System.out.println("Adding entries (if available)");
             //If this is just an addition to the existing table
 
             for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < length; i+=3){
