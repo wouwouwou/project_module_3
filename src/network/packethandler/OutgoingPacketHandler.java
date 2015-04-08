@@ -62,4 +62,26 @@ public class OutgoingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Updates the floatingPacketMap
+     * <p>
+     *     Loops over the whole floatingPacketMap
+     *     Checking if the @param packet has the same Sequence number
+     *     If a match is found, the tentative is removed from the map and the method stops.
+     * </p>
+     * @param packet Packet an Acknowledgment that has to be checked
+     * @return boolean if floatingPacketMap is updated
+     */
+    public boolean updateTentative(Packet packet) {
+        synchronized (floatingPacketMap) {
+            for (byte[] tentativeSeq : floatingPacketMap.keySet()) {
+                if (packet.getSequenceBytes() == tentativeSeq) {
+                    floatingPacketMap.remove(tentativeSeq);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
