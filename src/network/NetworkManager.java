@@ -17,6 +17,8 @@ public class NetworkManager {
     private IncomingPacketHandler incomingPacketHandler;
     private OutgoingPacketHandler outgoingPacketHandler;
     private InetAddress group;
+    private ArrayList<Byte> routingTable;
+    private short discoverySequenceNum = 0;
 
     // -----<=>-----< Main >-----<=>----- \\
 
@@ -61,7 +63,7 @@ public class NetworkManager {
 
 
             //Create and start the IncomingPacketHandler
-            incomingPacketHandler = new IncomingPacketHandler(socket, 1000);
+            incomingPacketHandler = new IncomingPacketHandler(socket, this, 1000);
 
             //Create and start the OutgoingPacketHandler
             outgoingPacketHandler = new OutgoingPacketHandler(socket, this);
@@ -128,6 +130,71 @@ public class NetworkManager {
         return addr.getAddress()[3];
     }
 
+    // Adds or replaces a table entry
+    public void addTableEntry(byte[] entry){
+        if(entry.length == 3){
+            int index = getTableIndexByDestination(entry[0]);
+            if(index == -1) {
+                routingTable.add(entry[0]);
+                routingTable.add(entry[1]);
+                routingTable.add(entry[2]);
+            } else {
+                routingTable.set(index, entry[0]);
+                routingTable.set(index + 1, entry[1]);
+                routingTable.set(index + 2, entry[2]);
+            }
+        }
+    }
+
+    public byte[] getTableEntryByDestination(byte destination){
+        for(int i = 0; i < routingTable.size(); i += 3){
+            if(routingTable.get(i) == destination){
+                return new byte[]{routingTable.get(i), routingTable.get(i+1), routingTable.get(i+2)};
+            }
+
+        }
+        return null;
+    }
+
+    public int getTableIndexByDestination(byte destination){
+        for(int i = 0; i < routingTable.size(); i += 3){
+            if(routingTable.get(i) == destination){
+                return i;
+            }
+
+        }
+        return -1;
+    }
+
+    public void dropTable(){
+        //Clear the table and
+        routingTable.clear();
+        routingTable.add((byte) Protocol.CLIENT_ID);
+        routingTable.add((byte) 0);
+        routingTable.add((byte) Protocol.CLIENT_ID);
+    }
+
+    public void sendTable(){
+        byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
+
+        packet[0] = Protocol.DISCOVERY_PACKET;
+
+        packet[1] = (byte) routingTable.size();
+
+        packet[2] = (byte) (discoverySequenceNum >> 8);
+
+        packet[3] = (byte) discoverySequenceNum;
+
+        System.arraycopy(routingTable.toArray(), 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
+
+
+        try {
+            socket.send(new DatagramPacket(packet, packet.length, group, Protocol.GROUP_PORT));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // -----<=>-----< Getters & Setters >-----<=>----- \\
 
@@ -138,4 +205,13 @@ public class NetworkManager {
     public InetAddress getGroup() {
         return group;
     }
+
+    public void setDiscoverySequenceNum(short sequenceNum){
+        discoverySequenceNum = sequenceNum;
+    }
+
+    public short getDiscoverySequenceNum(){
+        return discoverySequenceNum;
+    }
+
 }
