@@ -14,12 +14,12 @@ public class TestMessages {
 
         NetworkManager networkManager = new NetworkManager();
         PrintingPacketListener l = new PrintingPacketListener();
-        networkManager.getPacketHandler().addListener(l);
+        networkManager.getIncomingPacketHandler().addListener(l);
         Packet packet;
         String message;
 
         //Send packets
-        /**
+
         while(true) {
             for (int i = 0; i < 10000; i++) {
                 message = String.format("Number: %s", i);
@@ -32,6 +32,6 @@ public class TestMessages {
                 }
             }
         }
-         **/
+
     }
 }
