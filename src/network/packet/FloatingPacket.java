@@ -14,7 +14,7 @@ public class FloatingPacket extends Packet {
         this.sentOn = System.currentTimeMillis();
     }
 
-    public FloatingPacket(byte[] data){
+    public FloatingPacket(byte[] data) throws InvalidPacketException {
         super(data);
         this.sentOn = System.currentTimeMillis();
     }

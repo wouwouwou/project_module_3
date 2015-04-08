@@ -8,18 +8,21 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by gerben on 7-4-15.
  */
 public class OutgoingPacketHandler implements Runnable{
 
-    private final HashMap<byte[], FloatingPacket> floatingPacketMap = new HashMap<byte[], FloatingPacket>();
+    private final ConcurrentHashMap<byte[], FloatingPacket> floatingPacketMap = new ConcurrentHashMap<byte[], FloatingPacket>();
     private MulticastSocket socket;
+    private NetworkManager networkManager;
     private Thread thread;
 
 
-    public OutgoingPacketHandler(MulticastSocket socket){
+    public OutgoingPacketHandler(MulticastSocket socket, NetworkManager networkManager){
+        this.networkManager = networkManager;
         this.socket = socket;
         this.thread = new Thread(this);
         this.thread.start();
@@ -31,13 +34,8 @@ public class OutgoingPacketHandler implements Runnable{
             synchronized (floatingPacketMap) {
                 for (FloatingPacket packet : floatingPacketMap.values()) {
                     if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
-                        try {
-                            //TODO: Give group and port to datagram in the line below:
-                            socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length));
-                            packet.setSentOn(System.currentTimeMillis());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        this.send(packet, networkManager.getGroup());
+                        packet.setSentOn(System.currentTimeMillis());
                     }
                 }
             }
@@ -61,7 +59,11 @@ public class OutgoingPacketHandler implements Runnable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+            try {
+                floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+            } catch (Packet.InvalidPacketException e) {
+                e.printStackTrace();
+            }
         }
     }
 

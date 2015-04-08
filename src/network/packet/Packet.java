@@ -1,5 +1,7 @@
 package network.packet;
 
+import network.Protocol;
+
 /**
  * Represents a packet
  * Sets up a basic packet, for easy construction and reading
@@ -7,16 +9,20 @@ package network.packet;
  */
 public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
-    private byte[] data;
-    private long sequenceNumber;
-    private byte destination;
+    private byte[] data = new byte[0];
+    private int sequenceNumber;
+    private byte type = Protocol.COMMUNICATION_PACKET;
+    private byte dataType = 0;
+    private byte source = 0;
+    private byte destination = 0;
+    private byte flags = 0;
 
     // -----<=>-----< Constructors >-----<=>----- \\
 
     public Packet() {}
 
-    public Packet(byte[] data) {
-        this.data = data;
+    public Packet(byte[] packet) throws InvalidPacketException {
+        fromBytes(packet);
     }
 
     // -----<=>-----< Methods >-----<=>----- \\
@@ -26,6 +32,79 @@ public class Packet {
     public void print() {
         System.out.println(new String(this.getData()));
     }
+
+    public void fromBytes(byte[] packet) throws InvalidPacketException {
+        if (packet.length < 9){
+            throw new InvalidPacketException();
+        }
+
+        type = packet[0];
+
+        if(type == Protocol.NULL_PACKET){
+            throw new InvalidPacketException();
+        }
+
+        dataType = packet[1];
+
+        source = packet[2];
+
+        destination = packet[3];
+
+        sequenceNumber = (fixSign(packet[4]) << 24) + (fixSign(packet[5]) << 16) +(fixSign(packet[6]) << 8) + fixSign(packet[7]);
+
+        flags = packet[8];
+
+        int dataLength = (fixSign(packet[9]) <<8) + (fixSign(packet[10]));
+
+        data = new byte[dataLength];
+
+        System.arraycopy(packet, 11, data, 0, dataLength);
+
+    }
+
+    public byte[] toBytes(){
+        //Create the new byte[]
+
+        byte[] out = new byte[11 + data.length];
+        //Shape the packet
+        out[0] = type;
+
+        out[1] = dataType;
+
+        out[2] = source;
+
+        out[3] = destination;
+
+        out[4] = (byte) (sequenceNumber >> 24);
+        out[5] = (byte) (sequenceNumber >> 16);
+        out[6] = (byte) (sequenceNumber >> 8);
+        out[7] = (byte) (sequenceNumber);
+
+        out[8] = flags;
+
+        out[9] = (byte) (data.length >> 8);
+        out[10] = (byte) (data.length);
+
+        System.arraycopy(data, 0, out, 11, data.length);
+
+
+
+        return out;
+    }
+
+    public static int fixSign(byte data){
+        //Function to fix signed stuff.
+        long dataL = (long) data;
+        int dataI = (int )dataL & 0xff;
+        return dataI;
+    }
+
+
+
+
+
+
+
 
 
     // -----<=>-----< Queries >-----<=>----- \\
@@ -58,13 +137,62 @@ public class Packet {
         return out;
     }
 
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public long getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public byte getType() {
+        return type;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
+    }
+
+    public byte getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(byte dataType) {
+        this.dataType = dataType;
+    }
+
+    public byte getSource() {
+        return source;
+    }
+
+    public void setSource(byte source) {
+        this.source = source;
+    }
+
     public byte getDestination(){
         return destination;
     }
 
-    public byte[] toBytes(){
-        //Shape the packet
-        //TODO: Put the whole packet in a byte[]
-        return this.data;
+    public void setDestination(byte destination) {
+        this.destination = destination;
+    }
+
+    public byte getFlags() {
+        return flags;
+    }
+
+    public void setFlags(byte flags) {
+        this.flags = flags;
+    }
+
+    //-----------<=>---< Exceptions >---<=>-------------\\
+
+    public class InvalidPacketException extends Exception{
+
     }
 }

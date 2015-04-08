@@ -64,11 +64,20 @@ public class IncomingPacketHandler implements Runnable {
                 for(PacketListener listener: listeners){
                     listener.onReceive(packet);
                 }
-            } catch (IOException e) {
+            } catch (IOException | Packet.InvalidPacketException e) {
                 e.printStackTrace();
             }
 
 
         }
+    }
+
+    public void printBytes(byte[] bytes){
+        String out = "[";
+        for (byte b: bytes){
+            out += b + " ";
+        }
+        out += "]";
+        System.out.println(out);
     }
 }

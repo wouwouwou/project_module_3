@@ -40,7 +40,7 @@ public class NetworkManager {
             incomingPacketHandler = new IncomingPacketHandler(socket, 1000);
 
             //Create and start the OutgoingPacketHandler
-            outgoingPacketHandler = new OutgoingPacketHandler(socket);
+            outgoingPacketHandler = new OutgoingPacketHandler(socket, this);
 
 
             /**
@@ -73,5 +73,9 @@ public class NetworkManager {
 
     public IncomingPacketHandler getIncomingPacketHandler() {
         return incomingPacketHandler;
+    }
+
+    public InetAddress getGroup() {
+        return group;
     }
 }

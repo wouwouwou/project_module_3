@@ -22,8 +22,14 @@ public class Protocol {
     /**
      * This is the Timeout before a packet is resent.
      */
-    public static final int TIMEOUT = 500;
+    public static final int TIMEOUT = 5000;
 
+
+
+    //Packet types:
+    public static final byte NULL_PACKET = 0;
+    public static final byte DISCOVERY_PACKET = 1;
+    public static final byte COMMUNICATION_PACKET = 2;
 
 
     // -----<=>-----< Queries >-----<=>----- \\
