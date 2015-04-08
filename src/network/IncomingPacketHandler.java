@@ -1,15 +1,14 @@
 package network;
 
-
 import network.packet.Packet;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
 
 /**
- * Created by gerben on 7-4-15.
+ * @author Gerben Meijer
+ * Created on 7-4-15.
  */
 public class IncomingPacketHandler implements Runnable {
     private ArrayList<PacketListener> listeners;
