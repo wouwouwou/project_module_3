@@ -37,7 +37,7 @@ public class Packet {
     }
 
     public void fromBytes(byte[] packet) throws InvalidPacketException {
-        if (packet.length < 9){
+        if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH){
             throw new InvalidPacketException();
         }
 
@@ -61,14 +61,14 @@ public class Packet {
 
         data = new byte[dataLength];
 
-        System.arraycopy(packet, 11, data, 0, dataLength);
+        System.arraycopy(packet, Protocol.COMMUNICATION_HEADER_LENGTH, data, 0, dataLength);
 
     }
 
     public byte[] toBytes(){
         //Create the new byte[]
 
-        byte[] out = new byte[11 + data.length];
+        byte[] out = new byte[Protocol.COMMUNICATION_HEADER_LENGTH + data.length];
         //Shape the packet
         out[0] = type;
 
@@ -88,7 +88,7 @@ public class Packet {
         out[9] = (byte) (data.length >> 8);
         out[10] = (byte) (data.length);
 
-        System.arraycopy(data, 0, out, 11, data.length);
+        System.arraycopy(data, 0, out, Protocol.COMMUNICATION_HEADER_LENGTH, data.length);
 
 
 

@@ -24,6 +24,8 @@ public class Protocol {
      */
     public static final int TIMEOUT = 5000;
 
+    public static final int COMMUNICATION_HEADER_LENGTH = 11;
+
     public static int CLIENT_ID = 0;
 
     //Packet types:
