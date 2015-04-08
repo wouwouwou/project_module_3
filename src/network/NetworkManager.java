@@ -11,14 +11,20 @@ import java.util.Enumeration;
  * Created by gerben on 7-4-15.
  */
 public class NetworkManager {
+    // -----<=>-----< Fields >-----<=>----- \\
+
     private MulticastSocket socket;
     private IncomingPacketHandler incomingPacketHandler;
     private OutgoingPacketHandler outgoingPacketHandler;
     private InetAddress group;
 
+    // -----<=>-----< Main >-----<=>----- \\
+
     public static void main(String[] args){
         NetworkManager networkManager = new NetworkManager();
     }
+
+    // -----<=>-----< Constructor >-----<=>----- \\
 
     public NetworkManager() {
         //Get the group address
@@ -67,6 +73,8 @@ public class NetworkManager {
         }
     }
 
+    // -----<=>-----< Methods >-----<=>----- \\
+
     public void send(Packet packet){
 
 
@@ -74,17 +82,14 @@ public class NetworkManager {
 
     }
 
-
-    public IncomingPacketHandler getIncomingPacketHandler() {
-        return incomingPacketHandler;
-    }
-
-    public InetAddress getGroup() {
-        return group;
-    }
+    // -----<=>-----< Queries >-----<=>----- \\
 
     /**
      * Returns the client id, taken from the ip address
+     * <p>
+     *     Builds an Enumeration of all NetworkInterfaces, checks their ip for the local address.
+     *     The last number of the local address is your ID.
+     * </p>
      * @return client id
      */
     public int getClientId(){
@@ -104,5 +109,16 @@ public class NetworkManager {
             return 0;
         }
         return addr.getAddress()[3];
+    }
+
+
+    // -----<=>-----< Getters & Setters >-----<=>----- \\
+
+    public IncomingPacketHandler getIncomingPacketHandler() {
+        return incomingPacketHandler;
+    }
+
+    public InetAddress getGroup() {
+        return group;
     }
 }
