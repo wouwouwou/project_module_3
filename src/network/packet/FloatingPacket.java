@@ -3,7 +3,11 @@ package network.packet;
 
 /**
  * Extends Packet, a floating packet has a timestamp.
- * If the timestamp is reached, the packet linked to this packet is resent.
+ * <p>
+ *     A floating packet represents an unacknowledged packet:
+ *      - If the timestamp is reached, a new packet is constructed from this object.
+ *      - This new packet is sent again and the timestamp is refreshed.
+ * </p>
  * @author Tim Hintzbergen
  * @since 7-4-15
  */
@@ -28,7 +32,7 @@ public class FloatingPacket extends Packet {
      * @param data byte[]
      * @throws InvalidPacketException
      */
-    //TODO proper exception handling, also with documenting (correctly refering to our implementation) - Woeter
+    //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
     public FloatingPacket(byte[] data) throws InvalidPacketException {
         super(data);
         this.sentOn = System.currentTimeMillis();
