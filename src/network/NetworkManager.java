@@ -138,6 +138,16 @@ public class NetworkManager {
     }
 
     // Adds or replaces a table entry
+
+    /**
+     * Adds an routingEntry to the routingTable
+     * <p>
+     *     This method adds or sets the given entry to the routingTable
+     *     If this destination does not exist yet, it will be added
+     *     If this destination does exist, it will be updated.
+     * </p>
+     * @param entry byte[destination, cost, next_hop]
+     */
     public void addTableEntry(byte[] entry){
         System.out.println("Adding table entry");
         if(entry.length == 3){
@@ -154,6 +164,15 @@ public class NetworkManager {
         }
     }
 
+    /**
+     * Gives the byte[] where this destination occurs
+     * <p>
+     *     Loops over the routingTable for the entry which matches the given destination
+     *     Gives the byte[destination, cost, next_hop] where the match occurs
+     * </p>
+     * @param destination
+     * @return byte[destination, cost, next_hop]
+     */
     public byte[] getTableEntryByDestination(byte destination){
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
@@ -164,6 +183,16 @@ public class NetworkManager {
         return null;
     }
 
+    /**
+     * Gives the index where this destination occurs
+     * <p>
+     *     Loops over the routingTable for the entry which matches the given destination
+     *     Gives the index of this entry
+     * </p>
+     * @param destination byte
+     * @return  int index in the routingTable.
+     *          -1 if destination not found
+     */
     public int getTableIndexByDestination(byte destination){
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
@@ -174,6 +203,12 @@ public class NetworkManager {
         return -1;
     }
 
+    /**
+     * Clears the routingTable and reinitializes it
+     * <p>
+     *     clears the routingTable and adds the routingEntry to this client
+     * </p>
+     */
     public void dropTable(){
         //Clear the table and
         routingTable.clear();
