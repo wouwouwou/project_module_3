@@ -24,7 +24,7 @@ public class Protocol {
      */
     public static final int TIMEOUT = 5000;
 
-
+    public static int CLIENT_ID = 0;
 
     //Packet types:
     public static final byte NULL_PACKET = 0;
@@ -42,11 +42,5 @@ public class Protocol {
         return InetAddress.getByName(GROUP_ADDRESS);
     }
 
-    /**
-     * Getter for the Client id
-     * @return int The Identifier of this client
-     */
-    public int getId() {
-        return 0; //TODO return the Id of this client
-    }
+
 }

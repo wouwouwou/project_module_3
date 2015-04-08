@@ -71,9 +71,9 @@ public class IncomingPacketHandler implements Runnable {
         }
     }
 
-    public void printBytes(byte[] bytes){
+    public static void printArray(Object[] objects){
         String out = "[";
-        for (byte b: bytes){
+        for (Object b: objects){
             out += b + " ";
         }
         out += "]";

@@ -3,10 +3,9 @@ package network;
 import network.packet.Packet;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 /**
  * Created by gerben on 7-4-15.
@@ -35,6 +34,11 @@ public class NetworkManager {
 
             //Join the multicast group
             socket.joinGroup(group);
+
+            //Get our client ID and set Protocol.CLIENT_ID
+            Protocol.CLIENT_ID = this.getClientId();
+            System.out.println("Init with client id: " + Protocol.CLIENT_ID);
+
 
             //Create and start the IncomingPacketHandler
             incomingPacketHandler = new IncomingPacketHandler(socket, 1000);
@@ -77,5 +81,28 @@ public class NetworkManager {
 
     public InetAddress getGroup() {
         return group;
+    }
+
+    /**
+     * Returns the client id, taken from the ip address
+     * @return client id
+     */
+    public int getClientId(){
+        InetAddress addr = null;
+        try {
+            Enumeration<InetAddress> addrs = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses();
+
+            while (addrs.hasMoreElements() && (addr == null || addr.getAddress()[0] != 192)){
+                addr = addrs.nextElement();
+            }
+
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
+        if(addr == null){
+            return 0;
+        }
+        return addr.getAddress()[3];
     }
 }
