@@ -1,77 +1,86 @@
 package gui;
 
+import gui.controller.MessageController;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by tristan on 7-4-15.
+ * Controlled by a MessageController
  */
 public class Gui extends JFrame {
     private static final Font DEFAULT_FONT = new Font("Ubuntu", Font.PLAIN, 15);
+    private final MessageController messageController;
     private JPanel rootPanel;
     private JList list1;
+    // DO NOT DELETE chatPanel and clientPanel!
+    @SuppressWarnings("unused")
+    private JPanel chatPanel;
+    @SuppressWarnings("unused")
+    private JPanel clientPanel;
     private JTextField messageField;
     private JButton sendButton;
     private JList list2;
-    private JPanel chatPanel;
-    private JPanel clientPanel;
-    private ArrayList<DefaultListModel<ChatMessage>> chatModel = new ArrayList<DefaultListModel<ChatMessage>>();
-    private DefaultListModel<Client> clientModel = new DefaultListModel<>();
     private int currentView = 0;
 
-    public Gui (){
-        super("IAPC: Incrypted Ad-hoc Penguin Chat");
-        this.setDefaultLookAndFeel();
+    /**
+     * Setup the GUI
+     */
+    public Gui (MessageController mc){
+        super("PC: Penguin Chat");
+        this.messageController = mc;
+        // Setup JFrame
         setContentPane(rootPanel);
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
+
+        // Setup custom modules
+        this.setDefaultLookAndFeel();
         this.clientList();
-        this.sendMessageButton();
         this.messagesList();
         this.setFonts();
-        this.sendTextfield();
-        this.setSize(600,600);
+        this.setSize(600, 600);
+        // Add all action listeners
+        this.clientListActionListener();
+        this.sendTextfieldActionListener();
+        this.sendMessageButtonActionListener();
+
+        // Set visible
+        setVisible(true);
     }
 
-    private void sendTextfield() {
-        messageField.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                sendMessage();
-            }
-        });
+    // ------------------- Set up the GUI functions -----------------------------------------------------------------------------------------------
+
+    /**
+     * Sets up the messages list.
+     */
+    public void messagesList(){
+        try{
+            messageController.getClientModel().get(currentView).setRead(true);
+            list2.setModel(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()));
+        }catch (IllegalArgumentException e){
+
+        }
+        list2.setCellRenderer(new ListRenderer(messageController.getOwnID()));
     }
-
-
-    // ------------------- Set up the main functions -------------------
 
     /**
      * Set the client list (a group 0 is added as broadcast group).
      */
     private void clientList() {
-        this.addClient(0, "Lobby");
+        // Add 'lobby' as broadcast group
+        messageController.addClient(0, "Lobby");
 
-        list1.setModel(clientModel);
-        list1.setCellRenderer(new ListRenderer());
+        // Set the entries of <code>list1</code> to clientModel and use <code>ListRenderer</code> as CellRenderer
+        list1.setModel(messageController.getClientModel());
+        list1.setCellRenderer(new ListRenderer(messageController.getOwnID()));
+
         list1.setSelectedIndex(0);
-        list1.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                if(!listSelectionEvent.getValueIsAdjusting()){
-                    currentView = list1.getSelectedIndex();
-                    messagesList();
-                }
-            }
-        });
     }
     /**
      * Set default look and feel to Ubuntu look and feel.
@@ -79,13 +88,7 @@ public class Gui extends JFrame {
     private void setDefaultLookAndFeel() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -98,83 +101,52 @@ public class Gui extends JFrame {
         sendButton.setFont(DEFAULT_FONT);
     }
 
+    //  ------------------- Action listeners -----------------------------------------------------------------------------------------------
+
     /**
-     * Sets up the 'send message' button
+     * Adds an action listener to the <code>messageField</code>. If <key>ENTER</key> is pressed, the message will be send.
      */
-    public void sendMessageButton(){
-        sendButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println(messageField.getText());
-                sendMessage();
+    private void sendTextfieldActionListener() {
+        messageField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                messageController.sendMessage();
             }
         });
     }
 
-    private void sendMessage() {
-        //TODO: send message to network with selected client (0 = broadcast)
-
-        // Send message to own list
-        ChatMessage message = new ChatMessage(messageField.getText(), "ikzelf", new Date(), currentView);
-        addChatMessage(message);
-        messageField.setText("");
-    }
-
     /**
-     * Sets up the messages list
+     * Adds an action listener to the <code>sendButton</code>. The message will be send if this button is pressed.
      */
-    public void messagesList(){
-        try{
-            list2.setModel(chatModel.get(currentView));
-            clientModel.get(currentView).setRead(true);
-
-        }catch (IndexOutOfBoundsException e){
-
-        }
-        list2.setCellRenderer(new ListRenderer());
-    }
-
-
-
-    /**
-     *  Receive a message and determine what to do.
-     */
-    public void onReceive(Message message) {
-        if(message instanceof PingMessage){
-            addClient(((PingMessage) message).getId(), ((PingMessage) message).getName());
-        }else if(message instanceof ChatMessage){
-            if(((ChatMessage)message).getDestination() != currentView && ((ChatMessage)message).getDestination() < clientModel.size()){
-                clientModel.get(((ChatMessage)message).getDestination()).setRead(false);
+    public void sendMessageButtonActionListener(){
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                messageController.sendMessage();
             }
-            addChatMessage((ChatMessage) message);
-        }
+        });
     }
 
     /**
-     * Add an entry to the chatmessages
+     * Add an action listener to <code>list1</code>. Update the messageList if an other index has been selected.
      */
-    public void addChatMessage(ChatMessage message){
-        try{
-            chatModel.get(message.getDestination()).addElement(message);
-        }catch(IndexOutOfBoundsException e){
-            chatModel.add(message.getDestination(), new DefaultListModel<ChatMessage>());
-            chatModel.get(message.getDestination()).addElement(message);
-        }
-        this.messagesList();
-
+    public void clientListActionListener(){
+        list1.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                if (!listSelectionEvent.getValueIsAdjusting()) {
+                    currentView = list1.getSelectedIndex();
+                    messagesList();
+                }
+            }
+        });
     }
 
-    /**
-     * Update the clients list
-     */
-    public void changeClients(){
 
+    public int getCurrentView() {
+        return currentView;
     }
 
-    /**
-     * Adds an client to the list
-     */
-    public void addClient(int id, String name){
-        clientModel.addElement(new Client(id, name, null, true));
+    public JTextField getMessageField() {
+        return messageField;
     }
 }

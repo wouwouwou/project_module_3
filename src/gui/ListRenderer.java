@@ -1,26 +1,34 @@
 package gui;
 
-import javax.imageio.ImageIO;
+import gui.controller.ChatMessage;
+import gui.controller.Client;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by tristan on 7-4-15.
+ * Generates a ListCell based on a JLabel for use in an JList.
  */
 public class ListRenderer extends JLabel implements ListCellRenderer {
-
+    // The width of the profile image
     private static final int NEW_WIDTH = 40;
+
+    // The height of the profile image
     private static final int NEW_HEIGHT = 40;
 
-    public ListRenderer(){
+    // The id of a the source of the entry (not used)
+    @SuppressWarnings("unused")
+    private int id;
+
+    public ListRenderer(int id){
+        this.id = id;
         setOpaque(true);
-        setIconTextGap(12);
+        setIconTextGap(24);
     }
 
     @Override
@@ -28,15 +36,9 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
         if(o instanceof ChatMessage) {
             ChatMessage entry = (ChatMessage) o;
             DateFormat df = new SimpleDateFormat("HH:mm:ss MM-dd-yyyy");
-            setText("<html>" + entry.getMessage()+"<br><font color='gray' size=-1'>"+entry.getName()+" om "+df.format(entry.getDate())+"</font></html>");
+            setText("<html>" + entry.getMessage() + "<br><font color='gray' size=-1'><b>" + entry.getName() + "</b> om " + df.format(entry.getDate()) + "</font></html>");
             // Set the image
-            URL iconURL = getClass().getResource("/gui/1.png");
-            ImageIcon icon = new ImageIcon(iconURL);
-            Image img = icon.getImage();
-            Image newimg = img.getScaledInstance(NEW_WIDTH, NEW_HEIGHT, java.awt.Image.SCALE_SMOOTH);
-            icon = new ImageIcon(newimg);
-
-            setIcon(icon);
+            setIcon(getImage(entry));
 
             setBackground(Color.WHITE);
             setForeground(Color.BLACK);
@@ -45,14 +47,12 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
         }else{
             Client entry = (Client) o;
             if(entry.isRead()){
-                setText(entry.getName() +  "");
-                System.out.println("Read!");
+                setText("<html>"+entry.getName() +  "<br><font color='gray' size=-1'>Laatst gezien:"+lastSeen(entry.getDate())+"</font></html>");
             }else{
-                setText("<html>"+entry.getName() +  "&emsp;<span color='GREEN'>\u272A Nieuw bericht!</span></html>");
-                System.out.println("Not yet read!");
+                setText("<html>"+entry.getName() +  "&emsp;<span color='GREEN'>\u272A Nieuw bericht!</span><br><font color='gray' size=-1'>Laatst gezien: " + lastSeen(entry.getDate())+"</font></html>");
             }
             if(b){
-                setBackground(Color.GRAY);
+                setBackground(Color.LIGHT_GRAY);
                 setForeground(Color.BLACK);
             }else {
                 setBackground(Color.WHITE);
@@ -60,5 +60,37 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
             }
             return this;
         }
+    }
+
+    private String lastSeen(Date date){
+        Date currentdate = new Date();
+        long diff = currentdate.getTime() - date.getTime();
+        long diffSeconds = diff / 1000 % 60;
+        long diffMinutes = diff / (60*1000) % 60;
+        long diffHours = diff / (60*60*1000);
+        int diffDays = (int) diff / (1000 * 60 * 60 * 24);
+        if(diffDays > 0){
+            return diffDays + " dagen";
+        }else if(diffHours > 0){
+            return diffHours + " uren";
+        }else if(diffMinutes > 0){
+            return diffMinutes + " minuten";
+        }else{
+            return diffSeconds + " seconden";
+        }
+    }
+
+    private ImageIcon getImage(ChatMessage entry){
+        int imagesource;
+        if(entry.getSource() == 0){
+            imagesource = 1;
+        }else{
+            imagesource = entry.getSource();
+        }
+        URL iconURL = getClass().getResource("/gui/sources/"+imagesource+".png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        Image img = icon.getImage();
+        Image newimg = img.getScaledInstance(NEW_WIDTH, NEW_HEIGHT, java.awt.Image.SCALE_SMOOTH);
+        return new ImageIcon(newimg);
     }
 }
