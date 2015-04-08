@@ -1,4 +1,4 @@
-package tests.exceptions.packet;
+package tests.exceptions.network.packet;
 
 import exceptions.network.packet.InvalidCommunicationHeaderLengthException;
 import network.Protocol;
