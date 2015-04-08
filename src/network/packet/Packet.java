@@ -5,7 +5,6 @@ import exceptions.network.packet.NullPacketException;
 import network.Protocol;
 import exceptions.network.InvalidPacketException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
