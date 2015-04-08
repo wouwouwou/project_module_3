@@ -1,5 +1,7 @@
 package network;
 
+import network.packet.Packet;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -36,6 +38,12 @@ public class Protocol {
     public static final byte COMMUNICATION_PACKET = 2;
 
 
+    //Internal classes
+    public static class flags{
+        public static byte DATA = 1;
+        public static byte ACK = 2;
+    }
+
     // -----<=>-----< Queries >-----<=>----- \\
     /**
      * Getter for the InetAddress of the multicast network
@@ -45,6 +53,5 @@ public class Protocol {
     public InetAddress getGroupAddress() throws UnknownHostException {
         return InetAddress.getByName(GROUP_ADDRESS);
     }
-
 
 }
