@@ -22,6 +22,7 @@ public class NetworkManager {
     private InetAddress group;
     private ArrayList<Byte> routingTable;
     private short discoverySequenceNum = 0;
+    private int sequenceNum = Protocol.CLIENT_ID << 24;
 
     // -----<=>-----< Main >-----<=>----- \\
     /**
@@ -105,7 +106,7 @@ public class NetworkManager {
      */
     public void send(Packet packet){
 
-        outgoingPacketHandler.send(packet, group);
+        outgoingPacketHandler.send(packet);
 
     }
 
@@ -211,6 +212,10 @@ public class NetworkManager {
         }
     }
 
+    public int nextSequenceNum(){
+        sequenceNum += 1;
+        return sequenceNum;
+    }
 
     // -----<=>-----< Getters & Setters >-----<=>----- \\
     public IncomingPacketHandler getIncomingPacketHandler() {
@@ -231,5 +236,37 @@ public class NetworkManager {
 
     public Object[] getRoutingTable() {
         return routingTable.toArray();
+    }
+
+
+    public Packet constructPacket(byte destination, byte dataType, byte[] data){
+        Packet packet = new Packet();
+        packet.setDataType(dataType);
+        packet.setData(data);
+        packet.setDestination(destination);
+        packet.setSource((byte) Protocol.CLIENT_ID);
+        packet.setType(Protocol.COMMUNICATION_PACKET);
+        packet.setSequenceNumber(nextSequenceNum());
+        byte[] route = getTableEntryByDestination(destination);
+        if(route == null){
+            return null;
+        }
+        packet.setNextHop(route[2]);
+        packet.setFlags(Protocol.flags.DATA);
+        return packet;
+    }
+
+    public Packet constructACK(Packet packet){
+        packet.setData(new byte[0]);
+        packet.setDestination(packet.getSource());
+        packet.setSource((byte) Protocol.CLIENT_ID);
+        packet.setType(Protocol.COMMUNICATION_PACKET);
+        byte[] route = getTableEntryByDestination(packet.getDestination());
+        if(route == null){
+            return null;
+        }
+        packet.setNextHop(route[2]);
+        packet.setFlags(Protocol.flags.ACK);
+        return packet;
     }
 }

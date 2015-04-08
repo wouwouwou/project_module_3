@@ -149,6 +149,19 @@ public class IncomingPacketHandler extends PacketHandler {
     }
 
     public void handleCommunication(byte[] packet){
+        if(packet[3] == networkManager.getClientId()){
+            if (packet[8] == Protocol.flags.DATA){
+                try {
+                    Packet ack = networkManager.constructACK(new Packet(packet));
+                    networkManager.send(ack);
+
+                } catch (Packet.InvalidPacketException e) {
+                    e.printStackTrace();
+                }
+            } else if(packet[8] == Protocol.flags.ACK){
+                //Handle ACK
+            }
+        }
 
     }
 }

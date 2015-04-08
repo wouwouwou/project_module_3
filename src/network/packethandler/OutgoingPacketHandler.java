@@ -34,7 +34,7 @@ public class OutgoingPacketHandler extends PacketHandler {
             synchronized (floatingPacketMap) {
                 for (FloatingPacket packet : floatingPacketMap.values()) {
                     if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
-                        this.send(packet, networkManager.getGroup());
+                        this.send(packet);
                         packet.setSentOn(System.currentTimeMillis());
                     }
                 }
@@ -54,19 +54,21 @@ public class OutgoingPacketHandler extends PacketHandler {
      *     As long as a tentative packet has not been received, it will be retransmitted
      * </p>
      * @param packet Packet the packet that will be broadcasted to the multicast network
-     * @param group InetAddress the multicast group address where you sent the packet to
      */
-    public void send(Packet packet, InetAddress group){
+    public void send(Packet packet){
+        InetAddress group = networkManager.getGroup();
         synchronized (floatingPacketMap) {
             try {
                 socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            try {
-                floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
-            } catch (Packet.InvalidPacketException e) {
-                e.printStackTrace();
+            if(packet.getFlags() == Protocol.flags.DATA) {
+                try {
+                    floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+                } catch (Packet.InvalidPacketException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
