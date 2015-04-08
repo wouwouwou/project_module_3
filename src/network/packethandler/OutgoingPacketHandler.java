@@ -83,7 +83,7 @@ public class OutgoingPacketHandler extends PacketHandler {
      * @param packet Packet an Acknowledgment that has to be checked
      * @return boolean if floatingPacketMap is updated
      */
-    public boolean updateTentative(Packet packet) {
+    public boolean updateFloatingPacketMap(Packet packet) {
         synchronized (floatingPacketMap) {
             for (byte[] tentativeSeq : floatingPacketMap.keySet()) {
                 if (packet.getSequenceBytes() == tentativeSeq) {
