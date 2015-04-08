@@ -8,20 +8,33 @@ package network.packet;
  * Created on 7-4-15.
  */
 public class FloatingPacket extends Packet {
+
+    // -----<=>-----< Fields >-----<=>----- \\
+
     private long sentOn;
 
+    // -----<=>-----< Constructors >-----<=>----- \\
+
     /**
-     *
+     * Empty Constructor
      */
     public FloatingPacket(){
         super();
         this.sentOn = System.currentTimeMillis();
     }
 
+    /**
+     * Constructing a packet from a (byte[])
+     * @param data byte[]
+     * @throws InvalidPacketException
+     */
+    //TODO proper exception handling, also with documenting (correctly refering to our implementation) - Woeter
     public FloatingPacket(byte[] data) throws InvalidPacketException {
         super(data);
         this.sentOn = System.currentTimeMillis();
     }
+
+    // -----<=>-----< Getters & Setters >-----<=>----- \\
 
     public long getSentOn(){
         return sentOn;
