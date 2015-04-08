@@ -24,10 +24,10 @@ public class Client {
 
     /**
      * Construct a client, based on a id, name, last seen date and whether the messages of this client have been read.
-     * @param id
-     * @param name
-     * @param date
-     * @param read
+     * @param id The id of a client
+     * @param name The name of a client
+     * @param date The last date the client has been seen
+     * @param read Messages of the client have been read
      */
     public Client(int id, String name, Date date, Boolean read) {
         this.id = id;
@@ -38,8 +38,8 @@ public class Client {
 
     // ------------------- Getters -------------------
     /**
-     * Returns the date of an message.
-     * @return date
+     * Returns the date of an client.
+     * @return date The date a client has been seen last
      */
     public Date getDate() {
         return date;
@@ -47,7 +47,7 @@ public class Client {
 
     /**
      * Returns the name of a client.
-     * @return
+     * @return name The name of a client
      */
     public String getName() {
         return name;
@@ -55,7 +55,7 @@ public class Client {
 
     /**
      * Returns <code>id</code> of a client.
-     * @return id
+     * @return id The id of a client
      */
     public int getId() {
         return id;
@@ -63,7 +63,7 @@ public class Client {
 
     /**
      * Sets the <code>read</code> to the given parameter.
-     * @param read
+     * @param read Determines whether the messages of the client have been read
      */
     public void setRead(Boolean read){
         this.read = read;
@@ -71,7 +71,7 @@ public class Client {
 
     /**
      * Returns the <code>read</code> of a client (determines whether all messages of a client have been read.
-     * @return read
+     * @return read The Boolean whether messages have been read
      */
     public Boolean isRead() {
         return read;

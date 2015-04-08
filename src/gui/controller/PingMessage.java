@@ -28,7 +28,7 @@ public class PingMessage implements Message{
 
     /**
      * Returns the name of a sender
-     * @return name
+     * @return name The name of the sender
      */
     public String getName() {
         return name;
@@ -36,7 +36,7 @@ public class PingMessage implements Message{
 
     /**
      * Returns the id of a sender
-     * @return id
+     * @return id The source-id of the sender
      */
     public int getId() {
         return id;

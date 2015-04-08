@@ -44,7 +44,7 @@ public class ChatMessage implements Message {
     // ------------------- Getters ----------------------------------------------------------------------------
     /**
      * Returns the date of an message.
-     * @return date
+     * @return date The date of an message
      */
     public Date getDate() {
         return date;
@@ -52,7 +52,7 @@ public class ChatMessage implements Message {
 
     /**
      * Returns the sender of an message.
-     * @return
+     * @return name The name of the sender
      */
     public String getName() {
         return name;
@@ -60,7 +60,7 @@ public class ChatMessage implements Message {
 
     /**
      * Returns the source of an message.
-     * @return source
+     * @return source The source-id of the sender
      */
     public int getId() {
         return source;
@@ -68,7 +68,7 @@ public class ChatMessage implements Message {
 
     /**
      * Returns the message.
-     * @return
+     * @return message The message the sender told
      */
     public String getMessage() {
         return message;
@@ -76,7 +76,7 @@ public class ChatMessage implements Message {
 
     /**
      * Returns the destination of a message.
-     * @return destination
+     * @return destination The destination of the message (this host)
      */
     public int getDestination() {
         return destination;
@@ -84,7 +84,7 @@ public class ChatMessage implements Message {
 
     /**
      * Returns the source of a message.
-     * @return source
+     * @return source The source-id of the message
      */
     public int getSource(){
         return getId();

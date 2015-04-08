@@ -34,7 +34,7 @@ public class MessageController {
     // ------------------- Actions that can be called ----------------------------------------------------------------------------
 
     /**
-     * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>.
+     * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>. Sends the message to it's own listener and to the NetworkLayer.
      */
     public void sendMessage() {
         //TODO: send message to network with selected client (0 = broadcast)
@@ -47,21 +47,22 @@ public class MessageController {
 
     /**
      *  Receive a message and determine what to do. Messages can by of type <code>PingMessage</code> and <code>ChatMessage</code>.
+     *  @param message The message the sender has got to tell.
      */
     public void onReceive(Message message) {
         if(message instanceof PingMessage){
             // Message is a ping message. Determine if the client is already added to the <code>clientModel</code>
-            int exisitingclient = -1;
+            int client = -1;
             for(int i = 0; i < clientModel.size(); i++){
-                if(clientModel.get(i).getId() == ((PingMessage) message).getId()){
-                    exisitingclient = i;
+                if(clientModel.get(i).getId() == message.getId()){
+                    client = i;
                     break;
                 }
             }
-            if(exisitingclient > 0){
-                clientModel.get(exisitingclient).setDate();
+            if(client > 0){
+                clientModel.get(client).setDate();
             }else{
-                addClient(((PingMessage) message).getId(), ((PingMessage) message).getName());
+                addClient(message.getId(), (message.getName()));
             }
         }else if(message instanceof ChatMessage){
             // Message is a ChatMessage. Add the message to the list.
@@ -106,6 +107,7 @@ public class MessageController {
      * Remove the client with <code>id</code> from <code>clientModel</code>.
      * @param id The id to delete
      */
+    @SuppressWarnings("unused")
     private void changeClients(int id){
         for(int i = 0; i < clientModel.size(); i++){
             if(clientModel.get(i).getId() == id){

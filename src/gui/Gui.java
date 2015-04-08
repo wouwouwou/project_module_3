@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 /**
  * Created by tristan on 7-4-15.
- * Controlled by a MessageController.
+ * Controlled by a MessageController
  */
 public class Gui extends JFrame {
     private static final Font DEFAULT_FONT = new Font("Ubuntu", Font.PLAIN, 15);
@@ -19,7 +19,9 @@ public class Gui extends JFrame {
     private JPanel rootPanel;
     private JList list1;
     // DO NOT DELETE chatPanel and clientPanel!
+    @SuppressWarnings("unused")
     private JPanel chatPanel;
+    @SuppressWarnings("unused")
     private JPanel clientPanel;
     private JTextField messageField;
     private JButton sendButton;
@@ -59,8 +61,8 @@ public class Gui extends JFrame {
      */
     public void messagesList(){
         try{
-                messageController.getClientModel().get(currentView).setRead(true);
-                list2.setModel(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()));
+            messageController.getClientModel().get(currentView).setRead(true);
+            list2.setModel(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()));
         }catch (IllegalArgumentException e){
 
         }
@@ -86,13 +88,7 @@ public class Gui extends JFrame {
     private void setDefaultLookAndFeel() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

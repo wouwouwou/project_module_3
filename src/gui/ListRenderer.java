@@ -15,10 +15,15 @@ import java.util.Date;
  * Generates a ListCell based on a JLabel for use in an JList.
  */
 public class ListRenderer extends JLabel implements ListCellRenderer {
-
+    // The width of the profile image
     private static final int NEW_WIDTH = 40;
+
+    // The height of the profile image
     private static final int NEW_HEIGHT = 40;
-    private final int id;
+
+    // The id of a the source of the entry (not used)
+    @SuppressWarnings("unused")
+    private int id;
 
     public ListRenderer(int id){
         this.id = id;

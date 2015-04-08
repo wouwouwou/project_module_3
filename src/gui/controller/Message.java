@@ -7,13 +7,13 @@ package gui.controller;
 interface Message {
     /**
      * The name of a sender of a message
-     * @return name
+     * @return name The name of a sender of a message
      */
     String getName();
 
     /**
      * The id of a sender of a message
-     * @return id
+     * @return id The id of a sender of a message
      */
     int getId();
 }
