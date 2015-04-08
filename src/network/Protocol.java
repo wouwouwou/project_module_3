@@ -25,6 +25,7 @@ public class Protocol {
     public static final int TIMEOUT = 5000;
 
     public static final int COMMUNICATION_HEADER_LENGTH = 11;
+    public static final int DISCOVERY_HEADER_LENGTH = 4;
 
     public static int CLIENT_ID = 0;
 
