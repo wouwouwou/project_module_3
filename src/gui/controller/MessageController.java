@@ -1,8 +1,10 @@
 package gui.controller;
 
+import file.FileHandler;
 import gui.Gui;
 
 import javax.swing.*;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -23,12 +25,15 @@ public class MessageController {
     // The clientModel is used to store all clients. A DefaultListModel can easily be used to populate a JList.
     private DefaultListModel<Client> clientModel = new DefaultListModel<>();
 
+    private int filecount = 0;
     /**
      *  Creates a new GUI that is linked to field <code>gui</code>.
      */
     public MessageController(){
         gui = new Gui(this);
     }
+
+
 
 
     // ------------------- Actions that can be called ----------------------------------------------------------------------------
@@ -68,6 +73,16 @@ public class MessageController {
             // Message is a ChatMessage. Add the message to the list.
             addChatMessage((ChatMessage) message);
         }
+    }
+
+    /**
+     * Handles the file control.
+     */
+    public void sendFile(Path path){
+        FileHandler fh = new FileHandler();
+        // Read the file using a buffered reader
+        fh.sendFile(path, filecount, gui.getCurrentView());
+        filecount++;
     }
 
     // ------------------- Methods that can be called by onReceive ---------------------------------------------------------
