@@ -16,12 +16,12 @@ import java.util.ArrayList;
  */
 public class IncomingPacketHandler extends PacketHandler {
 
-    // -----<=>-----< Fields >-----<=>----- \\
+    // Fields
     private ArrayList<PacketListener> listeners;
     private byte[] buffer;
     private NetworkManager networkManager;
 
-    // -----<=>-----< Constructor(s) >-----<=>----- \\
+    // Constructor(s)
     /**
      * Constructs a new IncomingPacketHandler, this is done by the NetworkHandler.
      * The IncomingPacketHandler is then started in a new Thread
