@@ -39,13 +39,11 @@ public class TestMessages {
 
         //Construct packet2 from bytes[]
         Packet packet2;
-        try {
-            packet2 = new Packet(packet1Bytes);
-            System.out.printf("Constructed packet has sequence number: %s\n", packet2.getSequenceNumber());
-            System.out.printf("Constructed packet has data: %s\n", new String(packet2.getData()));
-        } catch (Packet.InvalidPacketException e) {
-            e.printStackTrace();
-        }
+
+        packet2 = new Packet(packet1Bytes);
+        System.out.printf("Constructed packet has sequence number: %s\n", packet2.getSequenceNumber());
+        System.out.printf("Constructed packet has data: %s\n", new String(packet2.getData()));
+
 
 
         try {
