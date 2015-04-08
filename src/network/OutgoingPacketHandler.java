@@ -2,30 +2,25 @@ package network;
 
 import network.packet.FloatingPacket;
 import network.packet.Packet;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by gerben on 7-4-15.
+ * @author Gerben Meijer
+ * @since 7-4-15
  */
-public class OutgoingPacketHandler implements Runnable{
+public class OutgoingPacketHandler extends PacketHandler{
 
-    private final ConcurrentHashMap<byte[], FloatingPacket> floatingPacketMap = new ConcurrentHashMap<byte[], FloatingPacket>();
-    private MulticastSocket socket;
+    private final ConcurrentHashMap<byte[], FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
     private NetworkManager networkManager;
-    private Thread thread;
 
 
     public OutgoingPacketHandler(MulticastSocket socket, NetworkManager networkManager){
+        super(socket);
         this.networkManager = networkManager;
-        this.socket = socket;
-        this.thread = new Thread(this);
-        this.thread.start();
     }
 
     @Override
@@ -45,11 +40,6 @@ public class OutgoingPacketHandler implements Runnable{
                 e.printStackTrace();
             }
         }
-    }
-
-
-    public Thread getThread(){
-        return thread;
     }
 
     public void send(Packet packet, InetAddress group){
