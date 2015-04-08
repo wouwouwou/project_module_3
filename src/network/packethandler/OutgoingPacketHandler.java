@@ -33,14 +33,22 @@ public class OutgoingPacketHandler extends PacketHandler {
     // Methods
     @Override
     public void run() {
-        while (true){
-            synchronized (floatingPacketMap) {
-                for (FloatingPacket packet : floatingPacketMap.values()) {
-                    if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
-                        this.send(packet);
-                        packet.setSentOn(System.currentTimeMillis());
+        while (true) {
+            if (System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.CONVERGE_TIME) {
+                synchronized (floatingPacketMap) {
+                    for (FloatingPacket packet : floatingPacketMap.values()) {
+                        if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
+                            this.send(packet);
+                            packet.setSentOn(System.currentTimeMillis());
+                        }
                     }
                 }
+            }
+
+            if(System.currentTimeMillis() > networkManager.getLastTableDrop() + 10000){
+                networkManager.dropTable();
+                networkManager.setDiscoverySequenceNum((short) (networkManager.getDiscoverySequenceNum() + 1));
+                networkManager.sendTable();
             }
             try {
                 Thread.sleep(50);
@@ -49,6 +57,7 @@ public class OutgoingPacketHandler extends PacketHandler {
                 e.printStackTrace();
             }
         }
+
     }
 
     /**
@@ -77,13 +86,15 @@ public class OutgoingPacketHandler extends PacketHandler {
         }
     }
 
-    public void handleACK(Packet ackPacket){
+    public Packet handleACK(Packet ackPacket){
         System.out.println("Ack received!");
         System.out.println(floatingPacketMap.containsKey(ackPacket.getFloatingKey()));
         if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
-            System.out.println("Removing..");
+            Packet original = floatingPacketMap.get(ackPacket.getFloatingKey());
             floatingPacketMap.remove(ackPacket.getFloatingKey());
+            return ackPacket;
         }
+        return null;
     }
 
 
