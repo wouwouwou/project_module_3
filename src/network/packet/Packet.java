@@ -4,7 +4,6 @@ import exceptions.network.packet.InvalidCommunicationHeaderLengthException;
 import exceptions.network.packet.NullPacketException;
 import network.Protocol;
 import exceptions.network.InvalidPacketException;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
 
     private byte[] data = new byte[0];
-    private int sequenceNumber;
+    private int sequenceNumber = 0;
     private byte type = Protocol.COMMUNICATION_PACKET;
     private byte dataType = 0;
     private byte source = 0;
@@ -27,7 +26,6 @@ public class Packet {
     private byte nextHop = 0;
 
     // -----<=>-----< Constructors >-----<=>----- \\
-
     /**
      * Empty packet constructor
      */
@@ -60,11 +58,11 @@ public class Packet {
 
         destination = packet[3];
 
-        sequenceNumber = (fixSign(packet[4]) << 24) + (fixSign(packet[5]) << 16) +(fixSign(packet[6]) << 8) + fixSign(packet[7]);
+        sequenceNumber = (Protocol.fixSign(packet[4]) << 24) + (Protocol.fixSign(packet[5]) << 16) +(Protocol.fixSign(packet[6]) << 8) + Protocol.fixSign(packet[7]);
 
         flags = packet[8];
 
-        int dataLength = (fixSign(packet[9]) << 8) + (fixSign(packet[10]));
+        int dataLength = (Protocol.fixSign(packet[9]) << 8) + (Protocol.fixSign(packet[10]));
 
         nextHop = packet[11];
 
@@ -81,6 +79,7 @@ public class Packet {
         System.out.println(new String(this.getData()));
     }
 
+    // -----<=>-----< Queries >-----<=>----- \\
     /**
      * Converts this (Packet) object to a (byte[])
      * <p>
@@ -119,27 +118,6 @@ public class Packet {
     }
 
     /**
-     * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java
-     * @param data byte
-     * @return int correctly converted data (byte) to (int)
-     */
-    public static int fixSign(byte data){
-        //Function to fix signed stuff.
-        long dataL = (long) data;
-        return (int )dataL & 0xff;
-    }
-
-
-    // -----<=>-----< Queries >-----<=>----- \\
-    /**
-     * Getter for the data field (byte[]) of this packet
-     * @return byte[] with the data of the packet
-     */
-    public byte[] getData() {
-        return this.data;
-    }
-
-    /**
      * Gives a byte[] representation of the sequenceNumber (long) field
      * @return byte[] The sequence number converted to a byte array with 4 entries
      */
@@ -168,19 +146,23 @@ public class Packet {
 
     public String toString(){
         String out = "Packet: ";
-        out += String.format("\ttype: %s\n", type);
-        out += String.format("\t\tdata type: %s\n", dataType);
-        out += String.format("\t\tsource: %s\n", source);
-        out += String.format("\t\tdestination: %s\n", destination);
-        out += String.format("\t\tsequence number: %s\n", sequenceNumber);
-        out += String.format("\t\tflags: %s\n", flags);
-        out += String.format("\t\tdata length: %s\n", data.length);
-        out += String.format("\t\tnext hop: %s\n", nextHop);
+        out += String.format("\t type: %s\n", type);
+        out += String.format("\t data type: %s\n", dataType);
+        out += String.format("\t source: %s\n", source);
+        out += String.format("\t destination: %s\n", destination);
+        out += String.format("\t sequence number: %s\n", sequenceNumber);
+        out += String.format("\t flags: %s\n", flags);
+        out += String.format("\t data length: %s\n", data.length);
+        out += String.format("\t next hop: %s\n", nextHop);
 
         return out;
     }
 
     // -----<=>-----< Setters & Getters >-----<=>----- \\
+    public byte[] getData() {
+        return this.data;
+    }
+
     public void setData(byte[] data) {
         this.data = data;
     }
