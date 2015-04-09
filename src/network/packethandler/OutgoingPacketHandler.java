@@ -77,7 +77,7 @@ public class OutgoingPacketHandler extends PacketHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(packet.getFlags() == Protocol.Flags.DATA) {
+            if (packet.getFlags() == Protocol.Flags.DATA) {
                 try {
                     floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
                 } catch (InvalidPacketException e) {
