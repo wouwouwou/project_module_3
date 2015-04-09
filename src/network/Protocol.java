@@ -1,8 +1,5 @@
 package network;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 /**
  * Holds constants used in the Protocol and network.
  * @author Tim Hintzbergen
@@ -50,6 +47,7 @@ public class Protocol {
         public static byte TEXT = 2;
         public static byte FILE = 3;
     }
+
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**

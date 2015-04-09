@@ -1,6 +1,5 @@
 package gui.controller;
 
-import exceptions.network.InvalidPacketException;
 import file.FileHandler;
 import file.FileReceiver;
 import gui.Gui;
@@ -23,7 +22,7 @@ import java.util.List;
  */
 public class MessageController implements DataListener{
     // The ID of this client
-    private static final int OWN_ID = 1;
+    private static int OWN_ID;
 
     // The Gui that is used by this client
     private final Gui gui;
@@ -50,6 +49,9 @@ public class MessageController implements DataListener{
         if(this.networkManager == null){
             System.out.println("networkManager is null");
         }
+
+        OWN_ID = Protocol.CLIENT_ID;
+
         this.networkManager.getIncomingPacketHandler().addDataListener(this);
     }
 

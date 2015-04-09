@@ -13,10 +13,11 @@ import java.io.IOException;
  */
 public class TestMessages {
 
+    private final static String NAME = "eennaam";
     public static void main(String[] args){
         // Initialize test objects
 
-        NetworkManager networkManager = new NetworkManager();
+        NetworkManager networkManager = new NetworkManager(NAME);
         PrintingDataListener l = new PrintingDataListener();
         PrintingAckListener pal = new PrintingAckListener();
         networkManager.getIncomingPacketHandler().addDataListener(l);
