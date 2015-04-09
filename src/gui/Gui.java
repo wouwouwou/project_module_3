@@ -10,8 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by tristan on 7-4-15.
  * Controlled by a MessageController
+ * @author Tistan de Boer
+ * @since 7-4-15
  */
 public class Gui extends JFrame {
     private static final Font DEFAULT_FONT = new Font("Ubuntu", Font.PLAIN, 15);

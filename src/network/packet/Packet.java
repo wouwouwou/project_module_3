@@ -35,32 +35,15 @@ public class Packet {
 
     /**
      * Constructs a (Packet) from a (byte[])
-     * @param packet byte[] Data to be constructed into a packet
-     */
-    public Packet(byte[] packet) throws InvalidPacketException {
-        fromBytes(packet);
-    }
-
-    // -----<=>-----< Methods >-----<=>----- \\
-    /**
-     * Prints the data in a packet to the standard out (as a String)
-     */
-    public void print() {
-        System.out.println(new String(this.getData()));
-    }
-
-    /**
-     * Constructs a (Packet) object from a byte[]
      * <p>
-     *     This method will assign bytes from the byte[] to fields of the new Packet object following our design implementation.
+     *     This constructor will assign bytes from the byte[] to fields of the new Packet object.
      *     An InvalidPacketException is thrown and caught if the packet doesn't fulfill the requirements of our protocol.
      * </p>
-     * @param packet byte[] (byte[]) packet you want to convert to a (Packet)
+     * @param packet byte[] Data to be constructed into a packet
      */
     //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
     //TODO Testing of Exceptions! Especially the e.getMessage()!
-    public void fromBytes(byte[] packet) throws InvalidPacketException{
-
+    public Packet(byte[] packet) throws InvalidPacketException {
         if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH) {
             throw new InvalidCommunicationHeaderLengthException();
         }
@@ -88,7 +71,14 @@ public class Packet {
         data = new byte[dataLength];
 
         System.arraycopy(packet, Protocol.COMMUNICATION_HEADER_LENGTH, data, 0, dataLength);
+    }
 
+    // -----<=>-----< Methods >-----<=>----- \\
+    /**
+     * Prints the data in a packet to the standard out (as a String)
+     */
+    public void print() {
+        System.out.println(new String(this.getData()));
     }
 
     /**

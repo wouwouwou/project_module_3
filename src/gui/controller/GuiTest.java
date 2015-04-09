@@ -5,8 +5,9 @@ import network.NetworkManager;
 import java.util.Date;
 
 /**
- * Created by tristan on 7-4-15.
  * Tests the GUI's capability of receiving messages.
+ * @author Tistan de Boer
+ * @since 7-4-15
  */
 public class GuiTest {
     /**
