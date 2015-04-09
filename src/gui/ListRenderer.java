@@ -2,6 +2,7 @@ package gui;
 
 import gui.controller.ChatMessage;
 import gui.controller.Client;
+import gui.controller.ProcessMessage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,6 +46,9 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
             setForeground(Color.BLACK);
 
             return this;
+        }else if(o instanceof ProcessMessage){
+            // Update visuals of the ProcessMessage
+            return null;
         }else{
             Client entry = (Client) o;
             if(entry.isRead()){
@@ -85,8 +89,10 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
         int imagesource;
         if(entry.getSource() == 0){
             imagesource = 1;
-        }else{
+        }else if(entry.getSource() > 0 && entry.getSource() < 5){
             imagesource = entry.getSource();
+        }else{
+            imagesource = 5;
         }
         URL iconURL = getClass().getResource("/gui/sources/"+imagesource+".png");
         ImageIcon icon = new ImageIcon(iconURL);
