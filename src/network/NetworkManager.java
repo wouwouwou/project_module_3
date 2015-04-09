@@ -64,10 +64,7 @@ public class NetworkManager {
     }
 
     public void send(Packet packet){
-
-
         outgoingPacketHandler.send(packet, group);
-
     }
 
 
