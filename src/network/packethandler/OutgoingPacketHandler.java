@@ -25,8 +25,8 @@ public class OutgoingPacketHandler extends PacketHandler {
     private NetworkManager networkManager;
 
     // Constructor(s)
-    public OutgoingPacketHandler(MulticastSocket socket, NetworkManager networkManager){
-        super(socket);
+    public OutgoingPacketHandler(NetworkManager networkManager){
+        super(networkManager);
         this.networkManager = networkManager;
     }
 

@@ -73,10 +73,10 @@ public class NetworkManager {
 
 
             //Create and start the IncomingPacketHandler
-            incomingPacketHandler = new IncomingPacketHandler(socket, this, 1000);
+            incomingPacketHandler = new IncomingPacketHandler(this, 1000);
 
             //Create and start the OutgoingPacketHandler
-            outgoingPacketHandler = new OutgoingPacketHandler(socket, this);
+            outgoingPacketHandler = new OutgoingPacketHandler(this);
 
             //Fill the table (by dropping it) and send it
             dropTable();
@@ -342,5 +342,9 @@ public class NetworkManager {
 
     public OutgoingPacketHandler getOutgoingPacketHandler() {
         return outgoingPacketHandler;
+    }
+
+    public MulticastSocket getSocket() {
+        return socket;
     }
 }

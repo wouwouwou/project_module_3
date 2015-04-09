@@ -22,17 +22,15 @@ public class IncomingPacketHandler extends PacketHandler {
     private ArrayList<DataListener> dataListeners;
     private ArrayList<AckListener> ackListeners;
     private byte[] buffer;
-    private NetworkManager networkManager;
 
     // Constructor(s)
     /**
      * Constructs a new IncomingPacketHandler, this is done by the NetworkHandler.
      * The IncomingPacketHandler is then started in a new Thread
-     * @param socket
      * @param buffersize
      */
-    public IncomingPacketHandler(MulticastSocket socket, NetworkManager networkManager, int buffersize){
-        super(socket);
+    public IncomingPacketHandler(NetworkManager networkManager, int buffersize){
+        super(networkManager);
         this.buffer = new byte[buffersize];
         this.dataListeners = new ArrayList<>();
         this.ackListeners = new ArrayList<>();
@@ -70,6 +68,7 @@ public class IncomingPacketHandler extends PacketHandler {
         while(true){
             try {
                 socket.receive(recv);
+                IncomingPacketHandler.printArray(recv.getData());
                 handle(recv.getData());
             } catch (IOException e) {
                 e.printStackTrace();
