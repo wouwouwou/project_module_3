@@ -107,7 +107,9 @@ public class OutgoingPacketHandler extends PacketHandler {
             //TODO Synchronized might break because it is called from a synchronized block in run()
             synchronized (floatingPacketMap) {
                 try {
-
+                    if(floatingPacketMap.containsKey((packet.getFloatingKey()))){
+                        floatingPacketMap.remove(packet.getFloatingKey());
+                    }
                     //Try to find a route
                     byte[] route = networkManager.getTableEntryByDestination(packet.getDestination());
 

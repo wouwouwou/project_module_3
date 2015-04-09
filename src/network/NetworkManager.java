@@ -4,6 +4,7 @@ import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
+import test.PrintingAckListener;
 
 import java.io.IOException;
 import java.net.*;
@@ -68,6 +69,7 @@ public class NetworkManager {
 
             //Get our client ID and set Protocol.CLIENT_ID
             Protocol.CLIENT_ID = this.getClientId();
+            //Protocol.CLIENT_ID = 1;
             System.out.println("Init with client id: " + Protocol.CLIENT_ID);
             sequenceNum = (Protocol.CLIENT_ID << 24);
 
@@ -313,11 +315,6 @@ public class NetworkManager {
         packet.setDestination(packet.getSource());
         packet.setSource((byte) Protocol.CLIENT_ID);
         packet.setType(Protocol.COMMUNICATION_PACKET);
-        byte[] route = getTableEntryByDestination(packet.getDestination());
-        if(route == null){
-            throw new InvalidPacketException();
-        }
-        packet.setNextHop(route[2]);
         packet.setFlags(Protocol.Flags.ACK);
         return packet;
     }
