@@ -35,6 +35,7 @@ public class ChatMessage implements Message {
      * @param source The source
      */
     public ChatMessage(String message, String name, Date date, int destination, int source) {
+        System.out.printf("New Chatmessage s: %s, d: %s\n", source, destination);
         this.message = message;
         this.name = name;
         this.date = date;

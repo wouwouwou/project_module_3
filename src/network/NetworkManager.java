@@ -296,7 +296,6 @@ public class NetworkManager {
      * @return
      * @throws IOException
      */
-    //TODO Donder op met je Ad-Hoc Kobaldski
     public Packet constructPacket(byte destination, byte dataType, byte[] data) throws IOException {
         Packet packet = new Packet();
         packet.setDataType(dataType);
@@ -327,6 +326,26 @@ public class NetworkManager {
         packet.setNextHop(route[2]);
         packet.setFlags(Protocol.Flags.ACK);
         return packet;
+    }
+
+    /**
+     * Constructs a broadcast Ping packet
+     * <p>
+     *     Uses constructPacket(byte destination, byte dataType, byte[] data) to make a broadcasted ping packet
+     *     With destination 0 and Protocol.dataType.
+     * </p>
+     * @return packet a ping Packet with a destination 0
+     * @see #constructPacket(byte, byte, byte[])
+     */
+    public Packet constructPing() {
+        Packet ping = null;
+        try {
+            ping = constructPacket((byte) 0, (byte) 1, new byte[]{});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //TODO manipulate flags - Tim;  Not needed - Gerben
+        return ping;
     }
 
     public OutgoingPacketHandler getOutgoingPacketHandler() {
