@@ -217,9 +217,14 @@ public class NetworkManager {
         //Clear the table and
         lastTableDrop = System.currentTimeMillis();
         routingTable.clear();
+        // Add yourself to the routingTable
         routingTable.add((byte) Protocol.CLIENT_ID);
         routingTable.add((byte) 0);
         routingTable.add((byte) Protocol.CLIENT_ID);
+        // Add the broadcast routingEntry to the routingTable
+        routingTable.add((byte) 0);
+        routingTable.add((byte) 0);
+        routingTable.add((byte) 0);
     }
 
     /**
