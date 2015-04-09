@@ -302,8 +302,8 @@ public class NetworkManager {
     /**
      * Constructs a packet with given variables
      * @param destination   byte    destination for this packets, as a Protocol.CLIENT_ID
-     * @param dataType      byte    represents the type of packet
-     * @param data
+     * @param dataType      byte    represents the type of data**
+     * @param data          byte[]  the
      * @return
      * @throws IOException
      */
