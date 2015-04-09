@@ -4,9 +4,13 @@ import network.Protocol;
 import org.junit.Before;
 import org.junit.Test;
 import network.packet.Packet;
+
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
+ * Unit test for network.packet.Packet
  * @author Wouter Bos
  * @since 8-4-15
  */
@@ -20,9 +24,8 @@ public class PacketTest {
         packet1 = new Packet();
     }
 
-    //TODO test getFloatingKey & getSequencebytes
     @Test
-    public void testSimpleGetters() throws Exception {
+    public void testGetters() throws Exception {
         assert (packet1.getData().length == 0);
         assert (packet1.getDataType() == 0);
         assert (packet1.getDestination() == 0);
@@ -34,7 +37,7 @@ public class PacketTest {
     }
 
     @Test
-    public void testSimpleSetters() throws Exception {
+    public void testSetters() throws Exception {
         byte[] data = new byte[1];
         data[0] = 5;
         packet1.setData(data);
@@ -110,7 +113,26 @@ public class PacketTest {
 
     @Test
     public void testGetFloatingKey() throws Exception {
+        packet1.setSource((byte)10);
+        packet1.setDestination((byte)20);
 
+        packet1.setFlags((byte) 2);
+        List<Byte> result = packet1.getFloatingKey();
+        assert (result.size() == 5);
+        assert (result.get(0) == 0);
+        assert (result.get(1) == 0);
+        assert (result.get(2) == 0);
+        assert (result.get(3) == 0);
+        assert (result.get(4) == 10);
+
+        packet1.setFlags((byte) 1);
+        result = packet1.getFloatingKey();
+        assert (result.size() == 5);
+        assert (result.get(0) == 0);
+        assert (result.get(1) == 0);
+        assert (result.get(2) == 0);
+        assert (result.get(3) == 0);
+        assert (result.get(4) == 20);
     }
 
 }
