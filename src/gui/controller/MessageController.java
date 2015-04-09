@@ -2,6 +2,7 @@ package gui.controller;
 
 import file.FileHandler;
 import gui.Gui;
+import network.NetworkManager;
 
 import javax.swing.*;
 import java.nio.file.Path;
@@ -18,6 +19,7 @@ public class MessageController {
 
     // The Gui that is used by this client
     private final Gui gui;
+    private final NetworkManager networkManager;
 
     // The chatModel that is used to store all chats (in a HashMap). A DefaultListModel can easily be used to populate a JList.
     private HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
@@ -28,12 +30,12 @@ public class MessageController {
     private int filecount = 0;
     /**
      *  Creates a new GUI that is linked to field <code>gui</code>.
+     *  @param networkManager The networkmanager that can be called.
      */
-    public MessageController(){
+    public MessageController(NetworkManager networkManager) {
         gui = new Gui(this);
+        this.networkManager = networkManager;
     }
-
-
 
 
     // ------------------- Actions that can be called ----------------------------------------------------------------------------
