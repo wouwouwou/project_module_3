@@ -4,6 +4,7 @@ import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
+import test.PrintingAckListener;
 
 import java.io.IOException;
 import java.net.*;
@@ -14,6 +15,7 @@ import java.util.Enumeration;
  * @author Gerben Meijer
  * @since 7-4-15
  */
+//TODO Exceptionhandling! | Woeter Roeter
 public class NetworkManager {
 
     private final String clientName;
@@ -61,6 +63,7 @@ public class NetworkManager {
 
             //Get our client ID and set Protocol.CLIENT_ID
             Protocol.CLIENT_ID = this.getClientId();
+            //Protocol.CLIENT_ID = 1;
             System.out.println("Init with client id: " + Protocol.CLIENT_ID);
             sequenceNum = (Protocol.CLIENT_ID << 24);
 
@@ -99,7 +102,8 @@ public class NetworkManager {
      * </p>
      * @return client id
      */
-    public int getClientId(){
+    //TODO Watch the throws comment! | Woeter Roeter
+    public int getClientId() /* throws ProbablyNotInAdHocException */{
         InetAddress addr = null;
         try {
             Enumeration<InetAddress> addrs = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses();
@@ -121,7 +125,7 @@ public class NetworkManager {
 
     // Adds or replaces a table entry
     /**
-     * Adds an routingEntry to the routingTable
+     * Puts a routingEntry into the routingTable
      * <p>
      *     This method adds or sets the given entry to the routingTable
      *     If this destination does not exist yet, it will be added
@@ -129,7 +133,7 @@ public class NetworkManager {
      * </p>
      * @param entry byte[destination, cost, next_hop]
      */
-    public void addTableEntry(byte[] entry){
+    public void putTableEntry(byte[] entry){
         System.out.println("Adding table entry");
         if(entry.length == 3){
             int index = getTableIndexByDestination(entry[0]);
@@ -155,6 +159,7 @@ public class NetworkManager {
      * @param destination
      * @return byte[destination, cost, next_hop]
      */
+    //TODO should throw a DestinationNotInTableException | Woeter Roeter
     public byte[] getTableEntryByDestination(byte destination){
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
@@ -174,6 +179,7 @@ public class NetworkManager {
      * @return  int index in the routingTable.
      *          -1 if destination not found
      */
+    //TODO should throw a DestinationNotInTableException | Woeter Roeter
     public int getTableIndexByDestination(byte destination){
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
@@ -181,6 +187,7 @@ public class NetworkManager {
             }
 
         }
+        //throw new DestinationNotInTableException();
         return -1;
     }
 
@@ -249,7 +256,6 @@ public class NetworkManager {
      * @return int sequenceNumber + 1
      */
     public int nextSequenceNum(){
-        System.out.println(sequenceNum);
         sequenceNum += 1;
         return sequenceNum;
     }
@@ -306,11 +312,6 @@ public class NetworkManager {
         packet.setDestination(packet.getSource());
         packet.setSource((byte) Protocol.CLIENT_ID);
         packet.setType(Protocol.COMMUNICATION_PACKET);
-        byte[] route = getTableEntryByDestination(packet.getDestination());
-        if(route == null){
-            throw new InvalidPacketException();
-        }
-        packet.setNextHop(route[2]);
         packet.setFlags(Protocol.Flags.ACK);
         return packet;
     }
@@ -328,7 +329,7 @@ public class NetworkManager {
         Packet ping = null;
         byte[] nameData = name.getBytes();
         try {
-            ping = constructPacket((byte) 0, (byte) 1, nameData); //TODO I might forsee a problem with the dataLength of a ping packet /Tim
+            ping = constructPacket((byte) 0, (byte) 1, nameData);
         } catch (IOException e) {
             e.printStackTrace();
         }
