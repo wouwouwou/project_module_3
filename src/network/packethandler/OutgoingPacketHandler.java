@@ -72,9 +72,6 @@ public class OutgoingPacketHandler extends PacketHandler {
         InetAddress group = networkManager.getGroup();
         synchronized (floatingPacketMap) {
             try {
-                System.out.println(packet);
-                System.out.println(group);
-                System.out.println(Protocol.GROUP_PORT);
                 socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -95,7 +92,7 @@ public class OutgoingPacketHandler extends PacketHandler {
         if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
             Packet original = floatingPacketMap.get(ackPacket.getFloatingKey());
             floatingPacketMap.remove(ackPacket.getFloatingKey());
-            return ackPacket;
+            return original;
         }
         return null;
     }
