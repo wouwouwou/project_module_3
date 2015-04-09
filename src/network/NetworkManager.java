@@ -224,7 +224,7 @@ public class NetworkManager {
         // Add the broadcast routingEntry to the routingTable
         routingTable.add((byte) 0);
         routingTable.add((byte) 0);
-        routingTable.add((byte) 0); //TODO next_hop needs to be changed later/somewhere else
+        routingTable.add((byte) 0);
     }
 
     /**
