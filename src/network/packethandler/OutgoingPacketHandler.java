@@ -23,6 +23,7 @@ public class OutgoingPacketHandler extends PacketHandler {
     // Fields
     private final ConcurrentHashMap<List<Byte>, FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
     private NetworkManager networkManager;
+    private long lastPingSend;
 
     // Constructor(s)
     public OutgoingPacketHandler(NetworkManager networkManager){
@@ -55,6 +56,10 @@ public class OutgoingPacketHandler extends PacketHandler {
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
+            }
+
+            if (System.currentTimeMillis() > lastPingSend + Protocol.PING_INTERVAL) {
+                //TODO
             }
         }
 
@@ -121,5 +126,9 @@ public class OutgoingPacketHandler extends PacketHandler {
         return null;
     }
 
+    // Queries
+    public long getLastPingSend() {
+        return this.lastPingSend;
+    }
 
 }
