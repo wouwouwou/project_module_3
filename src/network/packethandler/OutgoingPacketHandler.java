@@ -60,7 +60,7 @@ public class OutgoingPacketHandler extends PacketHandler {
 
             // Broadcasts a ping
             if (System.currentTimeMillis() > getLastPingSend() + Protocol.PING_INTERVAL) {
-                Packet pingPacket = networkManager.constructPing();
+                Packet pingPacket = networkManager.constructPing(null);
                 send(pingPacket);
                 System.out.println("broadcasting Ping: " + "\n" + pingPacket);
                 // 'resets' the ping_timer

@@ -1,7 +1,5 @@
 package network;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import exceptions.network.InvalidClientIdException;
 
 /**
