@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
+ * Unit test for network.packethandler.IncomingPacketHandler
  * @author Wouter Bos
  * @since 8-4-15
  */

@@ -51,17 +51,7 @@ public class Protocol {
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**
-     * Getter for the InetAddress of the multicast network
-     * @return InetAddress of the group from the GROUP_ADDRESS String
-     * @throws UnknownHostException
-     */
-    public InetAddress getGroupAddress() throws UnknownHostException {
-        return InetAddress.getByName(GROUP_ADDRESS);
-    }
-
-    // -----<=>-----< Methods >-----<=>----- \\
-    /**
-     * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java
+     * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java.
      * @param data byte
      * @return int correctly converted data (byte) to (int)
      */

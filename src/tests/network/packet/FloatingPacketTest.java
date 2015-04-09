@@ -24,7 +24,7 @@ public class FloatingPacketTest {
 
     @Test
     public void testGetSentOn() throws Exception {
-        assert (packet.getSentOn() < System.currentTimeMillis());
+        assert (packet.getSentOn() <= System.currentTimeMillis());
     }
 
     @Test
