@@ -119,6 +119,28 @@ public class Packet {
     }
 
     /**
+     * Makes a deepCopy from this packet
+     * <p>
+     *     Builds a deepCopy from this packet by calling toBytes() and constructing a new packet from the byte[]
+     *     The new packet is a perfect copy and has a different reference.
+     *     If a packet couldn't be cloned, a null object will be returned.
+     * </p>
+     * @return Packet a new (cloned) instance of the packet called upon, with a different reference
+     * @see #toBytes()
+     * @see #Packet(byte[])
+     */
+    @Override
+    public Packet clone() {
+        try {
+            return new Packet(this.toBytes());
+        } catch (InvalidPacketException e) {
+            e.printStackTrace();
+            System.err.println("this Packet couldn't be cloned: " + "\n" + this);
+            return null;
+        }
+    }
+
+    /**
      * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java
      * @param data byte
      * @return int correctly converted data (byte) to (int)
