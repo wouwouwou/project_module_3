@@ -1,11 +1,14 @@
 package network;
 
+import network.packet.Packet;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
  * Holds constants used in the Protocol and network.
- * Created by tim on 7-4-15.
+ * @author Tim Hintzbergen
+ * @since 7-4-15
  */
 public class Protocol {
     // -----<=>-----< Fields >-----<=>----- \\
@@ -22,9 +25,31 @@ public class Protocol {
     /**
      * This is the Timeout before a packet is resent.
      */
-    public static final int TIMEOUT = 500;
+    public static final int TIMEOUT = 200;
+
+    public static final int COMMUNICATION_HEADER_LENGTH = 12;
+    public static final int DISCOVERY_HEADER_LENGTH = 4;
+    public static final long CONVERGE_TIME = 100;
+
+    public static int CLIENT_ID = 0;
+
+    //Packet types:
+    public static final byte NULL_PACKET = 0;
+    public static final byte DISCOVERY_PACKET = 1;
+    public static final byte COMMUNICATION_PACKET = 2;
 
 
+    //Internal classes
+    public static class Flags {
+        public static byte DATA = 1;
+        public static byte ACK = 2;
+    }
+
+    public static class DataType{
+        public static byte PING = 1;
+        public static byte TEXT = 2;
+        public static byte FILE = 3;
+    }
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**
@@ -36,11 +61,4 @@ public class Protocol {
         return InetAddress.getByName(GROUP_ADDRESS);
     }
 
-    /**
-     * Getter for the Client id
-     * @return int The Identifier of this client
-     */
-    public int getId() {
-        return 0; //TODO return the Id of this client
-    }
 }
