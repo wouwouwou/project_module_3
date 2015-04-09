@@ -36,7 +36,6 @@ public class OutgoingPacketHandler extends PacketHandler {
         while (true) {
             if (System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.CONVERGE_TIME) {
                 synchronized (floatingPacketMap) {
-                    System.out.println(floatingPacketMap);
                     for (FloatingPacket packet : floatingPacketMap.values()) {
                         if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
                             this.send(packet);
