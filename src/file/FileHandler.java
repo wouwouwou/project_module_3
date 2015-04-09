@@ -32,7 +32,7 @@ public class FileHandler {
         byte[] data = this.openFile(file);
         List<byte[]> listData = this.splitToPacketData(data);
         listData.add(file.getFileName().toString().getBytes());
-        int sequencenumber = listData.size();
+        int sequencenumber = listData.size() + 1;
         int count = 0;
         for(byte[] sendData: listData){
             byte[] toSendData = new byte[sendData.length + 6];
