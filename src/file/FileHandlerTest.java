@@ -7,7 +7,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Created by tristan on 8-4-15.
+ * @author Tristan de Boer
+ * @since 8-4-15
  */
 public class FileHandlerTest {
     public static void main(String[] args){

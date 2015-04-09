@@ -1,7 +1,5 @@
 package network;
 
-import network.packet.Packet;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -30,6 +28,7 @@ public class Protocol {
     public static final int COMMUNICATION_HEADER_LENGTH = 12;
     public static final int DISCOVERY_HEADER_LENGTH = 4;
     public static final long CONVERGE_TIME = 100;
+    public static final short MAX_RECIEVE_BUFFER_SIZE = 5;
 
     public static int CLIENT_ID = 0;
 
@@ -38,8 +37,7 @@ public class Protocol {
     public static final byte DISCOVERY_PACKET = 1;
     public static final byte COMMUNICATION_PACKET = 2;
 
-
-    //Internal classes
+    //Nested classes
     public static class Flags {
         public static byte DATA = 1;
         public static byte ACK = 2;
@@ -61,4 +59,15 @@ public class Protocol {
         return InetAddress.getByName(GROUP_ADDRESS);
     }
 
+    // -----<=>-----< Methods >-----<=>----- \\
+    /**
+     * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java
+     * @param data byte
+     * @return int correctly converted data (byte) to (int)
+     */
+    public static int fixSign(byte data){
+        //Function to fix signed stuff.
+        long dataL = (long) data;
+        return (int )dataL & 0xff;
+    }
 }

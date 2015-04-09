@@ -3,8 +3,9 @@ package gui.controller;
 import java.util.Date;
 
 /**
- * Created by tristan on 7-4-15.
  * A message that contains certain information.
+ * @author Tristan de Boer
+ * @since 7-4-15
  */
 public class ChatMessage implements Message {
 

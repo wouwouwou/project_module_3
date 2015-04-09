@@ -4,7 +4,8 @@ import network.packet.Packet;
 import network.DataListener;
 
 /**
- * Created by gerben on 7-4-15.
+ * @author Gerben Meijer
+ * @since 7-4-15
  */
 public class PrintingDataListener implements DataListener {
 

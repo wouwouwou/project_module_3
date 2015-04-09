@@ -70,13 +70,14 @@ public class OutgoingPacketHandler extends PacketHandler {
      */
     public void send(Packet packet){
         InetAddress group = networkManager.getGroup();
+        //TODO Synchronized might break because it is called from a synchronized block in run()
         synchronized (floatingPacketMap) {
             try {
                 socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(packet.getFlags() == Protocol.Flags.DATA) {
+            if (packet.getFlags() == Protocol.Flags.DATA) {
                 try {
                     floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
                 } catch (InvalidPacketException e) {
@@ -92,7 +93,7 @@ public class OutgoingPacketHandler extends PacketHandler {
         if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
             Packet original = floatingPacketMap.get(ackPacket.getFloatingKey());
             floatingPacketMap.remove(ackPacket.getFloatingKey());
-            return ackPacket;
+            return original;
         }
         return null;
     }

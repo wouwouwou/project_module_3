@@ -5,7 +5,8 @@ import network.AckListener;
 import network.packet.Packet;
 
 /**
- * Created by gerben on 8-4-15.
+ * @author Gerben Meijer
+ * @since 8-4-15
  */
 public class PrintingAckListener implements AckListener {
     @Override
