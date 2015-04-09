@@ -1,9 +1,9 @@
 package file;
 
-import network.NetworkManager;
-import network.Protocol;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -75,18 +75,26 @@ public class FileHandler {
      * @param filename The filename
      */
     public void writeFile(byte[] listdata, String filename){
-        Path p = Paths.get("./a.png");
-        try {
-            FileOutputStream fos = new FileOutputStream(p.toFile());
-            fos.write(listdata);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(createDir(new File (System.getProperty("user.home")+"/Penguin/"))) {
+            Path p = Paths.get(System.getProperty("user.home") + "/Penguin/" + filename);
+            try {
+                FileOutputStream fos = new FileOutputStream(p.toFile());
+                fos.write(listdata);
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    /**
+     * Create PenguinDir (if not exists)
+     */
+    public boolean createDir(File filename){
+        return (filename.exists() || (!filename.exists() && filename.mkdir()));
+    }
     /**
      * Converges a List of bytes to a single byte array.
      * @param listData List of bytes

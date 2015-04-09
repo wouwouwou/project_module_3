@@ -133,6 +133,8 @@ public class MessageController implements DataListener{
         }
         System.out.println("listbytearrayS size: " + listbytearraySlength);
 
+        // Add file name to data
+        listbytearrayS.add(path.getFileName().toString().getBytes());
         // Add information
         List<byte[]> CS = fileHandler.addHeaders(listbytearrayS, filecount);
         int CSlength = 0;
