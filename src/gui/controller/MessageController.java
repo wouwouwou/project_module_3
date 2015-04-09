@@ -1,10 +1,16 @@
 package gui.controller;
 
+import exceptions.network.InvalidPacketException;
 import file.FileHandler;
+import file.FileReceiver;
 import gui.Gui;
+import network.DataListener;
 import network.NetworkManager;
+import network.Protocol;
+import network.packet.Packet;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,13 +19,14 @@ import java.util.HashMap;
  * Created by tristan on 8-4-15.
  * Controls the GUI.
  */
-public class MessageController {
+public class MessageController implements DataListener{
     // The ID of this client
     private static final int OWN_ID = 1;
 
     // The Gui that is used by this client
     private final Gui gui;
     private final NetworkManager networkManager;
+    private final FileReceiver fileReceiver;
 
     // The chatModel that is used to store all chats (in a HashMap). A DefaultListModel can easily be used to populate a JList.
     private HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
@@ -33,8 +40,15 @@ public class MessageController {
      *  @param networkManager The networkmanager that can be called.
      */
     public MessageController(NetworkManager networkManager) {
+        // fileReceiver will be set once.
+        fileReceiver = new FileReceiver();
+
         gui = new Gui(this);
         this.networkManager = networkManager;
+        if(this.networkManager == null){
+            System.out.println("networkManager is null");
+        }
+        this.networkManager.getIncomingPacketHandler().addDataListener(this);
     }
 
 
@@ -44,6 +58,12 @@ public class MessageController {
      * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>. Sends the message to it's own listener and to the NetworkLayer.
      */
     public void sendMessage() {
+        try {
+            Packet packet = networkManager.constructPacket((byte)clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //TODO: send message to network with selected client (0 = broadcast)
 
         // Send message to own list
@@ -54,14 +74,21 @@ public class MessageController {
 
     /**
      *  Receive a message and determine what to do. Messages can by of type <code>PingMessage</code> and <code>ChatMessage</code>.
-     *  @param message The message the sender has got to tell.
+     *  @param packet The message the sender has got to tell.
      */
-    public void onReceive(Message message) {
-        if(message instanceof PingMessage){
-            // Message is a ping message. Determine if the client is already added to the <code>clientModel</code>
+    public void onReceive(Packet packet) {
+        if(packet.getDataType() == Protocol.DataType.TEXT){
+            for(int i = 0; i < clientModel.size(); i++){
+                if(clientModel.get(i).getId() == packet.getSource()){
+                    addChatMessage(new ChatMessage(new String(packet.getData()), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource()));
+                    System.out.println("Added chat message " + new String(packet.getData()));
+                    break;
+                }
+            }
+        }else if(packet.getDataType() == Protocol.DataType.PING){
             int client = -1;
             for(int i = 0; i < clientModel.size(); i++){
-                if(clientModel.get(i).getId() == message.getId()){
+                if(clientModel.get(i).getId() == packet.getSource()){
                     client = i;
                     break;
                 }
@@ -69,21 +96,23 @@ public class MessageController {
             if(client > 0){
                 clientModel.get(client).setDate();
             }else{
-                addClient(message.getId(), (message.getName()));
+                addClient(packet.getSource(), new String(packet.getData()));
             }
-        }else if(message instanceof ChatMessage){
-            // Message is a ChatMessage. Add the message to the list.
-            addChatMessage((ChatMessage) message);
+        }else if(packet.getDataType() == Protocol.DataType.FILE){
+            // TODO ROUTING TO FILE HANDLER/FILE RECEIVER
+
+
         }
     }
 
     /**
      * Handles the file control.
+     * @param path The path of the file that needs to be send
      */
     public void sendFile(Path path){
         FileHandler fh = new FileHandler();
         // Read the file using a buffered reader
-        fh.sendFile(path, filecount, gui.getCurrentView());
+        fh.sendFile(path, filecount, gui.getCurrentView(), networkManager);
         filecount++;
     }
 
@@ -167,4 +196,5 @@ public class MessageController {
     public HashMap<Integer,DefaultListModel<ChatMessage>> getChatModel() {
         return chatModel;
     }
+
 }
