@@ -20,7 +20,7 @@ public class FileHandler {
     /**
      * The maximum length of the data contained in the packet.
      */
-    private static final int MAX_DATA_LENGTH = 1000;
+    private static final int MAX_DATA_LENGTH = 500;
 
 
     /**
