@@ -217,6 +217,7 @@ public class IncomingPacketHandler extends PacketHandler {
 
     private void notifyAckListeners(Packet packet) {
         if(packet != null) {
+            System.out.println(packet);
             for (AckListener listener : ackListeners) {
                 listener.onAck(packet);
             }
