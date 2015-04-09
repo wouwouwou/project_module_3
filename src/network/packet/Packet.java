@@ -168,14 +168,14 @@ public class Packet {
 
     public String toString(){
         String out = "Packet: ";
-        out += String.format("\t type: %s\n", type);
-        out += String.format("\t data type: %s\n", dataType);
-        out += String.format("\t source: %s\n", source);
-        out += String.format("\t destination: %s\n", destination);
-        out += String.format("\t sequence number: %s\n", sequenceNumber);
-        out += String.format("\t flags: %s\n", flags);
-        out += String.format("\t data length: %s\n", data.length);
-        out += String.format("\t next hop: %s\n", nextHop);
+        out += String.format("\ttype: %s\n", type);
+        out += String.format("\t\tdata type: %s\n", dataType);
+        out += String.format("\t\tsource: %s\n", source);
+        out += String.format("\t\tdestination: %s\n", destination);
+        out += String.format("\t\tsequence number: %s\n", sequenceNumber);
+        out += String.format("\t\tflags: %s\n", flags);
+        out += String.format("\t\tdata length: %s\n", data.length);
+        out += String.format("\t\tnext hop: %s\n", nextHop);
 
         return out;
     }
