@@ -23,7 +23,7 @@ public class OutgoingPacketHandler extends PacketHandler {
     // Fields
     private final ConcurrentHashMap<List<Byte>, FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
     private NetworkManager networkManager;
-    private long lastPingSend;
+    private long lastPingSend = 0;
 
     // Constructor(s)
     public OutgoingPacketHandler(NetworkManager networkManager){
@@ -58,9 +58,14 @@ public class OutgoingPacketHandler extends PacketHandler {
                 e.printStackTrace();
             }
 
-            if (System.currentTimeMillis() > lastPingSend + Protocol.PING_INTERVAL) {
-                //TODO
+            // Broadcasts a ping
+            if (System.currentTimeMillis() > getLastPingSend() + Protocol.PING_INTERVAL) {
+                send(networkManager.constructPing());
+                // 'resets' the ping_timer
+                lastPingSend = System.currentTimeMillis();
             }
+
+
         }
 
     }
