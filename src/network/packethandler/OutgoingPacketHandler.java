@@ -36,6 +36,7 @@ public class OutgoingPacketHandler extends PacketHandler {
         while (true) {
             if (System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.CONVERGE_TIME) {
                 synchronized (floatingPacketMap) {
+                    System.out.println(floatingPacketMap);
                     for (FloatingPacket packet : floatingPacketMap.values()) {
                         if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
                             this.send(packet);
@@ -70,6 +71,7 @@ public class OutgoingPacketHandler extends PacketHandler {
      */
     public void send(Packet packet){
         InetAddress group = networkManager.getGroup();
+        //TODO Synchronized might break because it is called from a synchronized block in run()
         synchronized (floatingPacketMap) {
             try {
                 socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
