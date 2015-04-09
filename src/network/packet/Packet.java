@@ -170,7 +170,7 @@ public class Packet {
     }
 
     public String toString(){
-        String out = "Packet: ";
+        String out = "Packet: \n";
         out += String.format("\t type: %s\n", type);
         out += String.format("\t data type: %s\n", dataType);
         out += String.format("\t source: %s\n", source);
