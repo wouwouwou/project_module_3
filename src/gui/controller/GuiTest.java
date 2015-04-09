@@ -1,5 +1,7 @@
 package gui.controller;
 
+import network.NetworkManager;
+
 import java.util.Date;
 
 /**
@@ -12,7 +14,7 @@ public class GuiTest {
      * @param args No args are available.
      */
     public static void main(String[] args){
-        MessageController gui = new MessageController();
+        MessageController gui = new MessageController(new NetworkManager());
         // Send ping Tristan
         gui.onReceive(new PingMessage(2, "Tristan"));
         // Send ping Gerben
