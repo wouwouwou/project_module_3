@@ -1,7 +1,8 @@
 package file;
 
 /**
- * Created by tristan on 8-4-15.
+ * @author Tristan de Boer
+ * @since 8-4-15
  */
 public class FileReceiver {
     //TODO TOMORROW

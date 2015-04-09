@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class FileHandler {
 
-
     /**
      * The maximum length of the data contained in the packet.
      */

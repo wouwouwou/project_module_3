@@ -1,8 +1,9 @@
 package gui.controller;
 
 /**
- * Created by tristan on 7-4-15.
  * The message that is derived from a PingMessage.
+ * @author Tistan de Boer
+ * @since 7-4-15
  */
 public class PingMessage implements Message{
     // The ID of the sender of a ping

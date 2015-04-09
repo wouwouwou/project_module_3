@@ -163,6 +163,7 @@ public class NetworkManager {
                 routingTable.set(index, entry[0]);
                 routingTable.set(index + 1, entry[1]);
                 routingTable.set(index + 2, entry[2]);
+                IncomingPacketHandler.printArray(routingTable.toArray());
             }
         }
     }
@@ -216,9 +217,14 @@ public class NetworkManager {
         //Clear the table and
         lastTableDrop = System.currentTimeMillis();
         routingTable.clear();
+        // Add yourself to the routingTable
         routingTable.add((byte) Protocol.CLIENT_ID);
         routingTable.add((byte) 0);
         routingTable.add((byte) Protocol.CLIENT_ID);
+        // Add the broadcast routingEntry to the routingTable
+        routingTable.add((byte) 0);
+        routingTable.add((byte) 0);
+        routingTable.add((byte) 0);
     }
 
     /**
@@ -331,7 +337,7 @@ public class NetworkManager {
         packet.setType(Protocol.COMMUNICATION_PACKET);
         byte[] route = getTableEntryByDestination(packet.getDestination());
         if(route == null){
-            return null;
+            throw new InvalidPacketException();
         }
         packet.setNextHop(route[2]);
         packet.setFlags(Protocol.Flags.ACK);

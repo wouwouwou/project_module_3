@@ -16,8 +16,9 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by tristan on 8-4-15.
  * Controls the GUI.
+ * @author Tistan de Boer
+ * @since 8-4-15
  */
 public class MessageController implements DataListener{
     // The ID of this client

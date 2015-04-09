@@ -1,11 +1,10 @@
-import gui.Gui;
 import gui.controller.MessageController;
 import network.NetworkManager;
 
 /**
  * Start the main program
  * @author Tristan de Boer, Wouter Bos, Gerben Meijer, Tim Hintzbergen
- * @since 1.0
+ * @version 1.0
  */
 public class Main {
     /**

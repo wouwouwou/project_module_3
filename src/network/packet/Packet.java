@@ -4,7 +4,6 @@ import exceptions.network.packet.InvalidCommunicationHeaderLengthException;
 import exceptions.network.packet.NullPacketException;
 import network.Protocol;
 import exceptions.network.InvalidPacketException;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class Packet {
     // -----<=>-----< Fields >-----<=>----- \\
 
     private byte[] data = new byte[0];
-    private int sequenceNumber;
+    private int sequenceNumber = 0;
     private byte type = Protocol.COMMUNICATION_PACKET;
     private byte dataType = 0;
     private byte source = 0;
@@ -27,7 +26,6 @@ public class Packet {
     private byte nextHop = 0;
 
     // -----<=>-----< Constructors >-----<=>----- \\
-
     /**
      * Empty packet constructor
      */
@@ -35,32 +33,15 @@ public class Packet {
 
     /**
      * Constructs a (Packet) from a (byte[])
-     * @param packet byte[] Data to be constructed into a packet
-     */
-    public Packet(byte[] packet) throws InvalidPacketException {
-        fromBytes(packet);
-    }
-
-    // -----<=>-----< Methods >-----<=>----- \\
-    /**
-     * Prints the data in a packet to the standard out (as a String)
-     */
-    public void print() {
-        System.out.println(new String(this.getData()));
-    }
-
-    /**
-     * Constructs a (Packet) object from a byte[]
      * <p>
-     *     This method will assign bytes from the byte[] to fields of the new Packet object following our design implementation.
+     *     This constructor will assign bytes from the byte[] to fields of the new Packet object.
      *     An InvalidPacketException is thrown and caught if the packet doesn't fulfill the requirements of our protocol.
      * </p>
-     * @param packet byte[] (byte[]) packet you want to convert to a (Packet)
+     * @param packet byte[] Data to be constructed into a packet
      */
     //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
     //TODO Testing of Exceptions! Especially the e.getMessage()!
-    public void fromBytes(byte[] packet) throws InvalidPacketException{
-
+    public Packet(byte[] packet) throws InvalidPacketException {
         if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH) {
             throw new InvalidCommunicationHeaderLengthException();
         }
@@ -77,20 +58,28 @@ public class Packet {
 
         destination = packet[3];
 
-        sequenceNumber = (fixSign(packet[4]) << 24) + (fixSign(packet[5]) << 16) +(fixSign(packet[6]) << 8) + fixSign(packet[7]);
+        sequenceNumber = (Protocol.fixSign(packet[4]) << 24) + (Protocol.fixSign(packet[5]) << 16) +(Protocol.fixSign(packet[6]) << 8) + Protocol.fixSign(packet[7]);
 
         flags = packet[8];
 
-        int dataLength = (fixSign(packet[9]) << 8) + (fixSign(packet[10]));
+        int dataLength = (Protocol.fixSign(packet[9]) << 8) + (Protocol.fixSign(packet[10]));
 
         nextHop = packet[11];
 
         data = new byte[dataLength];
 
         System.arraycopy(packet, Protocol.COMMUNICATION_HEADER_LENGTH, data, 0, dataLength);
-
     }
 
+    // -----<=>-----< Methods >-----<=>----- \\
+    /**
+     * Prints the data in a packet to the standard out (as a String)
+     */
+    public void print() {
+        System.out.println(new String(this.getData()));
+    }
+
+    // -----<=>-----< Queries >-----<=>----- \\
     /**
      * Converts this (Packet) object to a (byte[])
      * <p>
@@ -129,26 +118,27 @@ public class Packet {
     }
 
     /**
-     * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java
-     * @param data byte
-     * @return int correctly converted data (byte) to (int)
+     * Makes a deepCopy from this packet
+     * <p>
+     *     Builds a deepCopy from this packet by calling toBytes() and constructing a new packet from the byte[]
+     *     The new packet is a perfect copy and has a different reference.
+     *     If a packet couldn't be cloned, a null object will be returned.
+     * </p>
+     * @return Packet a new (cloned) instance of the packet called upon, with a different reference
+     * @see #toBytes()
+     * @see #Packet(byte[])
      */
-    public static int fixSign(byte data){
-        //Function to fix signed stuff.
-        long dataL = (long) data;
-        return (int )dataL & 0xff;
+    @Override
+    public Packet clone() {
+        try {
+            return new Packet(this.toBytes());
+        } catch (InvalidPacketException e) {
+            e.printStackTrace();
+            System.err.println("this Packet couldn't be cloned: " + "\n" + this);
+            return null;
+        }
     }
-
-
-    // -----<=>-----< Queries >-----<=>----- \\
-    /**
-     * Getter for the data field (byte[]) of this packet
-     * @return byte[] with the data of the packet
-     */
-    public byte[] getData() {
-        return this.data;
-    }
-
+    
     /**
      * Gives a byte[] representation of the sequenceNumber (long) field
      * @return byte[] The sequence number converted to a byte array with 4 entries
@@ -171,13 +161,16 @@ public class Packet {
         for (int i = 0; i < getSequenceBytes().length; i++) {
             out[i] = getSequenceBytes()[i];
         }
-
-        out[4] = destination;
+        if(flags == Protocol.Flags.ACK){
+            out[4] = source;
+        } else {
+            out[4] = destination;
+        }
         return Arrays.asList(out);
     }
 
     public String toString(){
-        String out = "Packet: ";
+        String out = "Packet: \n";
         out += String.format("\t type: %s\n", type);
         out += String.format("\t data type: %s\n", dataType);
         out += String.format("\t source: %s\n", source);
@@ -191,6 +184,10 @@ public class Packet {
     }
 
     // -----<=>-----< Setters & Getters >-----<=>----- \\
+    public byte[] getData() {
+        return this.data;
+    }
+
     public void setData(byte[] data) {
         this.data = data;
     }

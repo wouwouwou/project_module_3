@@ -6,7 +6,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by wouwouwou on 8-4-15.
+ * @author Wouter Bos
+ * @since 8-4-15
  */
 public class IncomingPacketHandlerTest {
 

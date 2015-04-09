@@ -1,8 +1,9 @@
 package gui.controller;
 
 /**
- * Created by tristan on 7-4-15.
  * The interface Message, used by some XXMessages that are send by the networklayer.
+ * @author Tistan de Boer
+ * @since 7-4-15
  */
 interface Message {
     /**

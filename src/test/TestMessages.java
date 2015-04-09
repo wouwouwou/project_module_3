@@ -8,7 +8,8 @@ import java.io.IOException;
 
 /**
  * Tests the multicast adhoc network, sending 10 numbers to all subscribers
- * Created by gerben on 7-4-15.
+ * @author Gerben Meijer
+ * @since 7-4-15
  */
 public class TestMessages {
 
@@ -44,20 +45,29 @@ public class TestMessages {
             System.err.println("TristanIsErNietException");
         }
 
-        try {
-            Packet gerbenPacket = networkManager.constructPacket((byte) 3, Protocol.DataType.TEXT, "Hoi Gerben!".getBytes());
-            System.out.println(gerbenPacket);
-            networkManager.send(gerbenPacket);
-        } catch (IOException e) {
-            System.err.println("GerbenIsErNietException");
+        while(true) {
+            try {
+                Packet timPacket = networkManager.constructPacket((byte) 4, Protocol.DataType.TEXT, "Hoi Tim!".getBytes());
+                networkManager.send(timPacket);
+            } catch (IOException e) {
+                System.err.println("TimIsErNietException");
+            }
+
+
+            try {
+                Packet gerbenPacket = networkManager.constructPacket((byte) 3, Protocol.DataType.TEXT, "Hoi Gerben!".getBytes());
+                System.out.println(gerbenPacket);
+                networkManager.send(gerbenPacket);
+            } catch (IOException e) {
+                System.err.println("GerbenIsErNietException");
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
-        try {
-            Packet timPacket = networkManager.constructPacket((byte) 4, Protocol.DataType.TEXT, "Hoi Tim!".getBytes());
-            networkManager.send(timPacket);
-        } catch (IOException e) {
-            System.err.println("TimIsErNietException");
-        }
 
 
 
