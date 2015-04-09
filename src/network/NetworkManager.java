@@ -163,6 +163,7 @@ public class NetworkManager {
                 routingTable.set(index, entry[0]);
                 routingTable.set(index + 1, entry[1]);
                 routingTable.set(index + 2, entry[2]);
+                IncomingPacketHandler.printArray(routingTable.toArray());
             }
         }
     }
@@ -331,7 +332,7 @@ public class NetworkManager {
         packet.setType(Protocol.COMMUNICATION_PACKET);
         byte[] route = getTableEntryByDestination(packet.getDestination());
         if(route == null){
-            return null;
+            throw new InvalidPacketException();
         }
         packet.setNextHop(route[2]);
         packet.setFlags(Protocol.Flags.ACK);
