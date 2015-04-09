@@ -1,34 +1,28 @@
 package tests.network;
 
+import network.NetworkManager;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 /**
+ * Unit test for network.NetworkManager
  * @author Wouter Bos
  * @since 8-4-15
  */
 public class NetworkManagerTest {
 
+    private NetworkManager manager;
+
     @Before
     public void setUp() throws Exception {
-
-    }
-
-    @Test
-    public void testMain() throws Exception {
-
-    }
-
-    @Test
-    public void testSend() throws Exception {
-
+        manager = new NetworkManager();
     }
 
     @Test
     public void testGetClientId() throws Exception {
-
+        int id = manager.getClientId();
     }
 
     @Test

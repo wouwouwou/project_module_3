@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Unit test for exceptions.network.packet.InvalidCommunicationHeaderLengthException
  * @author Wouter Bos
  * @since 8-4-15
  */
