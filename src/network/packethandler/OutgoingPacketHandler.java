@@ -68,20 +68,41 @@ public class OutgoingPacketHandler extends PacketHandler {
      * </p>
      * @param packet Packet the packet that will be broadcasted to the multicast network
      */
-    public void send(Packet packet){
+    public void send(Packet packet) {
         InetAddress group = networkManager.getGroup();
-        //TODO Synchronized might break because it is called from a synchronized block in run()
-        synchronized (floatingPacketMap) {
-            try {
-                socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (packet.getDestination() == 0) {
+            System.out.println("Broadcast recieved");
+            byte[] packetBytes = packet.toBytes();
+            for (byte i = 1; i < 5; i++) {
+                if (i != Protocol.CLIENT_ID) {
+                    System.out.println("Sending to " + i);
+                    packetBytes[3] = i;
+                    byte[] route = networkManager.getTableEntryByDestination(i);
+                    if (route != null) {
+                        packetBytes[11] = route[2];
+                        try {
+                            this.send(new Packet(packetBytes));
+                            System.out.println("Sent");
+                        } catch (InvalidPacketException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
-            if (packet.getFlags() == Protocol.Flags.DATA) {
+        } else {
+            //TODO Synchronized might break because it is called from a synchronized block in run()
+            synchronized (floatingPacketMap) {
                 try {
-                    floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
-                } catch (InvalidPacketException e) {
+                    socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
+                } catch (IOException e) {
                     e.printStackTrace();
+                }
+                if (packet.getFlags() == Protocol.Flags.DATA) {
+                    try {
+                        floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+                    } catch (InvalidPacketException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

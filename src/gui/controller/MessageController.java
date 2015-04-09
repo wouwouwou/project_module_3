@@ -61,6 +61,7 @@ public class MessageController implements DataListener{
     public void sendMessage() {
         try {
             Packet packet = networkManager.constructPacket((byte)clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
+            networkManager.getOutgoingPacketHandler().send(packet);
         } catch (IOException e) {
             e.printStackTrace();
         }

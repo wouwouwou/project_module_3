@@ -231,6 +231,7 @@ public class IncomingPacketHandler extends PacketHandler {
 
     private void notifyDataListeners(Packet packet) {
         if(packet != null) {
+            System.out.println("Recieve triggered");
             for (DataListener listener : dataListeners) {
                 listener.onReceive(packet);
             }
