@@ -9,7 +9,6 @@ import network.packet.Packet;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.MulticastSocket;
 import java.util.ArrayList;
 
 /**
@@ -131,7 +130,7 @@ public class IncomingPacketHandler extends PacketHandler {
      * @param packet byte[] The packet to be handled
      */
     public void handleDiscovery(byte[] packet){
-        short seq = (short) ((Packet.fixSign(packet[2]) << 8) + Packet.fixSign(packet[3]));
+        short seq = (short) ((Protocol.fixSign(packet[2]) << 8) + Protocol.fixSign(packet[3]));
         byte length = packet[1];
         boolean forward = false;
         IncomingPacketHandler.printArray(packet);
