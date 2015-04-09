@@ -20,6 +20,7 @@ public class NetworkManagerTest {
         manager = new NetworkManager();
     }
 
+    //TODO ExceptionHandling in NetworkManager.getClientId().
     @Test
     public void testGetClientId() throws Exception {
         int id = manager.getClientId();
