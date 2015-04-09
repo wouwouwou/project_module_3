@@ -14,6 +14,11 @@ public class Main {
      */
     public static void main(String[] args) {
         NetworkManager networkManager = new NetworkManager();
+        try {
+            Thread.sleep(0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         MessageController gui = new MessageController(networkManager);
     }
 }
