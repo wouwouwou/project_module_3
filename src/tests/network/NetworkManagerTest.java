@@ -14,12 +14,13 @@ import static org.junit.Assert.*;
  * @since 8-4-15
  */
 public class NetworkManagerTest {
+    private final static String NAME = "eennaam";
 
     private NetworkManager manager;
 
     @Before
     public void setUp() throws Exception {
-        manager = new NetworkManager();
+        manager = new NetworkManager(NAME);
     }
 
     @Test

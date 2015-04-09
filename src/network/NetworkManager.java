@@ -4,6 +4,7 @@ import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
+import test.PrintingAckListener;
 
 import java.io.IOException;
 import java.net.*;
@@ -17,6 +18,7 @@ import java.util.Enumeration;
 //TODO Exceptionhandling! | Woeter Roeter
 public class NetworkManager {
 
+    private final String clientName;
     // -----<=>-----< Fields >-----<=>----- \\
     private MulticastSocket socket;
     private IncomingPacketHandler incomingPacketHandler;
@@ -27,15 +29,6 @@ public class NetworkManager {
     private int sequenceNum;
     private long lastTableDrop = 0;
 
-    // -----<=>-----< Main >-----<=>----- \\
-    /**
-     * Main method, to be changed
-     * @param args
-     */
-    //TODO Main method, to be changed
-    public static void main(String[] args){
-        NetworkManager networkManager = new NetworkManager();
-    }
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
@@ -48,7 +41,8 @@ public class NetworkManager {
      *      - Joins the multicast group and sets up its handlers
      * </p>
      */
-    public NetworkManager() {
+    public NetworkManager(String name) {
+        this.clientName = name;
         //Get the group address
         try {
             group = InetAddress.getByName(Protocol.GROUP_ADDRESS);
@@ -69,6 +63,7 @@ public class NetworkManager {
 
             //Get our client ID and set Protocol.CLIENT_ID
             Protocol.CLIENT_ID = this.getClientId();
+            //Protocol.CLIENT_ID = 1;
             System.out.println("Init with client id: " + Protocol.CLIENT_ID);
             sequenceNum = (Protocol.CLIENT_ID << 24);
 
@@ -317,11 +312,6 @@ public class NetworkManager {
         packet.setDestination(packet.getSource());
         packet.setSource((byte) Protocol.CLIENT_ID);
         packet.setType(Protocol.COMMUNICATION_PACKET);
-        byte[] route = getTableEntryByDestination(packet.getDestination());
-        if(route == null){
-            throw new InvalidPacketException();
-        }
-        packet.setNextHop(route[2]);
         packet.setFlags(Protocol.Flags.ACK);
         return packet;
     }
@@ -330,19 +320,19 @@ public class NetworkManager {
      * Constructs a broadcast Ping packet
      * <p>
      *     Uses constructPacket(byte destination, byte dataType, byte[] data) to make a broadcasted ping packet
-     *     With destination 0 and Protocol.dataType.
+     *     With destination 0 and Protocol.dataType. A name must be specified to be broadcasted.
      * </p>
      * @return packet a ping Packet with a destination 0
      * @see #constructPacket(byte, byte, byte[])
      */
-    public Packet constructPing() {
+    public Packet constructPing(String name) {
         Packet ping = null;
+        byte[] nameData = name.getBytes();
         try {
-            ping = constructPacket((byte) 0, (byte) 1, new byte[]{});
+            ping = constructPacket((byte) 0, (byte) 1, nameData); //TODO I might forsee a problem with the dataLength of a ping packet /Tim
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO manipulate flags - Tim;  Not needed - Gerben
         return ping;
     }
 
@@ -352,5 +342,9 @@ public class NetworkManager {
 
     public MulticastSocket getSocket() {
         return socket;
+    }
+
+    public String getClientName() {
+        return clientName;
     }
 }
