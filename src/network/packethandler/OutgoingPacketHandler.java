@@ -107,6 +107,16 @@ public class OutgoingPacketHandler extends PacketHandler {
             //TODO Synchronized might break because it is called from a synchronized block in run()
             synchronized (floatingPacketMap) {
                 try {
+                    byte[] route = networkManager.getTableEntryByDestination(packet.getDestination());
+                    if(route == null){
+                        try {
+                            floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+                        } catch (InvalidPacketException e) {
+                            e.printStackTrace();
+                        }
+                        throw new IOException(String.format("Destination %s unreachable.", packet.getDestination()));
+                    }
+                    packet.setNextHop(route[2]);
                     socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
                 } catch (IOException e) {
                     e.printStackTrace();

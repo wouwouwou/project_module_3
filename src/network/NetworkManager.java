@@ -304,11 +304,6 @@ public class NetworkManager {
         packet.setSource((byte) Protocol.CLIENT_ID);
         packet.setType(Protocol.COMMUNICATION_PACKET);
         packet.setSequenceNumber(nextSequenceNum());
-        byte[] route = getTableEntryByDestination(destination);
-        if(route == null){
-            throw new IOException(String.format("Destination %s unreachable.", destination));
-        }
-        packet.setNextHop(route[2]);
         packet.setFlags(Protocol.Flags.DATA);
         return packet;
     }
