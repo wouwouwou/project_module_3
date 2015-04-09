@@ -28,12 +28,23 @@ public class FileHandler {
      * @param file The file that has to be send
      * @param networkManager The networkmanager the data is send to.
      */
-    public void sendFile(Path file, int number, int client, NetworkManager networkManager){
+    public List<byte[]> sendFile(Path file, int number, int client, NetworkManager networkManager){
+        // File data
         byte[] data = this.openFile(file);
+        int predictedtotal = data.length;
+        // Split File data to 'stukjes'
         List<byte[]> listData = this.splitToPacketData(data);
-        listData.add(file.getFileName().toString().getBytes());
-        int sequencenumber = listData.size() + 1;
+        int total = 0;
+        for(byte[] xdfon: listData){
+            total += xdfon.length;
+        }
+
+        // Create a new list (this list will be returned)
+        List<byte[]> sendList = new ArrayList<>();
+
+        int sequencenumber = listData.size();
         int count = 0;
+
         for(byte[] sendData: listData){
             byte[] toSendData = new byte[sendData.length + 6];
 
@@ -41,23 +52,30 @@ public class FileHandler {
             Integer firstline = count << 16 | sequencenumber;
             System.arraycopy(ByteBuffer.allocate(4).putInt(firstline).array(), 0, toSendData, 0, 4);
 
-            short filenumber = (short) number;
-            System.arraycopy(ByteBuffer.allocate(4).putInt(filenumber).array(), 0, toSendData, 4, 2);
 
-            System.arraycopy(sendData, 0, toSendData, 6, sendData.length - 1);
+            System.arraycopy(ByteBuffer.allocate(4).putInt(number).array(), 2, toSendData, 4, 2);
+
+            System.arraycopy(sendData, 0, toSendData, 7, sendData.length - 1);
             for(byte b: toSendData){
                 System.out.print(b);
             }
 
             // Send data to network!
-            try {
-                networkManager.constructPacket((byte)client, Protocol.DataType.TEXT, toSendData);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(networkManager != null) {
+                try {
+                    networkManager.constructPacket((byte) client, Protocol.DataType.TEXT, toSendData);
+
+                } catch (IOException e) {
+
+                }
             }
+            sendList.add(toSendData);
             System.out.println();
+            System.out.println("Wrote " + sendList.size() + "/" + sequencenumber);
             count++;
         }
+        System.out.println(total + " / " + predictedtotal);
+        return sendList;
     }
 
     /**
@@ -91,7 +109,7 @@ public class FileHandler {
      * @param filename The filename
      */
     public void writeFile(byte[] listdata, String filename){
-        Path p = Paths.get(filename);
+        Path p = Paths.get("./a.png");
         try {
             FileOutputStream fos = new FileOutputStream(p.toFile());
             fos.write(listdata);
@@ -116,7 +134,7 @@ public class FileHandler {
         byte[] res = new byte[length];
         int current = 0;
         for(byte[] data: listData){
-            System.arraycopy(data, 0, res, current, data.length);
+            System.arraycopy(data, 7, res, current, data.length);
             current += data.length;
         }
         return res;
