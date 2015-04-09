@@ -208,14 +208,18 @@ public class IncomingPacketHandler extends PacketHandler {
     }
 
     private void notifyDataListeners(Packet packet) {
-        for(DataListener listener: dataListeners){
-            listener.onReceive(packet);
+        if(packet != null) {
+            for (DataListener listener : dataListeners) {
+                listener.onReceive(packet);
+            }
         }
     }
 
     private void notifyAckListeners(Packet packet) {
-        for(AckListener listener: ackListeners){
-            listener.onAck(packet);
+        if(packet != null) {
+            for (AckListener listener : ackListeners) {
+                listener.onAck(packet);
+            }
         }
     }
 }
