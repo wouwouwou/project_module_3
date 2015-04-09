@@ -21,15 +21,6 @@ public class FloatingPacket extends Packet {
     //TODO maybe a maximum amount of retries/resents
 
     // -----<=>-----< Constructors >-----<=>----- \\
-
-    /**
-     * Empty Constructor
-     */
-    public FloatingPacket(){
-        super();
-        this.sentOn = System.currentTimeMillis();
-    }
-
     /**
      * Constructing a packet from a (byte[])
      * @param data byte[]

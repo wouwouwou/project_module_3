@@ -82,21 +82,6 @@ public class NetworkManager {
             dropTable();
             sendTable();
 
-            /**
-             DatagramPacket hi = new DatagramPacket(msg.getBytes(), msg.length(),
-             group, 6789);
-             s.send(hi);
-             // get their responses!
-             byte[] buf = new byte[1000];
-             DatagramPacket recv = new DatagramPacket(buf, buf.length);
-             for (int i = 0; i < 2; i++) {
-             s.receive(recv);
-             System.out.println(new String(recv.getData()));
-             }
-
-             // OK, I'm done talking - leave the group...
-             s.leaveGroup(group);
-             **/
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -125,7 +110,6 @@ public class NetworkManager {
         InetAddress addr = null;
         try {
             Enumeration<InetAddress> addrs = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses();
-            //TODO Even naar kijken. Tweede deel (achter && ) returnt altijd true? | Woeter
             while (addrs.hasMoreElements() && (addr == null || addr.getAddress()[0] != 192)){
                 addr = addrs.nextElement();
             }
@@ -134,6 +118,7 @@ public class NetworkManager {
             e.printStackTrace();
         }
 
+        //TODO Exception instead of returning zero | Woeter Roeter
         if(addr == null){
             return 0;
         }
@@ -311,7 +296,6 @@ public class NetworkManager {
      * @return
      * @throws IOException
      */
-    //TODO Donder op met je Ad-Hoc Kobaldski
     public Packet constructPacket(byte destination, byte dataType, byte[] data) throws IOException {
         Packet packet = new Packet();
         packet.setDataType(dataType);
@@ -342,6 +326,26 @@ public class NetworkManager {
         packet.setNextHop(route[2]);
         packet.setFlags(Protocol.Flags.ACK);
         return packet;
+    }
+
+    /**
+     * Constructs a broadcast Ping packet
+     * <p>
+     *     Uses constructPacket(byte destination, byte dataType, byte[] data) to make a broadcasted ping packet
+     *     With destination 0 and Protocol.dataType.
+     * </p>
+     * @return packet a ping Packet with a destination 0
+     * @see #constructPacket(byte, byte, byte[])
+     */
+    public Packet constructPing() {
+        Packet ping = null;
+        try {
+            ping = constructPacket((byte) 0, (byte) 1, new byte[]{});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //TODO manipulate flags - Tim;  Not needed - Gerben
+        return ping;
     }
 
     public OutgoingPacketHandler getOutgoingPacketHandler() {

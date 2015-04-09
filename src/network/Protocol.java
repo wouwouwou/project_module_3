@@ -28,6 +28,7 @@ public class Protocol {
     public static final int COMMUNICATION_HEADER_LENGTH = 12;
     public static final int DISCOVERY_HEADER_LENGTH = 4;
     public static final long CONVERGE_TIME = 100;
+    public static final long PING_INTERVAL = 5000;
     public static final short MAX_RECIEVE_BUFFER_SIZE = 5;
 
     public static int CLIENT_ID = 0;
@@ -41,6 +42,7 @@ public class Protocol {
     public static class Flags {
         public static byte DATA = 1;
         public static byte ACK = 2;
+        public static byte BROADCAST = 4;
     }
 
     public static class DataType{
@@ -51,17 +53,7 @@ public class Protocol {
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**
-     * Getter for the InetAddress of the multicast network
-     * @return InetAddress of the group from the GROUP_ADDRESS String
-     * @throws UnknownHostException
-     */
-    public InetAddress getGroupAddress() throws UnknownHostException {
-        return InetAddress.getByName(GROUP_ADDRESS);
-    }
-
-    // -----<=>-----< Methods >-----<=>----- \\
-    /**
-     * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java
+     * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java.
      * @param data byte
      * @return int correctly converted data (byte) to (int)
      */

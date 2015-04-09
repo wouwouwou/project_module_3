@@ -7,6 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
+ * Unit test for exceptions.network.packet.NullPacketException
  * @author Wouter Bos
  * @since 8-4-15
  */

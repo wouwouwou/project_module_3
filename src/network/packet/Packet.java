@@ -240,6 +240,18 @@ public class Packet {
         this.flags = flags;
     }
 
+    public void addFlag(byte flag){
+        flags |= flag;
+    }
+
+    public void removeFlag(byte flag){
+        flags &= ~flag;
+    }
+
+    public boolean hasFlag(byte flag){
+        return (flags & flag) != 0;
+    }
+
     public byte getNextHop() {
         return nextHop;
     }

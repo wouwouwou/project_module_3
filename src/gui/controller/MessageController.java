@@ -61,6 +61,7 @@ public class MessageController implements DataListener{
     public void sendMessage() {
         try {
             Packet packet = networkManager.constructPacket((byte)clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
+            networkManager.getOutgoingPacketHandler().send(packet);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,9 +79,15 @@ public class MessageController implements DataListener{
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
+        System.out.println("asdasdas");
+        packet = packet.clone();
+        if(packet.hasFlag(Protocol.Flags.BROADCAST)){
+            packet.setDestination((byte) 0);
+        }
         if(packet.getDataType() == Protocol.DataType.TEXT){
+            System.out.println("HasTEXT!");
             for(int i = 0; i < clientModel.size(); i++){
-                if(clientModel.get(i).getId() == packet.getSource()){
+                if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == packet.getSource())){
                     addChatMessage(new ChatMessage(new String(packet.getData()), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource()));
                     System.out.println("Added chat message " + new String(packet.getData()));
                     break;
@@ -136,6 +143,7 @@ public class MessageController implements DataListener{
         try{
             chatModel.get(queue).addElement(message);
         }catch(NullPointerException e){
+            System.out.println("Created new queue");
             chatModel.put(queue, new DefaultListModel<ChatMessage>());
             chatModel.get(queue).addElement(message);
         }
