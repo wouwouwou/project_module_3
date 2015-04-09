@@ -64,7 +64,6 @@ public class IncomingPacketHandler extends PacketHandler {
     @Override
     public void run() {
         DatagramPacket recv = new DatagramPacket(buffer, buffer.length);
-        Packet packet;
         while(true){
             try {
                 socket.receive(recv);
@@ -202,7 +201,7 @@ public class IncomingPacketHandler extends PacketHandler {
                 }
             }
         } else if(packet[11] == Protocol.CLIENT_ID){
-
+            //TODO implement forwarding
         }
 
     }
@@ -217,7 +216,7 @@ public class IncomingPacketHandler extends PacketHandler {
 
     private void notifyAckListeners(Packet packet) {
         if(packet != null) {
-            System.out.println("Non-null packet: " + "\n" + packet.toString());
+            System.out.println("Non-null packet: " + "\n" + packet);
             for (AckListener listener : ackListeners) {
                 listener.onAck(packet);
             }
