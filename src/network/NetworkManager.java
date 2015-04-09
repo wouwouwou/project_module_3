@@ -325,7 +325,7 @@ public class NetworkManager {
         Packet ping = null;
         byte[] nameData = name.getBytes();
         try {
-            ping = constructPacket((byte) 0, (byte) 1, nameData); //TODO I might forsee a problem with the dataLength of a ping packet /Tim
+            ping = constructPacket((byte) 0, (byte) 1, nameData);
         } catch (IOException e) {
             e.printStackTrace();
         }
