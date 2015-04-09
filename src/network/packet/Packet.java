@@ -139,8 +139,11 @@ public class Packet {
         for (int i = 0; i < getSequenceBytes().length; i++) {
             out[i] = getSequenceBytes()[i];
         }
-
-        out[4] = destination;
+        if(flags == Protocol.Flags.ACK){
+            out[4] = source;
+        } else {
+            out[4] = destination;
+        }
         return Arrays.asList(out);
     }
 
