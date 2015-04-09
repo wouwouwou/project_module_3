@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Controls the GUI.
@@ -107,9 +108,7 @@ public class MessageController implements DataListener{
                 addClient(packet.getSource(), new String(packet.getData()));
             }
         }else if(packet.getDataType() == Protocol.DataType.FILE){
-            // TODO ROUTING TO FILE HANDLER/FILE RECEIVER
-
-
+            fileReceiver.onReceive(packet.getData());
         }
     }
 
@@ -118,9 +117,37 @@ public class MessageController implements DataListener{
      * @param path The path of the file that needs to be send
      */
     public void sendFile(Path path){
-        FileHandler fh = new FileHandler();
-        // Read the file using a buffered reader
-        //fh.sendFile(path, filecount, gui.getCurrentView(), networkManager);
+        FileHandler fileHandler = new FileHandler();
+        // Open file
+        byte[] bytearrayS = fileHandler.openFile(path);
+        System.out.println("bytearrayS size: " + bytearrayS.length);
+
+
+        // Split file to multiple byte arrays
+        List<byte[]> listbytearrayS = fileHandler.splitToPacketData(bytearrayS);
+        int listbytearraySlength = 0;
+        for(byte[] listbytearrayStocount: listbytearrayS){
+            listbytearraySlength += listbytearrayStocount.length;
+        }
+        System.out.println("listbytearrayS size: " + listbytearraySlength);
+
+        // Add information
+        List<byte[]> CS = fileHandler.addHeaders(listbytearrayS, filecount);
+        int CSlength = 0;
+        for(byte[] CStocount: CS){
+            CSlength += CStocount.length - 6;
+        }
+
+        for(byte[] toSendData: CS){
+            Packet packet = null;
+            try {
+                packet = networkManager.constructPacket((byte)clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.FILE, toSendData);
+                networkManager.getOutgoingPacketHandler().send(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         filecount++;
     }
 
