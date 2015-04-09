@@ -1,5 +1,4 @@
-import gui.controller.MessageController;
-import network.NetworkManager;
+import gui.NameDialog;
 
 /**
  * Start the main program
@@ -7,17 +6,9 @@ import network.NetworkManager;
  * @version 1.0
  */
 public class Main {
-    /**
-     * Start the main program
-     * @param args No arguments need to be given.
-     */
-    public static void main(String[] args) {
-        NetworkManager networkManager = new NetworkManager();
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        MessageController gui = new MessageController(networkManager);
+    public static void main (String[] args){
+        NameDialog dialog = new NameDialog();
+        dialog.pack();
+        dialog.setVisible(true);
     }
 }
