@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Gerben Meijer
@@ -21,6 +22,7 @@ public class IncomingPacketHandler extends PacketHandler {
     // Fields
     private ArrayList<DataListener> dataListeners;
     private ArrayList<AckListener> ackListeners;
+    private ArrayList<List<Byte>> lastPackets;
     private byte[] buffer;
 
     // Constructor(s)
@@ -35,6 +37,7 @@ public class IncomingPacketHandler extends PacketHandler {
         this.dataListeners = new ArrayList<>();
         this.ackListeners = new ArrayList<>();
         this.networkManager = networkManager;
+        lastPackets = new ArrayList<>();
     }
 
     public void addDataListener(DataListener listener){
@@ -47,6 +50,10 @@ public class IncomingPacketHandler extends PacketHandler {
 
     public void removeDataListener(DataListener listener){
         dataListeners.remove(listener);
+    }
+
+    public boolean isDuplicate(Packet packet){
+        return lastPackets.contains(packet);
     }
 
     public void removeAckListener(AckListener listener){
@@ -185,7 +192,15 @@ public class IncomingPacketHandler extends PacketHandler {
                     Packet p = new Packet(packet);
                     Packet ack = networkManager.constructACK(p);
                     networkManager.send(ack);
-                    notifyDataListeners(p);
+                    if(!isDuplicate(p)) {
+                        notifyDataListeners(p);
+                        lastPackets.add(p.getFloatingKey());
+                        System.out.println(lastPackets.size());
+                        if(lastPackets.size() >= Protocol.MAX_RECIEVE_BUFFER_SIZE){
+                            lastPackets.remove(0);
+                        }
+                    }
+
                 } catch (InvalidPacketException e) {
                     e.printStackTrace();
                 }
@@ -202,6 +217,15 @@ public class IncomingPacketHandler extends PacketHandler {
             }
         } else if(packet[11] == Protocol.CLIENT_ID){
             //TODO implement forwarding
+            byte[] route = networkManager.getTableEntryByDestination(packet[3]);
+            if(route != null) {
+                packet[11] = route[2];
+                try {
+                    socket.send(new DatagramPacket(packet, packet.length, networkManager.getGroup(), Protocol.GROUP_PORT));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
     }
