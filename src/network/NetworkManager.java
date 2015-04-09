@@ -319,19 +319,19 @@ public class NetworkManager {
      * Constructs a broadcast Ping packet
      * <p>
      *     Uses constructPacket(byte destination, byte dataType, byte[] data) to make a broadcasted ping packet
-     *     With destination 0 and Protocol.dataType.
+     *     With destination 0 and Protocol.dataType. A name must be specified to be broadcasted.
      * </p>
      * @return packet a ping Packet with a destination 0
      * @see #constructPacket(byte, byte, byte[])
      */
-    public Packet constructPing() {
+    public Packet constructPing(String name) {
         Packet ping = null;
+        byte[] nameData = null; //TODO add name
         try {
-            ping = constructPacket((byte) 0, (byte) 1, new byte[]{});
+            ping = constructPacket((byte) 0, (byte) 1, nameData);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO manipulate flags - Tim;  Not needed - Gerben
         return ping;
     }
 

@@ -1,7 +1,6 @@
 package network;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import exceptions.network.InvalidClientIdException;
 
 /**
  * Holds constants used in the Protocol and network.
@@ -50,6 +49,7 @@ public class Protocol {
         public static byte TEXT = 2;
         public static byte FILE = 3;
     }
+
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**
