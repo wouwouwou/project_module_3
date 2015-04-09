@@ -23,70 +23,37 @@ public class FileHandler {
      */
     private static final int MAX_DATA_LENGTH = 1000;
 
+
     /**
-     * Open a file from path and send it to the networklayer.
-     * @param file The file that has to be send
-     * @param networkManager The networkmanager the data is send to.
+     *  Adds headers to a List of bytearrays (to keep them in order and check if they all are available).
      */
-    public List<byte[]> sendFile(Path file, int number, int client, NetworkManager networkManager){
-        // File data
-        byte[] data = this.openFile(file);
-        int predictedtotal = data.length;
-        // Split File data to 'stukjes'
-        List<byte[]> listData = this.splitToPacketData(data);
-        int total = 0;
-        for(byte[] xdfon: listData){
-            total += xdfon.length;
+    public List<byte[]> addHeaders(List<byte[]> dataArray, int filenumber){
+        List<byte[]> result = new ArrayList<>();
+        int partCount = 0;
+        for(byte[] data: dataArray){
+            byte[] res = new byte[data.length + 6];
+            int header1 = partCount << 16 | dataArray.size();
+            int header2 = filenumber;
+            System.arraycopy(ByteBuffer.allocate(4).putInt(header1).array(), 0, res, 0, 4);
+            System.arraycopy(ByteBuffer.allocate(4).putInt(header2).array(), 2, res, 4, 2);
+            System.arraycopy(data, 0, res, 6, data.length);
+            result.add(res);
+            partCount++;
         }
-
-        // Create a new list (this list will be returned)
-        List<byte[]> sendList = new ArrayList<>();
-
-        int sequencenumber = listData.size();
-        int count = 0;
-
-        for(byte[] sendData: listData){
-            byte[] toSendData = new byte[sendData.length + 6];
-
-
-            Integer firstline = count << 16 | sequencenumber;
-            System.arraycopy(ByteBuffer.allocate(4).putInt(firstline).array(), 0, toSendData, 0, 4);
-
-
-            System.arraycopy(ByteBuffer.allocate(4).putInt(number).array(), 2, toSendData, 4, 2);
-
-            System.arraycopy(sendData, 0, toSendData, 7, sendData.length - 1);
-            for(byte b: toSendData){
-                System.out.print(b);
-            }
-
-            // Send data to network!
-            if(networkManager != null) {
-                try {
-                    networkManager.constructPacket((byte) client, Protocol.DataType.TEXT, toSendData);
-
-                } catch (IOException e) {
-
-                }
-            }
-            sendList.add(toSendData);
-            System.out.println();
-            System.out.println("Wrote " + sendList.size() + "/" + sequencenumber);
-            count++;
-        }
-        System.out.println(total + " / " + predictedtotal);
-        return sendList;
+        return result;
     }
 
     /**
-     * Creates an file out of listdata made by the datalistener.
-     * @param listData The collected listdata
+     *  Removes the headers from an List of bytearrays
      */
-    public void createFile(List<byte[]> listData){
-        String filename = new String(listData.get(listData.size() - 1));
-        listData.remove(listData.size() - 1);
-        byte[] convergeddata = this.convergeToArray(listData);
-        this.writeFile(convergeddata, filename);
+    public List<byte[]> removeHeaders(List<byte[]> headerArray){
+        List<byte[]> result = new ArrayList<>();
+        for(byte[] headerData: headerArray){
+            byte[] res = new byte[headerData.length - 6];
+            System.arraycopy(headerData, 6, res, 0, headerData.length - 6);
+            result.add(res);
+        }
+        return result;
     }
 
     /**
@@ -134,7 +101,7 @@ public class FileHandler {
         byte[] res = new byte[length];
         int current = 0;
         for(byte[] data: listData){
-            System.arraycopy(data, 7, res, current, data.length);
+            System.arraycopy(data, 0, res, current, data.length);
             current += data.length;
         }
         return res;
@@ -153,5 +120,49 @@ public class FileHandler {
             reslist.add(resByteArray);
         }
         return reslist;
+    }
+
+    /**
+     * Returns the sequence number of a packet.
+     * @param data
+     * @return
+     */
+    public int getSequenceNumber(byte[] data){
+        byte[] countArray = new byte[4];
+        System.arraycopy(data, 0, countArray, 2, 2);
+        return byteArrayToInt(countArray);
+    }
+
+    /**
+     * Returns the total amount of packets to be expected for this file.
+     */
+    public int getTotalPackets(byte[] data){
+        byte[] totalArray = new byte[4];
+        System.arraycopy(data, 2, totalArray, 2, 2);
+        return byteArrayToInt(totalArray);
+    }
+
+    /**
+     * Returns the number of this file.
+     */
+    public int getFileNumber(byte[] data){
+        byte[] fileArray = new byte[4];
+        System.arraycopy(data, 4, fileArray, 2, 2);
+        return byteArrayToInt(fileArray);
+    }
+
+    /**
+     * Converts a byte array to an integer.
+     * @param b the byte array
+     * @return int The integer representation of the byte
+     */
+    public static int byteArrayToInt(byte[] b)
+    {
+        int value = 0;
+        for (int i = 0; i < 4; i++) {
+            int shift = (4 - 1 - i) * 8;
+            value += (b[i] & 0x000000FF) << shift;
+        }
+        return value;
     }
 }
