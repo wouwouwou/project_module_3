@@ -1,6 +1,5 @@
 package network;
 
-
 /**
  * Holds constants used in the Protocol and network.
  * @author Tim Hintzbergen

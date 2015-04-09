@@ -326,9 +326,9 @@ public class NetworkManager {
      */
     public Packet constructPing(String name) {
         Packet ping = null;
-        byte[] nameData = null; //TODO add name
+        byte[] nameData = name.getBytes();
         try {
-            ping = constructPacket((byte) 0, (byte) 1, nameData);
+            ping = constructPacket((byte) 0, (byte) 1, nameData); //TODO I might forsee a problem with the dataLength of a ping packet /Tim
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -341,5 +341,9 @@ public class NetworkManager {
 
     public MulticastSocket getSocket() {
         return socket;
+    }
+
+    public String getClientName() {
+        return clientName;
     }
 }
