@@ -16,6 +16,7 @@ import java.util.Enumeration;
  */
 public class NetworkManager {
 
+    private final String clientName;
     // -----<=>-----< Fields >-----<=>----- \\
     private MulticastSocket socket;
     private IncomingPacketHandler incomingPacketHandler;
@@ -26,15 +27,6 @@ public class NetworkManager {
     private int sequenceNum;
     private long lastTableDrop = 0;
 
-    // -----<=>-----< Main >-----<=>----- \\
-    /**
-     * Main method, to be changed
-     * @param args
-     */
-    //TODO Main method, to be changed
-    public static void main(String[] args){
-        NetworkManager networkManager = new NetworkManager();
-    }
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
@@ -47,7 +39,8 @@ public class NetworkManager {
      *      - Joins the multicast group and sets up its handlers
      * </p>
      */
-    public NetworkManager() {
+    public NetworkManager(String name) {
+        this.clientName = name;
         //Get the group address
         try {
             group = InetAddress.getByName(Protocol.GROUP_ADDRESS);
