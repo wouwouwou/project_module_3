@@ -342,4 +342,8 @@ public class NetworkManager {
     public MulticastSocket getSocket() {
         return socket;
     }
+
+    public String getClientName() {
+        return clientName;
+    }
 }

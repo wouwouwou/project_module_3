@@ -1,7 +1,5 @@
 package network;
 
-import exceptions.network.InvalidClientIdException;
-
 /**
  * Holds constants used in the Protocol and network.
  * @author Tim Hintzbergen
