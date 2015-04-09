@@ -185,7 +185,7 @@ public class IncomingPacketHandler extends PacketHandler {
 
     public void handleCommunication(byte[] packet){
         if(packet[3] == Protocol.CLIENT_ID){
-            if (packet[8] == Protocol.Flags.DATA){
+            if ((packet[8] & Protocol.Flags.DATA) != 0){
 
                 try {
                     Packet p = new Packet(packet);
