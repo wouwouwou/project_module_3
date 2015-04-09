@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
  */
 public class PacketTest {
 
-    //TODO Test for second constructor
     private Packet packet1;
     private Packet packet2;
 
