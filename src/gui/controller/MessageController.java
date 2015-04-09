@@ -79,6 +79,10 @@ public class MessageController implements DataListener{
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
+        packet = packet.clone();
+        if(packet.hasFlag(Protocol.Flags.BROADCAST)){
+            packet.setDestination((byte) 0);
+        }
         if(packet.getDataType() == Protocol.DataType.TEXT){
             for(int i = 0; i < clientModel.size(); i++){
                 if(clientModel.get(i).getId() == packet.getSource()){

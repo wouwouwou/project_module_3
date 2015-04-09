@@ -71,7 +71,7 @@ public class OutgoingPacketHandler extends PacketHandler {
     public void send(Packet packet) {
         InetAddress group = networkManager.getGroup();
         if (packet.getDestination() == 0) {
-            System.out.println("Broadcast recieved");
+            packet.addFlag(Protocol.Flags.BROADCAST);
             byte[] packetBytes = packet.toBytes();
             for (byte i = 1; i < 5; i++) {
                 if (i != Protocol.CLIENT_ID) {

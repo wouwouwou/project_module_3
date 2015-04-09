@@ -41,6 +41,7 @@ public class Protocol {
     public static class Flags {
         public static byte DATA = 1;
         public static byte ACK = 2;
+        public static byte BROADCAST = 4;
     }
 
     public static class DataType{
