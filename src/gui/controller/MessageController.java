@@ -120,7 +120,7 @@ public class MessageController implements DataListener{
     public void sendFile(Path path){
         FileHandler fh = new FileHandler();
         // Read the file using a buffered reader
-        fh.sendFile(path, filecount, gui.getCurrentView(), networkManager);
+        //fh.sendFile(path, filecount, gui.getCurrentView(), networkManager);
         filecount++;
     }
 
