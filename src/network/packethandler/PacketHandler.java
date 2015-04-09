@@ -1,5 +1,7 @@
 package network.packethandler;
 
+import network.NetworkManager;
+
 import java.net.MulticastSocket;
 
 /**
@@ -11,11 +13,13 @@ public abstract class PacketHandler implements Runnable {
 
     // -----<=>-----< Fields >-----<=>----- \\
     MulticastSocket socket;
-    Thread thread;
+    protected Thread thread;
+    protected NetworkManager networkManager;
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
-    public PacketHandler(MulticastSocket socket) {
-        this.socket = socket;
+    public PacketHandler(NetworkManager networkManager) {
+        this.socket = networkManager.getSocket();
+        this.networkManager = networkManager;
         this.thread = new Thread(this);
         this.thread.start();
     }
