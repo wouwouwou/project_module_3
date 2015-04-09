@@ -1,5 +1,8 @@
 package file;
 
+import network.NetworkManager;
+import network.Protocol;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
@@ -23,8 +26,9 @@ public class FileHandler {
     /**
      * Open a file from path and send it to the networklayer.
      * @param file The file that has to be send
+     * @param networkManager The networkmanager the data is send to.
      */
-    public void sendFile(Path file, int number, int client){
+    public void sendFile(Path file, int number, int client, NetworkManager networkManager){
         byte[] data = this.openFile(file);
         List<byte[]> listData = this.splitToPacketData(data);
         listData.add(file.getFileName().toString().getBytes());
@@ -45,8 +49,12 @@ public class FileHandler {
                 System.out.print(b);
             }
 
-            //  gerboon.sendPacket(data, client);
-            //  TODO SEND PACKET TO NETWORKLAYER
+            // Send data to network!
+            try {
+                networkManager.constructPacket((byte)client, Protocol.DataType.TEXT, toSendData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             System.out.println();
             count++;
         }
