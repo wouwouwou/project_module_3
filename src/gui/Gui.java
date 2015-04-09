@@ -8,6 +8,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Created by tristan on 7-4-15.
@@ -26,6 +27,7 @@ public class Gui extends JFrame {
     private JTextField messageField;
     private JButton sendButton;
     private JList list2;
+    private JButton fileButton;
     private int currentView = 0;
 
     /**
@@ -49,6 +51,7 @@ public class Gui extends JFrame {
         this.clientListActionListener();
         this.sendTextfieldActionListener();
         this.sendMessageButtonActionListener();
+        this.fileButtonActionListener();
 
         // Set visible
         setVisible(true);
@@ -99,6 +102,7 @@ public class Gui extends JFrame {
     private void setFonts() {
         messageField.setFont(DEFAULT_FONT);
         sendButton.setFont(DEFAULT_FONT);
+        fileButton.setFont(DEFAULT_FONT);
     }
 
     //  ------------------- Action listeners -----------------------------------------------------------------------------------------------
@@ -141,6 +145,25 @@ public class Gui extends JFrame {
         });
     }
 
+    /**
+     * Add an action listener to <code>fileButton</code>. Show a dialog if the button is pressed.
+     */
+    public void fileButtonActionListener(){
+        fileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                final JFileChooser fc = new JFileChooser();
+                int returnVal = fc.showOpenDialog(Gui.this);
+
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    messageController.sendFile(file.toPath());
+                } else {
+
+                }
+            }
+        });
+    }
 
     public int getCurrentView() {
         return currentView;
