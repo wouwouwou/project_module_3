@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * @author wouter Bos
+ * @author Wouter Bos
  * @since 8-4-15
  */
 public class NullPacketExceptionTest {
