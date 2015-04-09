@@ -1,5 +1,8 @@
 package gui;
 
+import gui.controller.MessageController;
+import network.NetworkManager;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -7,6 +10,8 @@ public class NameDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
+    private JFormattedTextField formattedTextField1;
+    private JTextField textField1;
 
     public NameDialog() {
         setContentPane(contentPane);
@@ -25,7 +30,7 @@ public class NameDialog extends JDialog {
             }
         });
 
-// call onCancel() when cross is clicked
+        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -33,7 +38,7 @@ public class NameDialog extends JDialog {
             }
         });
 
-// call onCancel() on ESCAPE
+        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -42,12 +47,18 @@ public class NameDialog extends JDialog {
     }
 
     private void onOK() {
-// add your code here
+        NetworkManager networkManager = new NetworkManager(textField1.getText());
+        try {
+            Thread.sleep(0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        MessageController gui = new MessageController(networkManager);
         dispose();
     }
 
     private void onCancel() {
-// add your code here if necessary
+        // add your code here if necessary
         dispose();
     }
 
