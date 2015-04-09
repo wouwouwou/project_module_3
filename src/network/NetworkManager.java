@@ -118,15 +118,15 @@ public class NetworkManager {
             e.printStackTrace();
         }
 
-        //TODO Exception instead of returning zero | Woeter Roeter
+        //TODO Throw a ProbablyNotInAdHocException instead of returning zero | Woeter Roeter
         if(addr == null){
+            //throw new ProbablyNotInAdHocException();
             return 0;
         }
         return addr.getAddress()[3];
     }
 
     // Adds or replaces a table entry
-
     /**
      * Adds an routingEntry to the routingTable
      * <p>
@@ -167,7 +167,6 @@ public class NetworkManager {
             if(routingTable.get(i) == destination){
                 return new byte[]{routingTable.get(i), routingTable.get(i+1), routingTable.get(i+2)};
             }
-
         }
         return null;
     }
