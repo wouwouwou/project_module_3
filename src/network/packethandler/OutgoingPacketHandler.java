@@ -107,26 +107,25 @@ public class OutgoingPacketHandler extends PacketHandler {
             //TODO Synchronized might break because it is called from a synchronized block in run()
             synchronized (floatingPacketMap) {
                 try {
+
+                    //Try to find a route
                     byte[] route = networkManager.getTableEntryByDestination(packet.getDestination());
+
+                    //If there is no known route, throw an Exception and schedule the packet for a retry.
                     if(route == null){
-                        try {
-                            floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
-                        } catch (InvalidPacketException e) {
-                            e.printStackTrace();
-                        }
+                        floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
                         throw new IOException(String.format("Destination %s unreachable.", packet.getDestination()));
                     }
+
                     packet.setNextHop(route[2]);
                     socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (packet.getFlags() == Protocol.Flags.DATA) {
-                    try {
-                        floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
-                    } catch (InvalidPacketException e) {
-                        e.printStackTrace();
+
+                    if (packet.getFlags() == Protocol.Flags.DATA) {
+                            floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
                     }
+
+                } catch (IOException | InvalidPacketException e) {
+                    e.printStackTrace();
                 }
             }
         }
