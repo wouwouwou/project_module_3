@@ -79,7 +79,6 @@ public class OutgoingPacketHandler extends PacketHandler {
      * </p>
      * @param packet Packet the packet that will be broadcasted to the multicast network
      */
-    //TODO Exceptionhandling | Woeter Roeter
     public void send(Packet packet) {
         InetAddress group = networkManager.getGroup();
         if (packet.getDestination() == 0) {
@@ -128,14 +127,14 @@ public class OutgoingPacketHandler extends PacketHandler {
                         scheduleForResend(packet);
                     }
 
-                } catch (IOException | InvalidPacketException e) {
-                    //This does not need further handling, we'll just retry.
-                    //e.printStackTrace();
+                } catch (IOException e) {
+                    //This does not need further handling, packet already scheduled for resend.
                 }
             }
         }
     }
 
+    //TODO Structure change? | Woeter Roeter
     public Packet handleACK(Packet ackPacket){
         System.out.println("Ack received!");
         System.out.println(floatingPacketMap.containsKey(ackPacket.getFloatingKey()));
@@ -152,13 +151,18 @@ public class OutgoingPacketHandler extends PacketHandler {
         return this.lastPingSend;
     }
 
-    public void scheduleForResend(Packet packet) throws InvalidPacketException {
+    public void scheduleForResend(Packet packet) {
         boolean resend = true;
-        FloatingPacket floatingPacket;
+        FloatingPacket floatingPacket = null;
 
         if( !(packet instanceof FloatingPacket)) {
 
+            try {
                 floatingPacket = new FloatingPacket(packet.toBytes());
+            } catch (InvalidPacketException e) {
+                //Made a InvalidPacket from a valid packet
+                e.printStackTrace();
+            }
 
         } else {
             floatingPacket = (FloatingPacket) packet;

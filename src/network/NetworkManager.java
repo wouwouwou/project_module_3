@@ -1,5 +1,6 @@
 package network;
 
+import exceptions.network.ClientIdNotAvailableException;
 import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
 import network.packethandler.ClientMapPingListener;
@@ -16,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Gerben Meijer
  * @since 7-4-15
  */
-//TODO Exceptionhandling! | Woeter Roeter
 public class NetworkManager {
 
     private final String clientName;
@@ -67,7 +67,14 @@ public class NetworkManager {
             socket.joinGroup(group);
 
             //Get our client ID and set Protocol.CLIENT_ID
-            Protocol.CLIENT_ID = this.getClientId();
+            try {
+                Protocol.CLIENT_ID = this.getClientId();
+            } catch (ClientIdNotAvailableException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+                System.err.println("Shutting down...");
+                System.exit(-1);
+            }
             //Protocol.CLIENT_ID = 1;
             System.out.println("Init with client id: " + Protocol.CLIENT_ID);
             sequenceNum = (Protocol.CLIENT_ID << 24);
@@ -109,8 +116,9 @@ public class NetworkManager {
      *     The last number of the local address is your ID.
      * </p>
      * @return client id
+     * @throws ClientIdNotAvailableException when no Id could be generated and causes the process to terminate with error code -1
      */
-    public int getClientId() /* throws NoClientIdAvailableException */{
+    public int getClientId() throws ClientIdNotAvailableException {
         InetAddress addr = null;
         try {
             Enumeration<InetAddress> addrs = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses();
@@ -122,10 +130,8 @@ public class NetworkManager {
             e.printStackTrace();
         }
 
-        //TODO Throw a NoClientIdAvailableException instead of returning zero | Woeter Roeter & Tim
-        if(addr == null){
-            //throw new NoClientIdAvailableException, should even kill the client after passing a message/trace
-            return 0;
+        if(addr == null) {
+            throw new ClientIdNotAvailableException();
         }
         return addr.getAddress()[3];
     }
