@@ -1,7 +1,11 @@
 package file;
 
+import gui.controller.Client;
+import gui.controller.MessageController;
+import gui.controller.ProcessMessage;
 import network.packet.Packet;
 
+import javax.swing.*;
 import java.util.*;
 
 /**
@@ -10,22 +14,31 @@ import java.util.*;
  */
 public class FileReceiver {
 
+    private final MessageController messageController;
     Map<Integer, SortedMap<Integer, byte[]>> receivedMap = new HashMap<>();
-    /**
-     *
-     * @param packet
-     */
-    public void onReceive(Packet packet) {
-        this.onReceive(packet.getData());
+
+    public FileReceiver(MessageController messageController) {
+        this.messageController = messageController;
     }
 
-    public void onReceive(byte[] data) {
+
+    public void onReceive(Packet packet) {
+        byte[] data = packet.getData();
         synchronized (receivedMap) {
             FileHandler fh = new FileHandler();
             // Add data to receivedMap
             // If map doesn't contain filenumber, add a new entry.
             if(!receivedMap.containsKey(fh.getFileNumber(data))){
                 receivedMap.put(fh.getFileNumber(data), new TreeMap<Integer, byte[]>());
+                DefaultListModel<Client> clientModel = messageController.getClientModel();
+                ProcessMessage pm = null;
+                for(int i = 0; i < clientModel.size(); i++) {
+                    if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == packet.getSource())) {
+                        pm = new ProcessMessage(fh.getFileNumber(data), fh.getTotalPackets(data), "Bestand!",clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
+                        break;
+                    }
+                }
+                messageController.addChatMessage(pm);
             }
             // If entry filenumber doesn't contain a packet number, add a new entry with packet data.
             if(!receivedMap.get(fh.getFileNumber(data)).containsKey(fh.getSequenceNumber(data))){

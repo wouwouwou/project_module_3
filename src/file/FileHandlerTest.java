@@ -9,7 +9,7 @@ import java.util.List;
  * @since 8-4-15
  */
 public class FileHandlerTest {
-    FileReceiver fr = new FileReceiver();
+    FileReceiver fr = new FileReceiver(null);
 
     public static void main(String[] args){
         new FileHandlerTest();
@@ -42,9 +42,6 @@ public class FileHandlerTest {
         }
         System.out.println("CS size: " + CSlength);
 
-        for(byte[] bytearray: CS){
-            fr.onReceive(bytearray);
-        }
     }
 
 }
