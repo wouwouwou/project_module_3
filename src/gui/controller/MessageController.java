@@ -256,4 +256,9 @@ public class MessageController implements DataListener{
     public void updateList2() {
         gui.updateList2();
     }
+
+    public void setMessage(int i, int j, String s) {
+        chatModel.get(i).get(j).setMessage(s);
+        updateList2();
+    }
 }
