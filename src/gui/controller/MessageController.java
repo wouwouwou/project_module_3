@@ -10,6 +10,7 @@ import network.packet.Packet;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.HashMap;
@@ -150,7 +151,8 @@ public class MessageController implements DataListener{
         for(byte[] toSendData: CS){
             Packet packet = null;
             try {
-                packet = networkManager.constructPacket((byte)clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.FILE, toSendData);
+                byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
+                packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
                 networkManager.getOutgoingPacketHandler().send(packet);
             } catch (IOException e) {
                 e.printStackTrace();

@@ -34,7 +34,7 @@ public class FileReceiver {
                 ProcessMessage pm = null;
                 for(int i = 0; i < clientModel.size(); i++) {
                     if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == packet.getSource())) {
-                        pm = new ProcessMessage(fh.getFileNumber(data), fh.getTotalPackets(data), "Bestand!",clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
+                        pm = new ProcessMessage(fh.getFileNumber(data), fh.getTotalPackets(data), "Incoming file. Received 0/"+fh.getTotalPackets(data),clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
                         break;
                     }
                 }
