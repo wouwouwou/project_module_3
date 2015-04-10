@@ -330,7 +330,7 @@ public class NetworkManagerTest {
 
     @Test
     public void testConstructPing() {
-        Packet ping = manager.constructPing(manager.getClientName());
+        Packet ping = manager.constructPing();
         assert (ping.getDataType() == Protocol.DataType.PING);
         assert (Arrays.equals(ping.getData(), manager.getClientName().getBytes()));
         assert (ping.getDestination() == 0);
