@@ -7,7 +7,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by wouwouwou on 10-4-15.
+ * @author Wouter Bos
+ * @since 10-4-15
  */
 public class ClientIdNotAvailableExceptionTest {
 

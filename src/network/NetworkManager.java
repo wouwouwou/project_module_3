@@ -156,6 +156,7 @@ public class NetworkManager {
                 routingTable.set(index + 2, entry[2]);
                 IncomingPacketHandler.printArray(routingTable.toArray());
             } else {
+                connectedClients.put(entry[0], (byte) 0);
                 routingTable.add(entry[0]);
                 routingTable.add(entry[1]);
                 routingTable.add(entry[2]);
@@ -366,8 +367,7 @@ public class NetworkManager {
             if(connectedClients.get(key) > Protocol.MAX_MISSED_PINGROUNDS){
                 dropTable();
                 sendTable();
-                connectedClients.remove(key);
-            }
+                connectedClients.remove(key); }
         }
     }
 }

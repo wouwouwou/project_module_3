@@ -40,7 +40,6 @@ public class Packet {
      * @param packet byte[] Data to be constructed into a packet
      */
     //TODO Documenting especially in respect to Exception handling (correctly referring to our implementation) / Woeter
-    //TODO Testing of Exceptions! Especially the e.getMessage()!
     public Packet(byte[] packet) throws InvalidPacketException {
         if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH) {
             throw new InvalidCommunicationHeaderLengthException();
@@ -131,8 +130,7 @@ public class Packet {
      * @see #toBytes()
      * @see #Packet(byte[]) Packet(byte[])
      */
-    @Override
-    public Packet clone() {
+    public Packet deepCopy() {
         try {
             return new Packet(this.toBytes());
         } catch (InvalidPacketException e) {
@@ -146,7 +144,7 @@ public class Packet {
      * Gives a byte[] representation of the sequenceNumber (long) field
      * @return byte[] The sequence number converted to a byte array with 4 entries
      */
-    public byte[] getSequenceBytes(){
+    public byte[] getSequenceBytes() {
         byte[] out = new byte[4];
         out[0] = (byte) (sequenceNumber >> 24);
         out[1] = (byte) (sequenceNumber >> 16);

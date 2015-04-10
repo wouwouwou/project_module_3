@@ -38,8 +38,7 @@ public class IncomingPacketHandler extends PacketHandler {
         this.networkManager = networkManager;
         lastPackets = new ArrayList<>();
     }
-    
-    //TODO Check if this works!
+
     public void addDataListener(DataListener listener){
         if (!dataListeners.contains(listener)) {
             dataListeners.add(listener);
