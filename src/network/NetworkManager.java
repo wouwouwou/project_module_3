@@ -1,5 +1,6 @@
 package network;
 
+import exceptions.network.DestinationNotInTableException;
 import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
@@ -133,19 +134,19 @@ public class NetworkManager {
      * </p>
      * @param entry byte[destination, cost, next_hop]
      */
-    public void putTableEntry(byte[] entry){
+    public void putTableEntry(byte[] entry) {
         System.out.println("Adding table entry");
         if(entry.length == 3){
-            int index = getTableIndexByDestination(entry[0]);
-            if(index == -1) {
-                routingTable.add(entry[0]);
-                routingTable.add(entry[1]);
-                routingTable.add(entry[2]);
-            } else {
+            try {
+                int index = getTableIndexByDestination(entry[0]);
                 routingTable.set(index, entry[0]);
                 routingTable.set(index + 1, entry[1]);
                 routingTable.set(index + 2, entry[2]);
                 IncomingPacketHandler.printArray(routingTable.toArray());
+            } catch (DestinationNotInTableException e) {
+                routingTable.add(entry[0]);
+                routingTable.add(entry[1]);
+                routingTable.add(entry[2]);
             }
         }
     }
@@ -160,13 +161,13 @@ public class NetworkManager {
      * @return byte[destination, cost, next_hop]
      */
     //TODO should throw a DestinationNotInTableException | Woeter Roeter
-    public byte[] getTableEntryByDestination(byte destination){
+    public byte[] getTableEntryByDestination(byte destination) throws DestinationNotInTableException {
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
                 return new byte[]{routingTable.get(i), routingTable.get(i+1), routingTable.get(i+2)};
             }
         }
-        return null;
+        throw new DestinationNotInTableException(destination);
     }
 
     /**
@@ -179,16 +180,14 @@ public class NetworkManager {
      * @return  int index in the routingTable.
      *          -1 if destination not found
      */
-    //TODO should throw a DestinationNotInTableException | Woeter Roeter
-    public int getTableIndexByDestination(byte destination){
+    public int getTableIndexByDestination(byte destination) throws DestinationNotInTableException {
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
                 return i;
             }
 
         }
-        //throw new DestinationNotInTableException();
-        return -1;
+        throw new DestinationNotInTableException(destination);
     }
 
     /**
