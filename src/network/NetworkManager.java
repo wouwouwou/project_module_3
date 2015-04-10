@@ -101,8 +101,7 @@ public class NetworkManager {
      * </p>
      * @return client id
      */
-    //TODO Watch the throws comment! | Woeter Roeter
-    public int getClientId() /* throws ProbablyNotInAdHocException */{
+    public int getClientId() /* throws NoClientIdAvailableException */{
         InetAddress addr = null;
         try {
             Enumeration<InetAddress> addrs = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses();
@@ -114,9 +113,9 @@ public class NetworkManager {
             e.printStackTrace();
         }
 
-        //TODO Throw a ProbablyNotInAdHocException instead of returning zero | Woeter Roeter
+        //TODO Throw a NoClientIdAvailableException instead of returning zero | Woeter Roeter & Tim
         if(addr == null){
-            //throw new ProbablyNotInAdHocException();
+            //throw new NoClientIdAvailableException, should even kill the client after passing a message/trace
             return 0;
         }
         return addr.getAddress()[3];

@@ -20,7 +20,6 @@ public class FloatingPacket extends Packet {
 
     private long sentOn;
     private byte retries;
-    //TODO maybe a maximum amount of retries/resents
 
     // -----<=>-----< Constructors >-----<=>----- \\
     /**
@@ -29,7 +28,7 @@ public class FloatingPacket extends Packet {
      * @throws InvalidPacketException from super constructor
      * @see network.packet.Packet#Packet(byte[])
      */
-    //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
+    //TODO Documenting especially in respect to Exception handling (correctly referring to our implementation) / Woeter
     public FloatingPacket(byte[] data) throws InvalidPacketException {
         super(data);
         this.retries = Protocol.MAX_RETRIES;
