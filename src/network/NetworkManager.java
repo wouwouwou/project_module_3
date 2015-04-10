@@ -69,7 +69,7 @@ public class NetworkManager {
 
 
             //Create and start the IncomingPacketHandler
-            incomingPacketHandler = new IncomingPacketHandler(this, 1000);
+            incomingPacketHandler = new IncomingPacketHandler(this, Protocol.RECEIVE_BUFFER_BYTES_SIZE);
 
             //Create and start the OutgoingPacketHandler
             outgoingPacketHandler = new OutgoingPacketHandler(this);

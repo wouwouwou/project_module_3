@@ -196,7 +196,7 @@ public class IncomingPacketHandler extends PacketHandler {
                         notifyDataListeners(p);
                         lastPackets.add(p.getFloatingKey());
                         System.out.println(lastPackets.size());
-                        if(lastPackets.size() >= Protocol.MAX_RECIEVE_BUFFER_SIZE){
+                        if(lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE){
                             lastPackets.remove(0);
                         }
                     }
