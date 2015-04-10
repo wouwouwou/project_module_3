@@ -366,7 +366,7 @@ public class NetworkManager {
             if(connectedClients.get(key) > Protocol.MAX_MISSED_PINGROUNDS){
                 dropTable();
                 sendTable();
-            }
+                connectedClients.remove(key); }
         }
     }
 }

@@ -145,7 +145,7 @@ public class Packet {
      * Gives a byte[] representation of the sequenceNumber (long) field
      * @return byte[] The sequence number converted to a byte array with 4 entries
      */
-    public byte[] getSequenceBytes(){
+    public byte[] getSequenceBytes() {
         byte[] out = new byte[4];
         out[0] = (byte) (sequenceNumber >> 24);
         out[1] = (byte) (sequenceNumber >> 16);

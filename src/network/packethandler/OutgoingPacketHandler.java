@@ -86,7 +86,7 @@ public class OutgoingPacketHandler extends PacketHandler {
             packet.addFlag(Protocol.Flags.BROADCAST);
             System.out.println(packet.getFlags());
             byte[] packetBytes = packet.toBytes();
-            for (byte i = 1; i < 5; i++) {
+            for (Byte i: networkManager.getConnectedClients().keySet()) {
                 if (i != Protocol.CLIENT_ID) {
                     System.out.println("Sending to " + i);
                     packetBytes[3] = i;
