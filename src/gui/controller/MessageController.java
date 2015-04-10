@@ -256,4 +256,8 @@ public class MessageController implements DataListener{
     public HashMap<Integer,DefaultListModel<ChatMessage>> getChatModel() {
         return chatModel;
     }
+
+    public void updateList2() {
+        gui.updateList2();
+    }
 }

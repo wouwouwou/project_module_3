@@ -147,6 +147,14 @@ public class Gui extends JFrame {
         }).start();
     }
 
+    /**
+     * Revalidate list2 if updates are made.
+     */
+    public void updateList2() {
+        list2.revalidate();
+        list2.repaint();
+    }
+
     //  ------------------- Action listeners -----------------------------------------------------------------------------------------------
 
     /**
@@ -219,4 +227,5 @@ public class Gui extends JFrame {
     public JTextField getMessageField() {
         return messageField;
     }
+
 }

@@ -56,6 +56,7 @@ public class FileReceiver {
                                 if (chatModel.get(i).getId() == fh.getFileNumber(data) && chatModel.get(i).getSource() == packet.getSource()) {
                                     // Update this packet :)
                                     chatModel.get(i).setMessage("Incoming file. Received " + receivedMap.get(fh.getFileNumber(data)).size() + "/" + fh.getTotalPackets(data));
+                                    messageController.updateList2();
                                 }
                             }
                         }
