@@ -114,12 +114,13 @@ public class OutgoingPacketHandler extends PacketHandler {
                         floatingPacketMap.remove(packet.getFloatingKey());
                     }
 
+
+                    //Try to find a route
                     byte[] route;
                     try {
-                        //Try to find a route
                         route = networkManager.getTableEntryByDestination(packet.getDestination());
-                        //If there is no known route, throw an Exception and schedule the packet for a retry.
                     } catch (DestinationNotInTableException e) {
+                        //If there is no known route, throw an Exception and schedule the packet for a retry.
                         floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
                         throw new IOException(String.format("Destination %s unreachable.", packet.getDestination()));
                     }
