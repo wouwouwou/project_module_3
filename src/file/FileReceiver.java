@@ -43,7 +43,7 @@ public class FileReceiver {
                 ProcessMessage pm = null;
                 // Show a message to the queue that a new file is being transmitted.
                 for(int i = 0; i < clientModel.size(); i++){
-                    if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == put[1])){
+                    if((clientModel.get(i).getId() == put[1])){
                         System.err.println("Adding in queue" + i);
                         pm = new ProcessMessage(put, fh.getTotalPackets(data), "Incoming file. Received 0/"+fh.getTotalPackets(data), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
                         break;
