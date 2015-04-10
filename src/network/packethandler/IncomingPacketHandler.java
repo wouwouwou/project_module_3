@@ -1,6 +1,6 @@
 package network.packethandler;
 
-import exceptions.network.DestinationNotInTableException;
+
 import exceptions.network.InvalidPacketException;
 import network.AckListener;
 import network.NetworkManager;
@@ -219,18 +219,11 @@ public class IncomingPacketHandler extends PacketHandler {
                 }
             }
         } else if(packet[11] == Protocol.CLIENT_ID){
-            //TODO implement forwarding
-            byte[] route = null;
 
-            route = networkManager.getTableEntryByDestination(packet[3]);
-
-            if(route != null) {
-                packet[11] = route[2];
-                try {
-                    socket.send(new DatagramPacket(packet, packet.length, networkManager.getGroup(), Protocol.GROUP_PORT));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                networkManager.send(new Packet(packet));
+            } catch (InvalidPacketException e) {
+                e.printStackTrace();
             }
         }
 
