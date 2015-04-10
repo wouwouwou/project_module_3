@@ -133,6 +133,7 @@ public class OutgoingPacketHandler extends PacketHandler {
         }
     }
 
+    //TODO Structure change? | Woeter Roeter
     public Packet handleACK(Packet ackPacket){
         System.out.println("Ack received!");
         System.out.println(floatingPacketMap.containsKey(ackPacket.getFloatingKey()));

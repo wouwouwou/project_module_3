@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  * @author Wouter Bos
  * @since 10-4-15
  */
-public class OverallNetworkTest {
+public class PacketHandlersTest {
 
     private static final String NAME = "WoeterRoeter";
     private NetworkManager manager;
@@ -42,20 +42,11 @@ public class OverallNetworkTest {
         testGetAckListeners();
         testAddAckListener();
         testRemoveAckListener();
-        testIsDuplicate();
         testGetBuffer();
     }
 
     private void testGetBuffer() {
-
-    }
-
-    private void testIsDuplicate() {
-        String text = "Hoi";
-        byte[] data = text.getBytes();
-        Packet packet = manager.constructPacket((byte) 2, Protocol.DataType.TEXT, data);
-        manager.getIncomingPacketHandler().handle(packet.toBytes());
-        assert (manager.getIncomingPacketHandler().isDuplicate(packet));
+        assert (manager.getIncomingPacketHandler().getBuffer().length == Protocol.RECEIVE_BUFFER_BYTES_SIZE);
     }
 
     private void testRemoveAckListener() {
@@ -86,6 +77,15 @@ public class OverallNetworkTest {
     private void testGetDataListeners() {
         ArrayList<DataListener> datalisteners = manager.getIncomingPacketHandler().getDataListeners();
         assert (datalisteners.contains(messageController));
+    }
+
+    @Test
+    public void testOutgoingPacketHandler() {
+        testGetLastPingSend();
+    }
+
+    private void testGetLastPingSend() {
+        assert (manager.getOutgoingPacketHandler().getLastPingSend() <= System.currentTimeMillis());
     }
 
 }
