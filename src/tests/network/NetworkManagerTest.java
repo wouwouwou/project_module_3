@@ -1,6 +1,5 @@
 package tests.network;
 
-import exceptions.network.DestinationNotInTableException;
 import network.NetworkManager;
 import network.Protocol;
 import network.packet.Packet;
@@ -10,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import java.net.InetAddress;
 import java.util.Arrays;
-
 import static org.junit.Assert.*;
 
 //TODO ExceptionHandling in NetworkManager. | Woeter Roeter
@@ -59,8 +57,6 @@ public class NetworkManagerTest {
 
     @Test
     public void testPutTableEntry() throws Exception {
-        boolean exceptionThrown = false;
-
         byte[] entry = {8, 4, 8};
         manager.putTableEntry(entry);
 
@@ -114,8 +110,6 @@ public class NetworkManagerTest {
 
     @Test
     public void testDropTable() throws Exception {
-        boolean exceptionThrown = false;
-
         byte[] entry = {8, 4, 8};
         manager.putTableEntry(entry);
 

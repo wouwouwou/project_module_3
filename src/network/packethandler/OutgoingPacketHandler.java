@@ -1,6 +1,5 @@
 package network.packethandler;
 
-import exceptions.network.DestinationNotInTableException;
 import exceptions.network.InvalidPacketException;
 import network.NetworkManager;
 import network.Protocol;
@@ -10,8 +9,6 @@ import network.packet.Packet;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
