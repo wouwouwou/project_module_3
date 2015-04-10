@@ -97,7 +97,7 @@ public class MessageController implements DataListener{
         if(packet.getDataType() == Protocol.DataType.TEXT){
             //System.out.println("HasTEXT!");
             for(int i = 0; i < clientModel.size(); i++){
-                if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == packet.getSource())){
+                if((clientModel.get(i).getId() == packet.getSource())){
                     addChatMessage(new ChatMessage(new String(packet.getData()), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource()));
                     //System.out.println("Added chat message " + new String(packet.getData()));
                     break;
@@ -147,6 +147,7 @@ public class MessageController implements DataListener{
         // Add file name to data
         listbytearrayS.add(path.getFileName().toString().getBytes());
         // Add information
+        filecount++;
         List<byte[]> CS = fileHandler.addHeaders(listbytearrayS, filecount);
         int CSlength = 0;
         for(byte[] CStocount: CS){
@@ -165,7 +166,7 @@ public class MessageController implements DataListener{
             }
         }
 
-        filecount++;
+
     }
 
     // ------------------- Methods that can be called by onReceive ---------------------------------------------------------
@@ -200,6 +201,7 @@ public class MessageController implements DataListener{
             }
         }
         gui.messagesList();
+        gui.updateList2();
     }
 
     /**
