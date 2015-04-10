@@ -121,7 +121,6 @@ public class NetworkManager {
         return addr.getAddress()[3];
     }
 
-    // Adds or replaces a table entry
     /**
      * Puts a routingEntry into the routingTable
      * <p>
