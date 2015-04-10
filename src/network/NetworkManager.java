@@ -1,11 +1,9 @@
 package network;
 
-import exceptions.network.DestinationNotInTableException;
 import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
-import test.PrintingAckListener;
 
 import java.io.IOException;
 import java.net.*;
@@ -160,7 +158,6 @@ public class NetworkManager {
      * </p>
      * @param destination
      * @return byte[destination, cost, next_hop]
-     * @throws DestinationNotInTableException
      */
     public byte[] getTableEntryByDestination(byte destination){
         for(int i = 0; i < routingTable.size(); i += 3){
@@ -179,7 +176,6 @@ public class NetworkManager {
      * </p>
      * @param destination byte
      * @return int index in the routingTable.
-     * @throws DestinationNotInTableException
      */
     public int getTableIndexByDestination(byte destination){
         for(int i = 0; i < routingTable.size(); i += 3){
