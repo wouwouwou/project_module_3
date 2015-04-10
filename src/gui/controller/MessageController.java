@@ -67,19 +67,21 @@ public class MessageController implements DataListener{
      * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>. Sends the message to it's own listener and to the NetworkLayer.
      */
     public void sendMessage() {
-        try {
-            Packet packet = networkManager.constructPacket((byte)clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
-            networkManager.getOutgoingPacketHandler().send(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(gui.getMessageField().getText() != "") {
+            try {
+                Packet packet = networkManager.constructPacket((byte) clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
+                networkManager.getOutgoingPacketHandler().send(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //TODO: send message to network with selected client (0 = broadcast)
+
+            // Send message to own list
+            ChatMessage message = new ChatMessage(gui.getMessageField().getText(), "ikzelf", new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
+            addChatMessage(message);
+            gui.getMessageField().setText("");
         }
-
-        //TODO: send message to network with selected client (0 = broadcast)
-
-        // Send message to own list
-        ChatMessage message = new ChatMessage(gui.getMessageField().getText(), "ikzelf", new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
-        addChatMessage(message);
-        gui.getMessageField().setText("");
     }
 
     /**
@@ -156,6 +158,7 @@ public class MessageController implements DataListener{
             try {
                 byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
                 packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
+                System.out.println("Sending packet to " + destination);
                 networkManager.getOutgoingPacketHandler().send(packet);
             } catch (IOException e) {
                 e.printStackTrace();
