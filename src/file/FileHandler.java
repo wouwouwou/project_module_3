@@ -25,7 +25,7 @@ public class FileHandler {
     private static int MAX_DATA_LENGTH;
 
     public FileHandler(){
-        MAX_DATA_LENGTH = Protocol.RECEIVE_BUFFER_BYTES_SIZE - 6;
+        MAX_DATA_LENGTH = Protocol.MAX_COMMUNICATION_PAYLOAD_SIZE - 6;
     }
 
     /**
