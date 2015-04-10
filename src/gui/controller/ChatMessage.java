@@ -10,7 +10,7 @@ import java.util.Date;
 public class ChatMessage implements Message {
 
     // The message
-    private final String message;
+    private String message;
 
     // The name of the sender of a message
     private final String name;
@@ -43,6 +43,14 @@ public class ChatMessage implements Message {
         this.source = source;
     }
 
+    // ------------------- Setters ----------------------------------------------------------------------------
+    /**
+     * Sets the message to the value given
+     * @param message String
+     */
+    public void setMessage(String message){
+        this.message = message;
+    }
     // ------------------- Getters ----------------------------------------------------------------------------
     /**
      * Returns the date of an message.

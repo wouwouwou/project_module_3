@@ -1,5 +1,7 @@
 package file;
 
+import network.Protocol;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,8 +22,11 @@ public class FileHandler {
     /**
      * The maximum length of the data contained in the packet.
      */
-    private static final int MAX_DATA_LENGTH = 500;
+    private static int MAX_DATA_LENGTH;
 
+    public FileHandler(){
+        MAX_DATA_LENGTH = Protocol.RECEIVE_BUFFER_BYTES_SIZE - 6;
+    }
 
     /**
      *  Adds headers to a List of bytearrays (to keep them in order and check if they all are available).

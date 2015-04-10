@@ -120,13 +120,13 @@ public class Packet {
     /**
      * Makes a deepCopy from this packet
      * <p>
-     *     Builds a deepCopy from this packet by calling toBytes() and constructing a new packet from the byte[]
+     *     Builds a deepCopy from this packet by calling toBytes() and constructing a new packet from the byte[] using Packet(byte[])
      *     The new packet is a perfect copy and has a different reference.
      *     If a packet couldn't be cloned, a null object will be returned.
      * </p>
      * @return Packet a new (cloned) instance of the packet called upon, with a different reference
      * @see #toBytes()
-     * @see #Packet(byte[])
+     * @see #Packet(byte[]) Packet(byte[])
      */
     @Override
     public Packet clone() {
@@ -169,6 +169,10 @@ public class Packet {
         return Arrays.asList(out);
     }
 
+    /**
+     * Builds a String representation of a packet
+     * @return String representation of a packet and its contents
+     */
     public String toString(){
         String out = "Packet: \n";
         out += String.format("\t type: %s\n", type);

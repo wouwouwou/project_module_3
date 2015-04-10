@@ -3,6 +3,7 @@ package gui;
 import gui.controller.ChatMessage;
 import gui.controller.Client;
 import gui.controller.ProcessMessage;
+import network.Protocol;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,8 +42,11 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
             setText("<html>" + entry.getMessage() + "<br><font color='gray' size=-1'><b>" + entry.getName() + "</b> om " + df.format(entry.getDate()) + "</font></html>");
             // Set the image
             setIcon(getImage(entry));
-
-            setBackground(Color.WHITE);
+            if(Protocol.CLIENT_ID == entry.getSource()){
+                setBackground(new Color(0xB1C3CA));
+            }else{
+                setBackground(Color.WHITE);
+            }
             setForeground(Color.BLACK);
 
             return this;
@@ -51,7 +55,7 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
             return null;
         }else{
             Client entry = (Client) o;
-            String lastseentext = "";
+            String lastseentext = "With free penguins!";
             if(entry.getId() != 0) {
                 lastseentext = "<font color='gray' size=-1'>Laatst gezien:" + lastSeen(entry.getDate()) + "</font>";
             }
@@ -85,7 +89,11 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
         }else if(diffMinutes > 0){
             return diffMinutes + " minuten";
         }else{
-            return diffSeconds + " seconden";
+            if(diffSeconds > 15){
+                return (Math.round(diffSeconds/10) * 10) + "seconden";
+            }else{
+                return "enkele seconden";
+            }
         }
     }
 

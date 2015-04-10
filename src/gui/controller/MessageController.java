@@ -36,6 +36,9 @@ public class MessageController implements DataListener{
     // The clientModel is used to store all clients. A DefaultListModel can easily be used to populate a JList.
     private DefaultListModel<Client> clientModel = new DefaultListModel<>();
 
+    // The processModel is used to store all files being transferred.
+    private DefaultListModel<ProcessMessage> processMessage = new DefaultListModel<>();
+
     private int filecount = 0;
     /**
      *  Creates a new GUI that is linked to field <code>gui</code>.
@@ -49,7 +52,7 @@ public class MessageController implements DataListener{
         gui = new Gui(this);
         this.networkManager = networkManager;
         if(this.networkManager == null){
-            System.out.println("networkManager is null");
+            //System.out.println("networkManager is null");
         }
 
         OWN_ID = Protocol.CLIENT_ID;
@@ -64,19 +67,21 @@ public class MessageController implements DataListener{
      * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>. Sends the message to it's own listener and to the NetworkLayer.
      */
     public void sendMessage() {
-        try {
-            Packet packet = networkManager.constructPacket((byte)clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
-            networkManager.getOutgoingPacketHandler().send(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(gui.getMessageField().getText() != "") {
+            try {
+                Packet packet = networkManager.constructPacket((byte) clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
+                networkManager.getOutgoingPacketHandler().send(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //TODO: send message to network with selected client (0 = broadcast)
+
+            // Send message to own list
+            ChatMessage message = new ChatMessage(gui.getMessageField().getText(), "ikzelf", new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
+            addChatMessage(message);
+            gui.getMessageField().setText("");
         }
-
-        //TODO: send message to network with selected client (0 = broadcast)
-
-        // Send message to own list
-        ChatMessage message = new ChatMessage(gui.getMessageField().getText(), "ikzelf", new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
-        addChatMessage(message);
-        gui.getMessageField().setText("");
     }
 
     /**
@@ -84,17 +89,17 @@ public class MessageController implements DataListener{
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
-        System.out.println("asdasdas");
+        //System.out.println("asdasdas");
         packet = packet.clone();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
         if(packet.getDataType() == Protocol.DataType.TEXT){
-            System.out.println("HasTEXT!");
+            //System.out.println("HasTEXT!");
             for(int i = 0; i < clientModel.size(); i++){
                 if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == packet.getSource())){
                     addChatMessage(new ChatMessage(new String(packet.getData()), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource()));
-                    System.out.println("Added chat message " + new String(packet.getData()));
+                    //System.out.println("Added chat message " + new String(packet.getData()));
                     break;
                 }
             }
@@ -128,7 +133,7 @@ public class MessageController implements DataListener{
         FileHandler fileHandler = new FileHandler();
         // Open file
         byte[] bytearrayS = fileHandler.openFile(path);
-        System.out.println("bytearrayS size: " + bytearrayS.length);
+        //System.out.println("bytearrayS size: " + bytearrayS.length);
 
 
         // Split file to multiple byte arrays
@@ -137,7 +142,7 @@ public class MessageController implements DataListener{
         for(byte[] listbytearrayStocount: listbytearrayS){
             listbytearraySlength += listbytearrayStocount.length;
         }
-        System.out.println("listbytearrayS size: " + listbytearraySlength);
+        //System.out.println("listbytearrayS size: " + listbytearraySlength);
 
         // Add file name to data
         listbytearrayS.add(path.getFileName().toString().getBytes());
@@ -153,6 +158,7 @@ public class MessageController implements DataListener{
             try {
                 byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
                 packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
+                System.out.println("Sending packet to " + destination);
                 networkManager.getOutgoingPacketHandler().send(packet);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -181,7 +187,7 @@ public class MessageController implements DataListener{
         try{
             chatModel.get(queue).addElement(message);
         }catch(NullPointerException e){
-            System.out.println("Created new queue");
+            //System.out.println("Created new queue");
             chatModel.put(queue, new DefaultListModel<ChatMessage>());
             chatModel.get(queue).addElement(message);
         }
@@ -196,6 +202,13 @@ public class MessageController implements DataListener{
         gui.messagesList();
     }
 
+    /**
+     * Add a message to the list of ProcessMessages
+     * @param pm ProcessMessage
+     */
+    public void addProcessMessage(ProcessMessage pm) {
+        processMessage.addElement(pm);
+    }
     /**
      * Remove the client with <code>id</code> from <code>clientModel</code>.
      * @param id The id to delete
@@ -243,5 +256,4 @@ public class MessageController implements DataListener{
     public HashMap<Integer,DefaultListModel<ChatMessage>> getChatModel() {
         return chatModel;
     }
-
 }

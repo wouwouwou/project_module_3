@@ -21,7 +21,6 @@ public class ProcessMessage extends ChatMessage{
     }
 
 
-
     @Override
     public String getName() {
         return null;
@@ -43,4 +42,6 @@ public class ProcessMessage extends ChatMessage{
     public void setProcess(int process) {
         this.process = process;
     }
+
+
 }

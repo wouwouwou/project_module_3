@@ -20,7 +20,7 @@ public class Protocol {
     /**
      * This is the Timeout before a packet is resent.
      */
-    public static final int TIMEOUT = 200;
+    public static final int TIMEOUT = 500;
 
     public static final int COMMUNICATION_HEADER_LENGTH = 12;
     public static final int DISCOVERY_HEADER_LENGTH = 4;
@@ -31,6 +31,7 @@ public class Protocol {
     //Payload and buffer size
     public static final int RECEIVE_BUFFER_BYTES_SIZE = 4096;
     public static final int MAX_COMMUNICATION_PAYLOAD_SIZE = RECEIVE_BUFFER_BYTES_SIZE - COMMUNICATION_HEADER_LENGTH;
+    public static final byte MAX_RETRIES = 5;
 
 
     public static int CLIENT_ID = 0;
