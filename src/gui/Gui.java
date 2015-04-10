@@ -16,9 +16,15 @@ import java.io.File;
  * @since 7-4-15
  */
 public class Gui extends JFrame {
+    // Default font used in application
     private static final Font DEFAULT_FONT = new Font("Ubuntu", Font.PLAIN, 15);
+    // The controller of this gui.
     private final MessageController messageController;
+    // rootPanel containing all other JPanels.
     private JPanel rootPanel;
+    /**
+     * Left list, used for contacts.
+     */
     private JList list1;
     // DO NOT DELETE chatPanel and clientPanel!
     @SuppressWarnings("unused")
@@ -27,13 +33,19 @@ public class Gui extends JFrame {
     private JPanel clientPanel;
     private JTextField messageField;
     private JButton sendButton;
+    /**
+     * Right list, used for messages.
+     */
     private JList list2;
     private JButton fileButton;
     private JScrollPane scrollPane;
+    /**
+     * The view currently used (selected by <code>list1.getSelectedIndex()</code>.
+     */
     private int currentView = 0;
 
     /**
-     * Setup the GUI
+     * Setup the GUI.
      */
     public Gui (MessageController mc){
         super("PC: Penguin Chat");
@@ -65,6 +77,9 @@ public class Gui extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Scrolls scrollPane to the bottom of the screen.
+     */
     public void setupAutoScroll() {
         scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
     }
@@ -74,6 +89,10 @@ public class Gui extends JFrame {
 
     /**
      * Sets up the messages list.
+     * <p>
+     *     Sets clientModel.get(currentView).getRead() to true.
+     *     Creates a new DefaultListModel if no content is set, otherwise it will set the model to getChatModel().get( client belonging to current view).
+     * </p>
      */
     public void messagesList(){
         try{
@@ -91,6 +110,9 @@ public class Gui extends JFrame {
 
     /**
      * Set the client list (a group 0 is added as broadcast group).
+     * <p>
+     *     Adds Lobby as client 0 ands sets the model of list1 to <code>clientModel</code>, and selects the first index of <code>list1</code>.
+     * </p>
      */
     private void clientList() {
         // Add 'lobby' as broadcast group
@@ -123,7 +145,7 @@ public class Gui extends JFrame {
     }
 
     /**
-     * Refresh the left contacts bar every 15 seconds or so.
+     * Refresh the <code>list1</code> every 1 second.
      */
     private void setupThread() {
         (new Thread() {
@@ -210,15 +232,28 @@ public class Gui extends JFrame {
         });
     }
 
+    /**
+     * Returns <code>currentView</code>.
+     * @return currentView
+     */
     public int getCurrentView() {
         return currentView;
     }
 
+    /**
+     * Returns <code>list1</code>.
+     * @return list1
+     */
     public JList getList1(){
         synchronized (list1) {
             return list1;
         }
     }
+
+    /**
+     * Returns the <code>messageField</code>.
+     * @return messageField
+     */
     public JTextField getMessageField() {
         return messageField;
     }

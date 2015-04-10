@@ -3,13 +3,13 @@ package gui.controller;
 import file.FileHandler;
 import file.FileReceiver;
 import gui.Gui;
+import network.AckListener;
 import network.DataListener;
 import network.NetworkManager;
 import network.Protocol;
 import network.packet.Packet;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.Date;
@@ -21,7 +21,7 @@ import java.util.List;
  * @author Tistan de Boer
  * @since 8-4-15
  */
-public class MessageController implements DataListener{
+public class MessageController implements DataListener, AckListener{
     // The ID of this client
     private static int OWN_ID;
 
@@ -29,6 +29,7 @@ public class MessageController implements DataListener{
     private final Gui gui;
     private final NetworkManager networkManager;
     private final FileReceiver fileReceiver;
+    private final FileReceiver fileAcker;
 
     // The chatModel that is used to store all chats (in a HashMap). A DefaultListModel can easily be used to populate a JList.
     private HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
@@ -47,6 +48,7 @@ public class MessageController implements DataListener{
     public MessageController(NetworkManager networkManager) {
         // fileReceiver will be set once.
         fileReceiver = new FileReceiver(this);
+        fileAcker = new FileReceiver(this, true);
 
 
         gui = new Gui(this);
@@ -57,6 +59,7 @@ public class MessageController implements DataListener{
 
         OWN_ID = Protocol.CLIENT_ID;
 
+        this.networkManager.getIncomingPacketHandler().addAckListener(this);
         this.networkManager.getIncomingPacketHandler().addDataListener(this);
     }
 
@@ -81,17 +84,24 @@ public class MessageController implements DataListener{
     }
 
     /**
+     * Send the ACK to an FileReceiver that has no capability of forming files.
+     * @param packet the packet that was ACKed.
+     */
+    @Override
+    public void onAck(Packet packet) {
+        fileAcker.onReceive(packet);
+    }
+
+    /**
      *  Receive a message and determine what to do. Messages can by of type <code>PingMessage</code> and <code>ChatMessage</code>.
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
-        //System.out.println("asdasdas");
         packet = packet.clone();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
         if(packet.getDataType() == Protocol.DataType.TEXT){
-            //System.out.println("HasTEXT!");
             for(int i = 0; i < clientModel.size(); i++){
                 if((clientModel.get(i).getId() == packet.getSource())){
                     addChatMessage(new ChatMessage(new String(packet.getData()), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource()));

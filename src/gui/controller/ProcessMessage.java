@@ -1,26 +1,27 @@
 package gui.controller;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by tristan on 9-4-15.
  */
 public class ProcessMessage extends ChatMessage{
 
-    private final int fileid;
+    private final List fileid;
 
     private final int size;
 
     private int process;
 
 
-    public ProcessMessage(int fileid, int size, String message, String name, Date date, int destination, int source) {
+    public ProcessMessage(List fileid, int size, String message, String name, Date date, int destination, int source) {
         super(message, name, date, destination, source);
         this.fileid = fileid;
         this.size = size;
     }
 
-    public int getFileId() {
+    public List getFileId() {
         return fileid;
     }
 
