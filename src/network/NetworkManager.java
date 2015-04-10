@@ -328,7 +328,7 @@ public class NetworkManager {
         Packet ping = null;
         byte[] nameData = name.getBytes();
         try {
-            ping = constructPacket((byte) 0, (byte) 1, nameData);
+            ping = constructPacket((byte) 0, Protocol.DataType.PING, nameData);
         } catch (IOException e) {
             e.printStackTrace();
         }
