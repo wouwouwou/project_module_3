@@ -5,7 +5,10 @@
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
-    <properties/>
+    <properties>
+      <foreground color="-5127222"/>
+      <inheritsPopupMenu value="false"/>
+    </properties>
     <border type="none"/>
     <children>
       <splitpane id="5a3f9">
@@ -14,7 +17,11 @@
             <preferred-size width="200" height="200"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <dividerLocation value="190"/>
+          <dividerSize value="1"/>
+          <lastDividerLocation value="190"/>
+        </properties>
         <border type="none"/>
         <children>
           <grid id="34357" binding="chatPanel" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -39,12 +46,19 @@
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <foreground color="-5127222"/>
+                  <horizontalScrollBarPolicy value="31"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <component id="ad3f4" class="javax.swing.JList" binding="list2" default-binding="true">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <foreground color="-5127222"/>
+                      <selectionBackground color="-5127222"/>
+                      <selectionForeground color="-5127222"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>
@@ -80,10 +94,13 @@
               <component id="4ca6a" class="javax.swing.JList" binding="list1" default-binding="true">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="50"/>
+                    <preferred-size width="160" height="50"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <foreground color="-5127222"/>
+                  <selectionForeground color="-5127222"/>
+                </properties>
               </component>
             </children>
           </grid>
