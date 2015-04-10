@@ -133,6 +133,7 @@ public class NetworkManager {
      *     If this destination does exist, it will be updated.
      * </p>
      * @param entry byte[destination, cost, next_hop]
+     * @see <a href="https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit?usp=sharing">routingEntry</a>
      */
     public void putTableEntry(byte[] entry) {
         System.out.println("Adding table entry");

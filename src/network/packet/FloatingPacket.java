@@ -22,8 +22,10 @@ public class FloatingPacket extends Packet {
 
     // -----<=>-----< Constructors >-----<=>----- \\
     /**
-     * Constructing a packet from a (byte[])
+     * Constructing a floating packet from a (byte[])
      * @param data byte[]
+     * @throws InvalidPacketException from super constructor
+     * @see network.packet.Packet#Packet(byte[])
      */
     //TODO proper exception handling, also with documenting (correctly referring to our implementation) - Woeter
     public FloatingPacket(byte[] data) throws InvalidPacketException {
