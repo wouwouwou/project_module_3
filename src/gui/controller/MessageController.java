@@ -97,7 +97,7 @@ public class MessageController implements DataListener, AckListener{
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
-        packet = packet.clone();
+        packet = packet.deepCopy();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
