@@ -130,8 +130,7 @@ public class Packet {
      * @see #toBytes()
      * @see #Packet(byte[]) Packet(byte[])
      */
-    @Override
-    public Packet clone() {
+    public Packet deepCopy() {
         try {
             return new Packet(this.toBytes());
         } catch (InvalidPacketException e) {

@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  */
 public class NullPacketExceptionTest {
 
-    NullPacketException e;
+    private NullPacketException e;
 
     @Before
     public void setUp() throws Exception {

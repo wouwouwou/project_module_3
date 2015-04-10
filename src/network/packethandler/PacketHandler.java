@@ -9,15 +9,15 @@ import java.net.MulticastSocket;
  * @author Wouter Bos
  * @since 8-4-15.
  */
-public abstract class PacketHandler implements Runnable {
+abstract class PacketHandler implements Runnable {
 
     // -----<=>-----< Fields >-----<=>----- \\
     MulticastSocket socket;
-    protected Thread thread;
-    protected NetworkManager networkManager;
+    private Thread thread;
+    NetworkManager networkManager;
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
-    public PacketHandler(NetworkManager networkManager) {
+    PacketHandler(NetworkManager networkManager) {
         this.socket = networkManager.getSocket();
         this.networkManager = networkManager;
         this.thread = new Thread(this);

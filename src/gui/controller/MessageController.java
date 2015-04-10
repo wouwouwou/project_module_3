@@ -9,7 +9,6 @@ import network.Protocol;
 import network.packet.Packet;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.Date;
@@ -86,7 +85,7 @@ public class MessageController implements DataListener{
      */
     public void onReceive(Packet packet) {
         //System.out.println("asdasdas");
-        packet = packet.clone();
+        packet = packet.deepCopy();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
