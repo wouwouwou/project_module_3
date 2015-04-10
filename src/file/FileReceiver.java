@@ -36,7 +36,8 @@ public class FileReceiver {
                 // Show a message to the queue that a new file is being transmitted.
                 for(int i = 0; i < clientModel.size(); i++) {
                     if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == packet.getSource())) {
-                        pm = new ProcessMessage(fh.getFileNumber(data), fh.getTotalPackets(data), "Incoming file. Received 0/"+fh.getTotalPackets(data),clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
+                        System.out.println("Adding in queue" + i);
+                        pm = new ProcessMessage(fh.getFileNumber(data), fh.getTotalPackets(data), "Incoming file. Received 0/"+fh.getTotalPackets(data), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
                         break;
                     }
                 }
@@ -49,11 +50,13 @@ public class FileReceiver {
                 receivedMap.get(fh.getFileNumber(data)).put(fh.getSequenceNumber(data), data);
                 for(int j = 0; j < chatMessages.size(); j++){
                     DefaultListModel<ChatMessage> chatModel = chatMessages.get(j);
-                    for(int i = 0; i < chatModel.size(); i++){
-                        if(chatModel.get(i) instanceof ProcessMessage){
-                            if(chatModel.get(i).getId() == fh.getFileNumber(data) && chatModel.get(i).getSource() == packet.getSource()){
-                                // Update this packet :)
-                                chatModel.get(i).setMessage("Incoming file. Received "+receivedMap.get(fh.getFileNumber(data)).size()+"/"+fh.getTotalPackets(data));
+                    if(chatModel != null) {
+                        for (int i = 0; i < chatModel.size(); i++) {
+                            if (chatModel.get(i) instanceof ProcessMessage) {
+                                if (chatModel.get(i).getId() == fh.getFileNumber(data) && chatModel.get(i).getSource() == packet.getSource()) {
+                                    // Update this packet :)
+                                    chatModel.get(i).setMessage("Incoming file. Received " + receivedMap.get(fh.getFileNumber(data)).size() + "/" + fh.getTotalPackets(data));
+                                }
                             }
                         }
                     }

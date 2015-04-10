@@ -84,7 +84,11 @@ public class Gui extends JFrame {
     public void messagesList(){
         try{
             messageController.getClientModel().get(currentView).setRead(true);
-            list2.setModel(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()));
+            if(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()) == null){
+                list2.setModel(new DefaultListModel<>());
+            }else {
+                list2.setModel(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()));
+            }
         }catch (IllegalArgumentException e){
 
         }
