@@ -35,7 +35,7 @@
                   <margin top="10" left="10" bottom="10" right="10"/>
                 </properties>
               </component>
-              <scrollpane id="1706c">
+              <scrollpane id="1706c" binding="scrollPane">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>

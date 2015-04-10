@@ -1,5 +1,6 @@
 package file;
 
+import gui.controller.ChatMessage;
 import gui.controller.Client;
 import gui.controller.MessageController;
 import gui.controller.ProcessMessage;
@@ -32,19 +33,33 @@ public class FileReceiver {
                 receivedMap.put(fh.getFileNumber(data), new TreeMap<Integer, byte[]>());
                 DefaultListModel<Client> clientModel = messageController.getClientModel();
                 ProcessMessage pm = null;
+                // Show a message to the queue that a new file is being transmitted.
                 for(int i = 0; i < clientModel.size(); i++) {
                     if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == packet.getSource())) {
-                        pm = new ProcessMessage(fh.getFileNumber(data), fh.getTotalPackets(data), "Bestand!",clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
+                        pm = new ProcessMessage(fh.getFileNumber(data), fh.getTotalPackets(data), "Incoming file. Received 0/"+fh.getTotalPackets(data),clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
                         break;
                     }
                 }
+                messageController.addProcessMessage(pm);
                 messageController.addChatMessage(pm);
             }
             // If entry filenumber doesn't contain a packet number, add a new entry with packet data.
             if(!receivedMap.get(fh.getFileNumber(data)).containsKey(fh.getSequenceNumber(data))){
-
+                HashMap<Integer,DefaultListModel<ChatMessage>> chatMessages = messageController.getChatModel();
                 receivedMap.get(fh.getFileNumber(data)).put(fh.getSequenceNumber(data), data);
-                System.out.println("adding to map!" + receivedMap.get(fh.getFileNumber(data)).size() + "/" + fh.getTotalPackets(data) + "of file" + fh.getFileNumber(data));
+                for(int j = 0; j < chatMessages.size(); j++){
+                    DefaultListModel<ChatMessage> chatModel = chatMessages.get(j);
+                    for(int i = 0; i < chatModel.size(); i++){
+                        if(chatModel.get(i) instanceof ProcessMessage){
+                            if(chatModel.get(i).getId() == fh.getFileNumber(data) && chatModel.get(i).getSource() == packet.getSource()){
+                                // Update this packet :)
+                                chatModel.get(i).setMessage("Incoming file. Received "+receivedMap.get(fh.getFileNumber(data)).size()+"/"+fh.getTotalPackets(data));
+                            }
+                        }
+                    }
+                }
+
+                //System.out.println("adding to map!" + receivedMap.get(fh.getFileNumber(data)).size() + "/" + fh.getTotalPackets(data) + "of file" + fh.getFileNumber(data));
             }
 
             // Check completeness
@@ -57,14 +72,14 @@ public class FileReceiver {
                 for(byte[] DRtocount: listbytearrayR){
                     DRlength += DRtocount.length;
                 }
-                System.out.println("DR size: " + DRlength);
+                //System.out.println("DR size: " + DRlength);
                 // Get filename and remove from list
                 String filename = new String(listbytearrayR.get(listbytearrayR.size() - 1));
                 listbytearrayR.remove(listbytearrayR.size() - 1);
                 // Convert to single byte array
                 byte[] bytearrayR = fh.convergeToArray(listbytearrayR);
-                System.out.println("ER size: " + bytearrayR.length);
-                System.out.println("Flushing to disk!");
+                //System.out.println("ER size: " + bytearrayR.length);
+                //System.out.println("Flushing to disk!");
 
                 fh.writeFile(bytearrayR, filename);
             }
