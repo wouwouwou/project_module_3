@@ -32,36 +32,20 @@ public class TestMessages {
 
         //Send packets
 
-        try {
-            Packet woeterPacket = networkManager.constructPacket((byte) 1, Protocol.DataType.TEXT, "Hoi Woeter!".getBytes());
-            networkManager.send(woeterPacket);
-        } catch (IOException e) {
-            System.err.println("WoeterIsErNietException");
-        }
+        Packet woeterPacket = networkManager.constructPacket((byte) 1, Protocol.DataType.TEXT, "Hoi Woeter!".getBytes());
+        networkManager.send(woeterPacket);
 
-        try {
-            Packet tristanPacket = networkManager.constructPacket((byte) 2, Protocol.DataType.TEXT, "Hoi Tristan!".getBytes());
-            networkManager.send(tristanPacket);
-        } catch (IOException e) {
-            System.err.println("TristanIsErNietException");
-        }
+        Packet tristanPacket = networkManager.constructPacket((byte) 2, Protocol.DataType.TEXT, "Hoi Tristan!".getBytes());
+        networkManager.send(tristanPacket);
 
         while(true) {
-            try {
-                Packet timPacket = networkManager.constructPacket((byte) 4, Protocol.DataType.TEXT, "Hoi Tim!".getBytes());
-                networkManager.send(timPacket);
-            } catch (IOException e) {
-                System.err.println("TimIsErNietException");
-            }
+            Packet timPacket = networkManager.constructPacket((byte) 4, Protocol.DataType.TEXT, "Hoi Tim!".getBytes());
+            networkManager.send(timPacket);
 
+            Packet gerbenPacket = networkManager.constructPacket((byte) 3, Protocol.DataType.TEXT, "Hoi Gerben!".getBytes());
+            System.out.println(gerbenPacket);
+            networkManager.send(gerbenPacket);
 
-            try {
-                Packet gerbenPacket = networkManager.constructPacket((byte) 3, Protocol.DataType.TEXT, "Hoi Gerben!".getBytes());
-                System.out.println(gerbenPacket);
-                networkManager.send(gerbenPacket);
-            } catch (IOException e) {
-                System.err.println("GerbenIsErNietException");
-            }
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

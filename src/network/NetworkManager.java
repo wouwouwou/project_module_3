@@ -290,7 +290,7 @@ public class NetworkManager {
      * @return
      * @throws IOException
      */
-    public Packet constructPacket(byte destination, byte dataType, byte[] data) throws IOException {
+    public Packet constructPacket(byte destination, byte dataType, byte[] data) {
         Packet packet = new Packet();
         packet.setDataType(dataType);
         packet.setData(data);
@@ -322,13 +322,9 @@ public class NetworkManager {
      * @see #constructPacket(byte, byte, byte[]) constructPacket()
      */
     public Packet constructPing() {
-        Packet ping = null;
+        Packet ping;
         byte[] nameData = this.getClientName().getBytes();
-        try {
-            ping = constructPacket((byte) 0, Protocol.DataType.PING, nameData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ping = constructPacket((byte) 0, Protocol.DataType.PING, nameData);
         return ping;
     }
 
