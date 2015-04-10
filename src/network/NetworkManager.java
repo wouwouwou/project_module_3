@@ -2,7 +2,6 @@ package network;
 
 import exceptions.network.ClientIdNotAvailableException;
 import exceptions.network.InvalidPacketException;
-import gui.controller.Client;
 import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
@@ -16,7 +15,6 @@ import java.util.Enumeration;
  * @author Gerben Meijer
  * @since 7-4-15
  */
-//TODO Exceptionhandling! | Woeter Roeter
 public class NetworkManager {
 
     private final String clientName;
