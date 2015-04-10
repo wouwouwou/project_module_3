@@ -25,6 +25,9 @@ public abstract class PacketHandler implements Runnable {
     }
 
     // -----<=>-----< Queries >-----<=>----- \\
+    /**
+     * A method for nicely shutting down the application.
+     */
     public Thread getThread(){
         return thread;
     }
