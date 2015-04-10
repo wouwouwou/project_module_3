@@ -219,6 +219,8 @@ public class IncomingPacketHandler extends PacketHandler {
                 }
             }
         } else if(packet[11] == Protocol.CLIENT_ID){
+            //TODO implement forwarding
+            byte[] route = null;
 
             try {
                 networkManager.send(new Packet(packet));
