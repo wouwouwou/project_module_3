@@ -137,13 +137,13 @@ public class NetworkManager {
     public void putTableEntry(byte[] entry) {
         System.out.println("Adding table entry");
         if(entry.length == 3){
-            try {
-                int index = getTableIndexByDestination(entry[0]);
+            int index = getTableIndexByDestination(entry[0]);
+            if(index != -1){
                 routingTable.set(index, entry[0]);
                 routingTable.set(index + 1, entry[1]);
                 routingTable.set(index + 2, entry[2]);
                 IncomingPacketHandler.printArray(routingTable.toArray());
-            } catch (DestinationNotInTableException newEntry) {
+            } else {
                 routingTable.add(entry[0]);
                 routingTable.add(entry[1]);
                 routingTable.add(entry[2]);
@@ -161,13 +161,13 @@ public class NetworkManager {
      * @return byte[destination, cost, next_hop]
      * @throws DestinationNotInTableException
      */
-    public byte[] getTableEntryByDestination(byte destination) throws DestinationNotInTableException {
+    public byte[] getTableEntryByDestination(byte destination){
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
                 return new byte[]{routingTable.get(i), routingTable.get(i+1), routingTable.get(i+2)};
             }
         }
-        throw new DestinationNotInTableException(destination);
+        return null;
     }
 
     /**
@@ -180,14 +180,14 @@ public class NetworkManager {
      * @return int index in the routingTable.
      * @throws DestinationNotInTableException
      */
-    public int getTableIndexByDestination(byte destination) throws DestinationNotInTableException {
+    public int getTableIndexByDestination(byte destination){
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
                 return i;
             }
 
         }
-        throw new DestinationNotInTableException(destination);
+        return -1;
     }
 
     /**

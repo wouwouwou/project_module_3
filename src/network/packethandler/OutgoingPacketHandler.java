@@ -92,17 +92,12 @@ public class OutgoingPacketHandler extends PacketHandler {
                 if (i != Protocol.CLIENT_ID) {
                     System.out.println("Sending to " + i);
                     packetBytes[3] = i;
+
                     try {
-                    byte[] route = networkManager.getTableEntryByDestination(i);
-                        packetBytes[11] = route[2];
-                        try {
-                            this.send(new Packet(packetBytes));
-                            System.out.println("Sent");
-                        } catch (InvalidPacketException e) {
-                            e.printStackTrace();
-                        }
-                    } catch (DestinationNotInTableException e) {
-                        //TODO
+                        this.send(new Packet(packetBytes));
+                        System.out.println("Sent");
+                    } catch (InvalidPacketException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -117,11 +112,11 @@ public class OutgoingPacketHandler extends PacketHandler {
 
                     //Try to find a route
                     byte[] route;
-                    try {
-                        route = networkManager.getTableEntryByDestination(packet.getDestination());
-                    } catch (DestinationNotInTableException e) {
+                    route = networkManager.getTableEntryByDestination(packet.getDestination());
+
+                    if(route == null) {
                         //If there is no known route, throw an Exception and schedule the packet for a retry.
-                        floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+                        scheduleForResend(packet);
                         throw new IOException(String.format("Destination %s unreachable.", packet.getDestination()));
                     }
 
@@ -129,11 +124,12 @@ public class OutgoingPacketHandler extends PacketHandler {
                     socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
 
                     if (packet.getFlags() == Protocol.Flags.DATA) {
-                            floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
+                        scheduleForResend(packet);
                     }
 
                 } catch (IOException | InvalidPacketException e) {
-                    e.printStackTrace();
+                    //This does not need further handling, we'll just retry.
+                    //e.printStackTrace();
                 }
             }
         }
@@ -153,6 +149,24 @@ public class OutgoingPacketHandler extends PacketHandler {
     // Queries
     public long getLastPingSend() {
         return this.lastPingSend;
+    }
+
+    public void scheduleForResend(Packet packet) throws InvalidPacketException {
+        boolean resend = true;
+        FloatingPacket floatingPacket;
+
+        if( !(packet instanceof FloatingPacket)) {
+
+                floatingPacket = new FloatingPacket(packet.toBytes());
+
+        } else {
+            floatingPacket = (FloatingPacket) packet;
+            resend = !((FloatingPacket) packet).decreaseRetries();
+        }
+        if (resend) {
+            floatingPacketMap.put(packet.getFloatingKey(), floatingPacket);
+        }
+
     }
 
 }

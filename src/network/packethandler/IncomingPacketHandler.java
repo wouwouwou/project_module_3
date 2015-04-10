@@ -166,12 +166,8 @@ public class IncomingPacketHandler extends PacketHandler {
 
                 //TODO Check cost of DVR | Assigned to Gerboon Meijer Meijer | Author: Woeter Roeter
                 //if the cost if the new entry is lower, use it and forward it
-                byte[] entry = null;
-                try{
-                    entry = networkManager.getTableEntryByDestination(packet[i]);
-                } catch(DestinationNotInTableException e){
-                    e.printStackTrace();
-                }
+
+                byte[] entry = networkManager.getTableEntryByDestination(packet[i]);
 
                 if(entry == null || packet[i+1] + 1 < entry[1]) {
                     networkManager.putTableEntry(new byte[]{packet[i], (byte) (packet[i + 1] + 1), packet[i + 2]});
@@ -225,11 +221,9 @@ public class IncomingPacketHandler extends PacketHandler {
         } else if(packet[11] == Protocol.CLIENT_ID){
             //TODO implement forwarding
             byte[] route = null;
-            try {
-                route = networkManager.getTableEntryByDestination(packet[3]);
-            } catch (DestinationNotInTableException e) {
-                e.printStackTrace();
-            }
+
+            route = networkManager.getTableEntryByDestination(packet[3]);
+
             if(route != null) {
                 packet[11] = route[2];
                 try {
