@@ -68,7 +68,10 @@ public class Packet {
 
         data = new byte[dataLength];
 
-        System.arraycopy(packet, Protocol.COMMUNICATION_HEADER_LENGTH, data, 0, dataLength);
+        if(dataLength != 0 && data.length != 0) {
+            System.out.println(dataLength + " " + data.length + " " + packet.length);
+            System.arraycopy(packet, Protocol.COMMUNICATION_HEADER_LENGTH, data, 0, dataLength);
+        }
     }
 
     // -----<=>-----< Methods >-----<=>----- \\

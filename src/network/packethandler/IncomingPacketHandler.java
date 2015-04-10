@@ -38,7 +38,8 @@ public class IncomingPacketHandler extends PacketHandler {
         this.networkManager = networkManager;
         lastPackets = new ArrayList<>();
     }
-
+    
+    //TODO Check if this works!
     public void addDataListener(DataListener listener){
         if (!dataListeners.contains(listener)) {
             dataListeners.add(listener);
@@ -228,15 +229,10 @@ public class IncomingPacketHandler extends PacketHandler {
             //TODO implement forwarding
             byte[] route = null;
 
-            route = networkManager.getTableEntryByDestination(packet[3]);
-
-            if(route != null) {
-                packet[11] = route[2];
-                try {
-                    socket.send(new DatagramPacket(packet, packet.length, networkManager.getGroup(), Protocol.GROUP_PORT));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                networkManager.send(new Packet(packet));
+            } catch (InvalidPacketException e) {
+                e.printStackTrace();
             }
         }
 

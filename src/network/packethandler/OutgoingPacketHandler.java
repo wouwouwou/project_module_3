@@ -113,14 +113,16 @@ public class OutgoingPacketHandler extends PacketHandler {
 
                     if(route == null) {
                         //If there is no known route, throw an Exception and schedule the packet for a retry.
-                        scheduleForResend(packet);
+                        if(packet.getSource() == Protocol.CLIENT_ID) {
+                            scheduleForResend(packet);
+                        }
                         throw new IOException(String.format("Destination %s unreachable.", packet.getDestination()));
                     }
 
                     packet.setNextHop(route[2]);
                     socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
 
-                    if (packet.getFlags() == Protocol.Flags.DATA) {
+                    if (packet.getFlags() == Protocol.Flags.DATA && packet.getSource() == Protocol.CLIENT_ID) {
                         scheduleForResend(packet);
                     }
 
