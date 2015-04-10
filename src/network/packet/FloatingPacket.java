@@ -45,7 +45,6 @@ public class FloatingPacket extends Packet {
         this.sentOn = sentOn;
     }
 
-
     public byte getRetries() {
         return retries;
     }

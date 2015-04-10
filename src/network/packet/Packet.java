@@ -40,7 +40,6 @@ public class Packet {
      * @param packet byte[] Data to be constructed into a packet
      */
     //TODO Documenting especially in respect to Exception handling (correctly referring to our implementation) / Woeter
-    //TODO Testing of Exceptions! Especially the e.getMessage()!
     public Packet(byte[] packet) throws InvalidPacketException {
         if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH) {
             throw new InvalidCommunicationHeaderLengthException();
