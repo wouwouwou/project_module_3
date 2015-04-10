@@ -82,9 +82,7 @@ public class OutgoingPacketHandler extends PacketHandler {
     public void send(Packet packet) {
         InetAddress group = networkManager.getGroup();
         if (packet.getDestination() == 0) {
-            System.out.println(packet.getFlags());
             packet.addFlag(Protocol.Flags.BROADCAST);
-            System.out.println(packet.getFlags());
             byte[] packetBytes = packet.toBytes();
             for (Byte i: networkManager.getConnectedClients().keySet()) {
                 if (i != Protocol.CLIENT_ID) {
