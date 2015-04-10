@@ -143,7 +143,7 @@ public class NetworkManager {
                 routingTable.set(index + 1, entry[1]);
                 routingTable.set(index + 2, entry[2]);
                 IncomingPacketHandler.printArray(routingTable.toArray());
-            } catch (DestinationNotInTableException e) {
+            } catch (DestinationNotInTableException newEntry) {
                 routingTable.add(entry[0]);
                 routingTable.add(entry[1]);
                 routingTable.add(entry[2]);
@@ -159,8 +159,8 @@ public class NetworkManager {
      * </p>
      * @param destination
      * @return byte[destination, cost, next_hop]
+     * @throws DestinationNotInTableException
      */
-    //TODO should throw a DestinationNotInTableException | Woeter Roeter
     public byte[] getTableEntryByDestination(byte destination) throws DestinationNotInTableException {
         for(int i = 0; i < routingTable.size(); i += 3){
             if(routingTable.get(i) == destination){
@@ -177,8 +177,8 @@ public class NetworkManager {
      *     Gives the index of this entry
      * </p>
      * @param destination byte
-     * @return  int index in the routingTable.
-     *          -1 if destination not found
+     * @return int index in the routingTable.
+     * @throws DestinationNotInTableException
      */
     public int getTableIndexByDestination(byte destination) throws DestinationNotInTableException {
         for(int i = 0; i < routingTable.size(); i += 3){
