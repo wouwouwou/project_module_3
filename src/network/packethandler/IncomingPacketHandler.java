@@ -170,9 +170,7 @@ public class IncomingPacketHandler extends PacketHandler {
 
             for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < Protocol.DISCOVERY_HEADER_LENGTH + length; i+=3){
 
-                //TODO Check cost of DVR | Assigned to Gerboon Meijer Meijer | Author: Woeter Roeter
                 //if the cost if the new entry is lower, use it and forward it
-
                 byte[] entry = networkManager.getTableEntryByDestination(packet[i]);
 
                 if(entry == null || packet[i+1] + 1 < entry[1]) {
@@ -225,8 +223,6 @@ public class IncomingPacketHandler extends PacketHandler {
                 }
             }
         } else if(packet[11] == Protocol.CLIENT_ID){
-            //TODO implement forwarding
-            byte[] route = null;
 
             try {
                 networkManager.send(new Packet(packet));

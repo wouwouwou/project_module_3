@@ -123,7 +123,6 @@ public class NetworkManager {
             e.printStackTrace();
         }
 
-        //TODO Throw a NoClientIdAvailableException instead of returning zero | Woeter Roeter & Tim
         if(addr == null) {
             throw new ClientIdNotAvailableException();
         }
