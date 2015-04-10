@@ -1,6 +1,5 @@
 package network.packethandler;
 
-import exceptions.network.DestinationNotInTableException;
 import exceptions.network.InvalidPacketException;
 import network.AckListener;
 import network.NetworkManager;
