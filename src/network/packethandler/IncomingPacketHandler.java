@@ -1,6 +1,5 @@
 package network.packethandler;
 
-import exceptions.network.DestinationNotInTableException;
 import exceptions.network.InvalidPacketException;
 import network.AckListener;
 import network.NetworkManager;
@@ -41,7 +40,9 @@ public class IncomingPacketHandler extends PacketHandler {
     }
 
     public void addDataListener(DataListener listener){
-        dataListeners.add(listener);
+        if (!dataListeners.contains(listener)) {
+            dataListeners.add(listener);
+        }
     }
 
     public void addAckListener(AckListener listener){
@@ -52,12 +53,17 @@ public class IncomingPacketHandler extends PacketHandler {
         dataListeners.remove(listener);
     }
 
+    //TODO isDuplicate vergelijkt PACKETS!!! Geen FloatingKeys!
     public boolean isDuplicate(Packet packet){
         return lastPackets.contains(packet);
     }
 
     public void removeAckListener(AckListener listener){
         ackListeners.remove(listener);
+    }
+
+    public ArrayList<AckListener> getAckListeners() {
+        return ackListeners;
     }
 
     public ArrayList<DataListener> getDataListeners(){
