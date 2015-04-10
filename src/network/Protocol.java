@@ -26,7 +26,12 @@ public class Protocol {
     public static final int DISCOVERY_HEADER_LENGTH = 4;
     public static final long CONVERGE_TIME = 100;
     public static final long PING_INTERVAL = 5000;
-    public static final short MAX_RECIEVE_BUFFER_SIZE = 500;
+    public static final short MAX_PACKET_BUFFER_SIZE = 500;
+
+    //Payload and buffer size
+    public static final int RECEIVE_BUFFER_BYTES_SIZE = 4096;
+    public static final int MAX_COMMUNICATION_PAYLOAD_SIZE = RECEIVE_BUFFER_BYTES_SIZE - COMMUNICATION_HEADER_LENGTH;
+
 
     public static int CLIENT_ID = 0;
 

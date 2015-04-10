@@ -1,5 +1,6 @@
 package network.packethandler;
 
+import exceptions.network.DestinationNotInTableException;
 import exceptions.network.InvalidPacketException;
 import network.AckListener;
 import network.NetworkManager;
@@ -73,7 +74,6 @@ public class IncomingPacketHandler extends PacketHandler {
         while(true){
             try {
                 socket.receive(recv);
-                IncomingPacketHandler.printArray(recv.getData());
                 handle(recv.getData());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -166,7 +166,14 @@ public class IncomingPacketHandler extends PacketHandler {
 
                 //TODO Check cost of DVR | Assigned to Gerboon Meijer Meijer | Author: Woeter Roeter
                 //if the cost if the new entry is lower, use it and forward it
-                if(networkManager.getTableEntryByDestination(packet[i]) == null || packet[i+1] + 1 < networkManager.getTableEntryByDestination(packet[i])[1]) {
+                byte[] entry = null;
+                try{
+                    entry = networkManager.getTableEntryByDestination(packet[i]);
+                } catch(DestinationNotInTableException e){
+                    e.printStackTrace();
+                }
+
+                if(entry == null || packet[i+1] + 1 < entry[1]) {
                     networkManager.putTableEntry(new byte[]{packet[i], (byte) (packet[i + 1] + 1), packet[i + 2]});
                     forward = true;
                 }
@@ -196,7 +203,7 @@ public class IncomingPacketHandler extends PacketHandler {
                         notifyDataListeners(p);
                         lastPackets.add(p.getFloatingKey());
                         System.out.println(lastPackets.size());
-                        if(lastPackets.size() >= Protocol.MAX_RECIEVE_BUFFER_SIZE){
+                        if(lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE){
                             lastPackets.remove(0);
                         }
                     }
@@ -217,7 +224,12 @@ public class IncomingPacketHandler extends PacketHandler {
             }
         } else if(packet[11] == Protocol.CLIENT_ID){
             //TODO implement forwarding
-            byte[] route = networkManager.getTableEntryByDestination(packet[3]);
+            byte[] route = null;
+            try {
+                route = networkManager.getTableEntryByDestination(packet[3]);
+            } catch (DestinationNotInTableException e) {
+                e.printStackTrace();
+            }
             if(route != null) {
                 packet[11] = route[2];
                 try {
