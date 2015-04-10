@@ -1,6 +1,5 @@
 package network.packethandler;
 
-
 import exceptions.network.InvalidPacketException;
 import network.AckListener;
 import network.NetworkManager;
@@ -39,9 +38,12 @@ public class IncomingPacketHandler extends PacketHandler {
         this.networkManager = networkManager;
         lastPackets = new ArrayList<>();
     }
-
+    
+    //TODO Check if this works!
     public void addDataListener(DataListener listener){
-        dataListeners.add(listener);
+        if (!dataListeners.contains(listener)) {
+            dataListeners.add(listener);
+        }
     }
 
     public void addAckListener(AckListener listener){
@@ -53,11 +55,15 @@ public class IncomingPacketHandler extends PacketHandler {
     }
 
     public boolean isDuplicate(Packet packet){
-        return lastPackets.contains(packet);
+        return lastPackets.contains(packet.getFloatingKey());
     }
 
     public void removeAckListener(AckListener listener){
         ackListeners.remove(listener);
+    }
+
+    public ArrayList<AckListener> getAckListeners() {
+        return ackListeners;
     }
 
     public ArrayList<DataListener> getDataListeners(){
