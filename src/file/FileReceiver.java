@@ -4,7 +4,6 @@ import gui.controller.ChatMessage;
 import gui.controller.Client;
 import gui.controller.MessageController;
 import gui.controller.ProcessMessage;
-import network.Protocol;
 import network.packet.Packet;
 
 import javax.swing.*;
@@ -17,7 +16,7 @@ import java.util.*;
 public class FileReceiver {
 
     private final MessageController messageController;
-    Map<Object[], SortedMap<Integer, byte[]>> receivedMap = new HashMap<>();
+    Map<Integer, SortedMap<Integer, byte[]>> receivedMap = new HashMap<>();
 
     public FileReceiver(MessageController messageController) {
         this.messageController = messageController;
@@ -26,59 +25,49 @@ public class FileReceiver {
 
     public void onReceive(Packet packet) {
         byte[] data = packet.getData();
-        packet = packet.clone();
-        if(packet.hasFlag(Protocol.Flags.BROADCAST)){
-            packet.setDestination((byte) 0);
-        }
         synchronized (receivedMap) {
             FileHandler fh = new FileHandler();
             // Add data to receivedMap
             // If map doesn't contain filenumber, add a new entry.
-            Object[] put = new Object[2];
-            put[0] = fh.getFileNumber(data);
-            put[1] = packet.getSource();
-            if(!receivedMap.containsKey(put)){
-                receivedMap.put(put, new TreeMap<Integer, byte[]>());
+            if(!receivedMap.containsKey(fh.getFileNumber(data))){
+                receivedMap.put(fh.getFileNumber(data), new TreeMap<Integer, byte[]>());
                 DefaultListModel<Client> clientModel = messageController.getClientModel();
-                ProcessMessage pm = null;
                 // Show a message to the queue that a new file is being transmitted.
-                for(int i = 0; i < clientModel.size(); i++){
-                    if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == put[1])){
-                        System.err.println("Adding in queue" + i);
-                        pm = new ProcessMessage(put, fh.getTotalPackets(data), "Incoming file. Received 0/"+fh.getTotalPackets(data), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
+                for(int i = 0; i < clientModel.size(); i++) {
+                    if((i == 0 && packet.getDestination() == 0) || (clientModel.get(i).getId() == packet.getSource())) {
+                        System.out.println("Adding in queue" + i);
+                        ProcessMessage pm = new ProcessMessage(fh.getFileNumber(data), fh.getTotalPackets(data), "Incoming file. Received 0/"+fh.getTotalPackets(data), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
+                        messageController.addProcessMessage(pm);
+                        messageController.addChatMessage(pm);
                         break;
                     }
                 }
-                messageController.addProcessMessage(pm);
-                messageController.addChatMessage(pm);
+
             }
             // If entry filenumber doesn't contain a packet number, add a new entry with packet data.
-            if(!receivedMap.get(put).containsKey(fh.getSequenceNumber(data))){
+            if(!receivedMap.get(fh.getFileNumber(data)).containsKey(fh.getSequenceNumber(data))){
                 HashMap<Integer,DefaultListModel<ChatMessage>> chatMessages = messageController.getChatModel();
-                receivedMap.get(put).put(fh.getSequenceNumber(data), data);
-                for(int j = 0; j < chatMessages.size(); j++){
-                    DefaultListModel<ChatMessage> chatModel = chatMessages.get(j);
-                    if(chatModel != null) {
-                        for (int i = 0; i < chatModel.size(); i++) {
-                            if (chatModel.get(i) instanceof ProcessMessage) {
-                                if (((ProcessMessage) chatModel.get(i)).getFileId() == put) {
-                                    // Update this packet :)
+                receivedMap.get(fh.getFileNumber(data)).put(fh.getSequenceNumber(data), data);
 
-                                    chatModel.get(i).setMessage("Incoming file. Received " + receivedMap.get(put).size() + "/" + fh.getTotalPackets(data));
-                                    messageController.updateList2();
-                                }
+                for(int i = 0; i < messageController.getClientModel().size(); i++){
+                    System.out.println("QWERTY");
+                    if(messageController.getChatModel().get(i) != null){
+                        System.out.println("UIOP");
+                        for(int k = 0; k < messageController.getChatModel().size(); k++){
+                            if(messageController.getChatModel().get(i).get(k).getId() == fh.getFileNumber(data) && messageController.getChatModel().get(i).get(k).getSource() == packet.getSource()){
+                                System.out.println("Gotcha!");
+                                messageController.setMessage(i, k, "Incoming file. Received " + receivedMap.get(fh.getFileNumber(data)).size() + "/" + fh.getTotalPackets(data));
                             }
                         }
                     }
                 }
-
-                //System.out.println("adding to map!" + receivedMap.get(filenumber).size() + "/" + fh.getTotalPackets(data) + "of file" + filenumber);
+                //System.out.println("adding to map!" + receivedMap.get(fh.getFileNumber(data)).size() + "/" + fh.getTotalPackets(data) + "of file" + fh.getFileNumber(data));
             }
 
             // Check completeness
             // Complete: call FileHandler (save to file) and flush data from map.
-            if(receivedMap.get(put).size() == fh.getTotalPackets(data)){
-                List<byte[]> list = new ArrayList<byte[]>(receivedMap.get(put).values());
+            if(receivedMap.get(fh.getFileNumber(data)).size() == fh.getTotalPackets(data)){
+                List<byte[]> list = new ArrayList<byte[]>(receivedMap.get(fh.getFileNumber(data)).values());
                 // Remove the headers
                 List<byte[]> listbytearrayR = fh.removeHeaders(list);
                 int DRlength = 0;

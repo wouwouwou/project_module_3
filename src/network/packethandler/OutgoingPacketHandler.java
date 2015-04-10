@@ -44,7 +44,7 @@ public class OutgoingPacketHandler extends PacketHandler {
                 }
             }
 
-            if(System.currentTimeMillis() > networkManager.getLastTableDrop() + 10000){
+            if(System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.TABLE_DROP_INTERVAL){
                 networkManager.dropTable();
                 networkManager.setDiscoverySequenceNum((short) (networkManager.getDiscoverySequenceNum() + 1));
                 networkManager.sendTable();
@@ -60,9 +60,10 @@ public class OutgoingPacketHandler extends PacketHandler {
             if (System.currentTimeMillis() > getLastPingSend() + Protocol.PING_INTERVAL) {
                 Packet pingPacket = networkManager.constructPing();
                 send(pingPacket);
-                System.out.println("broadcasting Ping: " + "\tname: " + networkManager.getClientName() + "\n" + pingPacket);
+                //System.out.println("broadcasting Ping: " + "\tname: " + networkManager.getClientName() + "\n" + pingPacket);
                 // 'resets' the ping_timer
                 lastPingSend = System.currentTimeMillis();
+                networkManager.increasePingRound();
             }
 
 

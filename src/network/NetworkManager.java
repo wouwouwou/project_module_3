@@ -3,6 +3,7 @@ package network;
 import exceptions.network.ClientIdNotAvailableException;
 import exceptions.network.InvalidPacketException;
 import network.packet.Packet;
+import network.packethandler.ClientMapPingListener;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
 
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Gerben Meijer
@@ -24,6 +26,7 @@ public class NetworkManager {
     private OutgoingPacketHandler outgoingPacketHandler;
     private InetAddress group;
     private ArrayList<Byte> routingTable;
+    private ConcurrentHashMap<Byte, Byte> connectedClients;
     private short discoverySequenceNum = 0;
     private int sequenceNum;
     private long lastTableDrop = 0;
@@ -52,6 +55,9 @@ public class NetworkManager {
 
         //Create the routingTable
         routingTable = new ArrayList<>();
+
+        //Create the connected clients map, consisting of: Byte clientId -> Byte missedPingRounds
+        connectedClients = new ConcurrentHashMap<>();
 
         //Create the Multicast socket
         try {
@@ -83,6 +89,9 @@ public class NetworkManager {
             //Fill the table (by dropping it) and send it
             dropTable();
             sendTable();
+
+            //Add the ClientMapPingListener
+            incomingPacketHandler.addDataListener(new ClientMapPingListener(this));
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -342,5 +351,23 @@ public class NetworkManager {
 
     public String getClientName() {
         return clientName;
+    }
+
+    public ConcurrentHashMap<Byte,Byte> getConnectedClients() {
+        return connectedClients;
+    }
+
+    /**
+     * Increases the pings missed on every entry in the connectedClients Map and resets DVR if changes have occured.
+     */
+    public void increasePingRound() {
+        for(Byte key: connectedClients.keySet()){
+            connectedClients.put(key, (byte) (connectedClients.get(key) + 1));
+            if(connectedClients.get(key) > Protocol.MAX_MISSED_PINGROUNDS){
+                dropTable();
+                sendTable();
+                connectedClients.remove(key);
+            }
+        }
     }
 }
