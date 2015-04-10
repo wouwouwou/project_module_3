@@ -45,13 +45,15 @@ public class FileReceiver {
                     DRlength += DRtocount.length;
                 }
                 System.out.println("DR size: " + DRlength);
-
+                // Get filename and remove from list
+                String filename = new String(listbytearrayR.get(listbytearrayR.size() - 1));
+                listbytearrayR.remove(listbytearrayR.size() - 1);
                 // Convert to single byte array
                 byte[] bytearrayR = fh.convergeToArray(listbytearrayR);
                 System.out.println("ER size: " + bytearrayR.length);
                 System.out.println("Flushing to disk!");
 
-                fh.writeFile(bytearrayR, "a.png");
+                fh.writeFile(bytearrayR, filename);
             }
         }
     }
