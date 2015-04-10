@@ -8,8 +8,6 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.io.File;
 
 /**
@@ -67,12 +65,8 @@ public class Gui extends JFrame {
         setVisible(true);
     }
 
-    private void setupAutoScroll() {
-        scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                e.getAdjustable().setValue(e.getAdjustable().getMaximum());
-            }
-        });
+    public void setupAutoScroll() {
+        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
     }
 
 
@@ -151,6 +145,7 @@ public class Gui extends JFrame {
      * Revalidate list2 if updates are made.
      */
     public void updateList2() {
+        setupAutoScroll();
         list2.revalidate();
         list2.repaint();
     }

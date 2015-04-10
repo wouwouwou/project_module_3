@@ -7,14 +7,14 @@ import java.util.Date;
  */
 public class ProcessMessage extends ChatMessage{
 
-    private final int fileid;
+    private final Object[] fileid;
 
     private final int size;
 
     private int process;
 
 
-    public ProcessMessage(int fileid, int size, String message, String name, Date date, int destination, int source) {
+    public ProcessMessage(Object[] fileid, int size, String message, String name, Date date, int destination, int source) {
         super(message, name, date, destination, source);
         this.fileid = fileid;
         this.size = size;
@@ -26,8 +26,7 @@ public class ProcessMessage extends ChatMessage{
         return null;
     }
 
-    @Override
-    public int getId() {
+    public Object[] getFileId() {
         return fileid;
     }
 
