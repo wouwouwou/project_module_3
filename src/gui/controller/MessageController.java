@@ -42,7 +42,7 @@ public class MessageController implements DataListener{
      */
     public MessageController(NetworkManager networkManager) {
         // fileReceiver will be set once.
-        fileReceiver = new FileReceiver();
+        fileReceiver = new FileReceiver(this);
 
         gui = new Gui(this);
         this.networkManager = networkManager;
@@ -110,7 +110,7 @@ public class MessageController implements DataListener{
                 addClient(packet.getSource(), new String(packet.getData()));
             }
         }else if(packet.getDataType() == Protocol.DataType.FILE){
-            fileReceiver.onReceive(packet.getData());
+            fileReceiver.onReceive(packet);
         }
     }
 
@@ -161,7 +161,7 @@ public class MessageController implements DataListener{
      * Add an entry to the chatmessages.
      * @param message The message that should be added
      */
-    private void addChatMessage(ChatMessage message){
+    public void addChatMessage(ChatMessage message){
         int queue;
         if(message.getDestination() == 0){
             queue = 0;
