@@ -78,7 +78,6 @@ public class OutgoingPacketHandler extends PacketHandler {
      * </p>
      * @param packet Packet the packet that will be broadcasted to the multicast network
      */
-    //TODO Exceptionhandling | Woeter Roeter
     public void send(Packet packet) {
         InetAddress group = networkManager.getGroup();
         if (packet.getDestination() == 0) {
