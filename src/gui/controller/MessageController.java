@@ -68,12 +68,8 @@ public class MessageController implements DataListener{
      */
     public void sendMessage() {
         if(gui.getMessageField().getText() != "") {
-            try {
-                Packet packet = networkManager.constructPacket((byte) clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
-                networkManager.getOutgoingPacketHandler().send(packet);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Packet packet = networkManager.constructPacket((byte) clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
+            networkManager.getOutgoingPacketHandler().send(packet);
 
             //TODO: send message to network with selected client (0 = broadcast)
 
@@ -155,15 +151,13 @@ public class MessageController implements DataListener{
         }
 
         for(byte[] toSendData: CS){
-            Packet packet = null;
-            try {
-                byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
-                packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
-                System.out.println("Sending packet to " + destination);
-                networkManager.getOutgoingPacketHandler().send(packet);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Packet packet;
+
+            byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
+            packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
+            System.out.println("Sending packet to " + destination);
+            networkManager.getOutgoingPacketHandler().send(packet);
+
         }
 
 

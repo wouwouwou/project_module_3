@@ -5,6 +5,7 @@ import network.AckListener;
 import network.DataListener;
 import network.NetworkManager;
 import network.Protocol;
+import network.packet.Packet;
 import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
 import org.junit.Before;
@@ -50,7 +51,11 @@ public class OverallNetworkTest {
     }
 
     private void testIsDuplicate() {
-
+        String text = "Hoi";
+        byte[] data = text.getBytes();
+        Packet packet = manager.constructPacket((byte) 2, Protocol.DataType.TEXT, data);
+        manager.getIncomingPacketHandler().handle(packet.toBytes());
+        assert (manager.getIncomingPacketHandler().isDuplicate(packet));
     }
 
     private void testRemoveAckListener() {
