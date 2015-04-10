@@ -1,5 +1,6 @@
 package network.packethandler;
 
+import exceptions.network.DestinationNotInTableException;
 import exceptions.network.InvalidPacketException;
 import network.NetworkManager;
 import network.Protocol;
@@ -91,8 +92,8 @@ public class OutgoingPacketHandler extends PacketHandler {
                 if (i != Protocol.CLIENT_ID) {
                     System.out.println("Sending to " + i);
                     packetBytes[3] = i;
+                    try {
                     byte[] route = networkManager.getTableEntryByDestination(i);
-                    if (route != null) {
                         packetBytes[11] = route[2];
                         try {
                             this.send(new Packet(packetBytes));
@@ -100,6 +101,8 @@ public class OutgoingPacketHandler extends PacketHandler {
                         } catch (InvalidPacketException e) {
                             e.printStackTrace();
                         }
+                    } catch (DestinationNotInTableException e) {
+                        //TODO
                     }
                 }
             }
@@ -110,11 +113,14 @@ public class OutgoingPacketHandler extends PacketHandler {
                     if(floatingPacketMap.containsKey((packet.getFloatingKey()))){
                         floatingPacketMap.remove(packet.getFloatingKey());
                     }
-                    //Try to find a route
-                    byte[] route = networkManager.getTableEntryByDestination(packet.getDestination());
 
-                    //If there is no known route, throw an Exception and schedule the packet for a retry.
-                    if(route == null){
+
+                    //Try to find a route
+                    byte[] route;
+                    try {
+                        route = networkManager.getTableEntryByDestination(packet.getDestination());
+                    } catch (DestinationNotInTableException e) {
+                        //If there is no known route, throw an Exception and schedule the packet for a retry.
                         floatingPacketMap.put(packet.getFloatingKey(), new FloatingPacket(packet.toBytes()));
                         throw new IOException(String.format("Destination %s unreachable.", packet.getDestination()));
                     }
