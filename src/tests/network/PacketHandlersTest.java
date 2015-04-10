@@ -71,7 +71,7 @@ public class PacketHandlersTest {
 
     private void testRemoveDataListeners() {
         manager.getIncomingPacketHandler().removeDataListener(messageController);
-        assert (manager.getIncomingPacketHandler().getDataListeners().isEmpty());
+        assert !(manager.getIncomingPacketHandler().getDataListeners().contains(messageController));
     }
 
     private void testGetDataListeners() {
