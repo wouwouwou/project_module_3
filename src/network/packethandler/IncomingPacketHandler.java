@@ -54,9 +54,8 @@ public class IncomingPacketHandler extends PacketHandler {
         dataListeners.remove(listener);
     }
 
-    //TODO isDuplicate vergelijkt PACKETS!!! Geen FloatingKeys!
     public boolean isDuplicate(Packet packet){
-        return lastPackets.contains(packet);
+        return lastPackets.contains(packet.getFloatingKey());
     }
 
     public void removeAckListener(AckListener listener){
