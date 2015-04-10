@@ -20,6 +20,6 @@ public class DestinationNotInTableException extends NetworkException {
         if (this.destination != -1)
             return "Destination: " + this.destination + " is not found in the routingTable.";
         else
-            return "the destination is not found in the routingTable.";
+            return "The destination is not found in the routingTable.";
     }
 }

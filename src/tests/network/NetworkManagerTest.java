@@ -31,8 +31,6 @@ public class NetworkManagerTest {
 
     @Test
     public void testGetTableEntryByDestination() throws Exception {
-        boolean exceptionThrown = false;
-
         byte[] entry = manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID);
         assert (entry.length == 3);
         assert (entry[0] == Protocol.CLIENT_ID);
@@ -45,30 +43,18 @@ public class NetworkManagerTest {
         assert (entry[1] == 0);
         assert (entry[2] == 0);
 
-        try {
-            manager.getTableEntryByDestination((byte) 12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
+        assert (manager.getTableEntryByDestination((byte) 12) == null);
     }
 
     @Test
     public void testGetTableIndexByDestination() throws Exception {
-        boolean exceptionThrown = false;
-
         int entry = manager.getTableIndexByDestination((byte) Protocol.CLIENT_ID);
         assert (entry == 0);
 
         entry = manager.getTableIndexByDestination((byte)0);
         assert (entry == 3);
 
-        try {
-            manager.getTableIndexByDestination((byte) 12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
+        assert (manager.getTableIndexByDestination((byte) 12) == -1);
     }
 
     @Test
@@ -81,13 +67,7 @@ public class NetworkManagerTest {
         assert (manager.getTableIndexByDestination((byte) Protocol.CLIENT_ID) == 0);
         assert (manager.getTableIndexByDestination((byte)0) == 3);
         assert (manager.getTableIndexByDestination((byte)8) == 6);
-        try {
-            manager.getTableIndexByDestination((byte)12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
+        assert (manager.getTableIndexByDestination((byte)12) == -1);
 
         assert (manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID).length == 3);
         assert (manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID)[0] == Protocol.CLIENT_ID);
@@ -104,13 +84,7 @@ public class NetworkManagerTest {
         assert (manager.getTableEntryByDestination((byte)8)[1] == 4);
         assert (manager.getTableEntryByDestination((byte)8)[2] == 8);
 
-        try {
-            manager.getTableEntryByDestination((byte) 12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
+        assert (manager.getTableEntryByDestination((byte)12) == null);
 
         byte[] entry2 = {8, 1, (byte)Protocol.CLIENT_ID};
         manager.putTableEntry(entry2);
@@ -118,13 +92,7 @@ public class NetworkManagerTest {
         assert (manager.getTableIndexByDestination((byte) Protocol.CLIENT_ID) == 0);
         assert (manager.getTableIndexByDestination((byte)0) == 3);
         assert (manager.getTableIndexByDestination((byte)8) == 6);
-        try {
-            manager.getTableIndexByDestination((byte)12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
+        assert (manager.getTableIndexByDestination((byte)12) == -1);
 
         assert (manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID).length == 3);
         assert (manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID)[0] == Protocol.CLIENT_ID);
@@ -141,12 +109,7 @@ public class NetworkManagerTest {
         assert (manager.getTableEntryByDestination((byte)8)[1] == 1);
         assert (manager.getTableEntryByDestination((byte)8)[2] == Protocol.CLIENT_ID);
 
-        try {
-            manager.getTableEntryByDestination((byte) 12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
+        assert (manager.getTableEntryByDestination((byte)12) == null);
     }
 
     @Test
@@ -159,13 +122,7 @@ public class NetworkManagerTest {
         assert (manager.getTableIndexByDestination((byte) Protocol.CLIENT_ID) == 0);
         assert (manager.getTableIndexByDestination((byte)0) == 3);
         assert (manager.getTableIndexByDestination((byte)8) == 6);
-        try {
-            manager.getTableIndexByDestination((byte)12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
+        assert (manager.getTableIndexByDestination((byte)12) == -1);
 
         assert (manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID).length == 3);
         assert (manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID)[0] == Protocol.CLIENT_ID);
@@ -182,34 +139,14 @@ public class NetworkManagerTest {
         assert (manager.getTableEntryByDestination((byte)8)[1] == 4);
         assert (manager.getTableEntryByDestination((byte)8)[2] == 8);
 
-        try {
-            manager.getTableEntryByDestination((byte) 12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
+        assert (manager.getTableEntryByDestination((byte)12) == null);
 
         manager.dropTable();
 
         assert (manager.getTableIndexByDestination((byte) Protocol.CLIENT_ID) == 0);
         assert (manager.getTableIndexByDestination((byte)0) == 3);
-
-        try {
-            manager.getTableIndexByDestination((byte)8);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
-
-        try {
-            manager.getTableIndexByDestination((byte)12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
+        assert (manager.getTableIndexByDestination((byte)8) == -1);
+        assert (manager.getTableIndexByDestination((byte)12) == -1);
 
         assert (manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID).length == 3);
         assert (manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID)[0] == Protocol.CLIENT_ID);
@@ -221,20 +158,9 @@ public class NetworkManagerTest {
         assert (manager.getTableEntryByDestination((byte)0)[1] == 0);
         assert (manager.getTableEntryByDestination((byte)0)[2] == 0);
 
-        try {
-            manager.getTableEntryByDestination((byte)8);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
+        assert (manager.getTableEntryByDestination((byte)8) == null);
 
-        try {
-            manager.getTableEntryByDestination((byte) 12);
-        } catch (DestinationNotInTableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
+        assert (manager.getTableEntryByDestination((byte)12) == null);
     }
 
     @Test
@@ -330,7 +256,7 @@ public class NetworkManagerTest {
 
     @Test
     public void testConstructPing() {
-        Packet ping = manager.constructPing(manager.getClientName());
+        Packet ping = manager.constructPing();
         assert (ping.getDataType() == Protocol.DataType.PING);
         assert (Arrays.equals(ping.getData(), manager.getClientName().getBytes()));
         assert (ping.getDestination() == 0);
