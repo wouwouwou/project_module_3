@@ -8,6 +8,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.io.File;
 
 /**
@@ -29,6 +31,7 @@ public class Gui extends JFrame {
     private JButton sendButton;
     private JList list2;
     private JButton fileButton;
+    private JScrollPane scrollPane;
     private int currentView = 0;
 
     /**
@@ -54,9 +57,24 @@ public class Gui extends JFrame {
         this.sendMessageButtonActionListener();
         this.fileButtonActionListener();
 
+
+        // Setup JList Refresher
+        this.setupThread();
+
+        // Setup autoscroll
+        this.setupAutoScroll();
         // Set visible
         setVisible(true);
     }
+
+    private void setupAutoScroll() {
+        scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+            }
+        });
+    }
+
 
     // ------------------- Set up the GUI functions -----------------------------------------------------------------------------------------------
 
@@ -104,6 +122,25 @@ public class Gui extends JFrame {
         messageField.setFont(DEFAULT_FONT);
         sendButton.setFont(DEFAULT_FONT);
         fileButton.setFont(DEFAULT_FONT);
+    }
+
+    /**
+     * Refresh the left contacts bar every 15 seconds or so.
+     */
+    private void setupThread() {
+        (new Thread() {
+            public void run() {
+                while(true){
+                    try {
+                        sleep(1000);
+                        getList1().revalidate();
+                        getList1().repaint();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
     //  ------------------- Action listeners -----------------------------------------------------------------------------------------------
@@ -170,6 +207,11 @@ public class Gui extends JFrame {
         return currentView;
     }
 
+    public JList getList1(){
+        synchronized (list1) {
+            return list1;
+        }
+    }
     public JTextField getMessageField() {
         return messageField;
     }

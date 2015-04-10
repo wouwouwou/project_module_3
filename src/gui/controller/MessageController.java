@@ -44,6 +44,7 @@ public class MessageController implements DataListener{
         // fileReceiver will be set once.
         fileReceiver = new FileReceiver(this);
 
+
         gui = new Gui(this);
         this.networkManager = networkManager;
         if(this.networkManager == null){
@@ -96,6 +97,8 @@ public class MessageController implements DataListener{
                     break;
                 }
             }
+            gui.getList1().revalidate();
+            gui.getList1().repaint();
         }else if(packet.getDataType() == Protocol.DataType.PING){
             int client = -1;
             for(int i = 0; i < clientModel.size(); i++){
@@ -109,6 +112,8 @@ public class MessageController implements DataListener{
             }else{
                 addClient(packet.getSource(), new String(packet.getData()));
             }
+            gui.getList1().revalidate();
+            gui.getList1().repaint();
         }else if(packet.getDataType() == Protocol.DataType.FILE){
             fileReceiver.onReceive(packet);
         }
