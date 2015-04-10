@@ -165,7 +165,7 @@ public class FileHandler {
 
     /**
      * Converts a byte array to an integer.
-     * @param b the byte array
+     * @param b The byte array
      * @return int The integer representation of the byte
      */
     public static int byteArrayToInt(byte[] b)
