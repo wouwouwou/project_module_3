@@ -98,7 +98,7 @@ public class MessageController implements DataListener, AckListener{
             networkManager.getOutgoingPacketHandler().send(packet);
 
             // Send message to own list
-            ChatMessage message = new ChatMessage(gui.getMessageField().getText(), OWN_NAME, new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
+            ChatMessage message = new ChatMessage(gui.getMessageField().getText(), "ikzelf", new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
             addChatMessage(message);
             gui.getMessageField().setText("");
         }
@@ -119,7 +119,7 @@ public class MessageController implements DataListener, AckListener{
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
-        // Translation needed to translate the used packet protocol to the protocol used in the GUI
+        packet = packet.clone();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
