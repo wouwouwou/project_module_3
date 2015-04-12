@@ -4,12 +4,17 @@ package gui.controller;
  * The message that is derived from a PingMessage.
  * @author Tistan de Boer
  * @since 7-4-15
+ * @deprecated Not used in implementation.
  */
 public class PingMessage implements Message{
-    // The ID of the sender of a ping
+    /**
+     * The id of this message.
+     */
     private final int id;
 
-    // The name of a sender
+    /**
+     * The name of the sender of the PingMessage.
+     */
     private final String name;
 
     // ------------------- Constructor --------------------------------------

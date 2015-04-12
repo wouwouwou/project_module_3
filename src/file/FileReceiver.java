@@ -10,6 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * Handles the packets that come in to the queue.
  * @author Tristan de Boer
  * @since 8-4-15
  */
@@ -56,7 +57,6 @@ public class FileReceiver {
     public void onReceive(Packet packet) {
         lock.lock();
         byte[] data = packet.getData();
-        packet = packet.clone();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
@@ -85,7 +85,12 @@ public class FileReceiver {
                     // source == i
 
                     String message = "Incoming file. Received 0/"+fh.getTotalPackets(data);
-                    ProcessMessage pm = new ProcessMessage(key, fh.getTotalPackets(data), message, messageController.getClientModel().get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
+                    ProcessMessage pm;
+                    if(onlyack){
+                        pm = new ProcessMessage(key, fh.getTotalPackets(data), message, messageController.getClientModel().get(i).getName(), new Date(), packet.getSource(), packet.getDestination());
+                    }else {
+                        pm = new ProcessMessage(key, fh.getTotalPackets(data), message, messageController.getClientModel().get(i).getName(), new Date(), packet.getDestination(), packet.getSource());
+                    }
                     messageController.addProcessMessage(pm);
                     messageController.addChatMessage(pm);
                 }
@@ -94,6 +99,7 @@ public class FileReceiver {
 
         // Add the sequence number and data to the map. After it has been added, update list2 with information that a new part has been received.
         if(!receivedMap.get(key).containsKey(fh.getSequenceNumber(data))){
+            System.err.println("Files@!");
             receivedMap.get(key).put(fh.getSequenceNumber(data), data);
 
             this.updateMessage(key, "Incoming file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
@@ -129,6 +135,11 @@ public class FileReceiver {
         lock.unlock();
     }
 
+    /**
+     * Update the message of an entry in a DefaultListModel in an entry of chatModel.
+     * @param key The unique identifiers for the file that is linked to the chat entry.
+     * @param message The message that needs to be set.
+     */
     private void updateMessage(List key, String message){
         for(int j = 0; j < messageController.getClientModel().size(); j++){
             if(messageController.getChatModel().get(j) != null) {
@@ -137,7 +148,8 @@ public class FileReceiver {
                         // Check if we need to update this processmessage.
                         List testKey = ((ProcessMessage)messageController.getChatModel().get(j).get(k)).getFileId();
                         if(testKey == key){
-                            messageController.getChatModel().get(j).get(k).setMessage(message);
+                            messageController.setMessage(j, k, message);
+                            //messageController.getChatModel().get(j).get(k).setMessage(message);
                             messageController.updateList2();
                         }
                     }

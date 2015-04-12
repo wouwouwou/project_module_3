@@ -22,24 +22,46 @@ import java.util.List;
  * @since 8-4-15
  */
 public class MessageController implements DataListener, AckListener{
-    // The ID of this client
+    /**
+     * The name of the user himself. In this case 'Ikzelf', which stands for 'I' in Dutch.
+     */
+    private static final String OWN_NAME = "Ikzelf";
+    /**
+     * The ID of the client himself, determined by the NetworkManager.
+     */
     private static int OWN_ID;
-
-    // The Gui that is used by this client
+    /**
+     * The <code>Gui</code> that needs to be controlled.
+     */
     private final Gui gui;
+    /**
+     * The <code>NetworkManager</code> that is used to control the network.
+     */
     private final NetworkManager networkManager;
+    /**
+     * The <code>FileReceiver</code> that is used to control(and display the status) of the incoming files.
+     */
     private final FileReceiver fileReceiver;
+    /**
+     * The <code>FileReceiver</code> that is used to display the status of the outgoing files.
+     */
     private final FileReceiver fileAcker;
-
-    // The chatModel that is used to store all chats (in a HashMap). A DefaultListModel can easily be used to populate a JList.
+    /**
+     * The Model that is used to store all chats (in <code>HashMap</code>. DefaultListModel is used because it can be used to easily populate a JList.
+     */
     private HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
-
-    // The clientModel is used to store all clients. A DefaultListModel can easily be used to populate a JList.
+    /**
+     * The Model that is used to store all clients. DefaultListModel is used because it can be used to easily populate a JList.
+     */
     private DefaultListModel<Client> clientModel = new DefaultListModel<>();
-
-    // The processModel is used to store all files being transferred.
+    /**
+     * The Model that is used to store all files that are transferred
+     * @unused Since <code>ProcessMessage</code> is extending <code>ChatMessage</code>, it can be stored in <code>chatModel</code>.
+     */
     private DefaultListModel<ProcessMessage> processMessage = new DefaultListModel<>();
-
+    /**
+     * The amount of files sent (used to determine the unique id)
+     */
     private int filecount = 0;
     /**
      *  Creates a new GUI that is linked to field <code>gui</code>.
@@ -54,7 +76,8 @@ public class MessageController implements DataListener, AckListener{
         gui = new Gui(this);
         this.networkManager = networkManager;
         if(this.networkManager == null){
-            //System.out.println("networkManager is null");
+            /System.out.println("networkManager is null");
+            // Running this Class with a null networkManager is not possible.
         }
 
         OWN_ID = Protocol.CLIENT_ID;
@@ -74,10 +97,8 @@ public class MessageController implements DataListener, AckListener{
             Packet packet = networkManager.constructPacket((byte) clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
             networkManager.getOutgoingPacketHandler().send(packet);
 
-            //TODO: send message to network with selected client (0 = broadcast)
-
             // Send message to own list
-            ChatMessage message = new ChatMessage(gui.getMessageField().getText(), "ikzelf", new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
+            ChatMessage message = new ChatMessage(gui.getMessageField().getText(), OWN_NAME, new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
             addChatMessage(message);
             gui.getMessageField().setText("");
         }
@@ -89,19 +110,21 @@ public class MessageController implements DataListener, AckListener{
      */
     @Override
     public void onAck(Packet packet) {
+        System.out.println("We have an ack!");
         fileAcker.onReceive(packet);
     }
 
     /**
-     *  Receive a message and determine what to do. Messages can by of type <code>PingMessage</code> and <code>ChatMessage</code>.
+     *  Receive a message and determine what to do. An packet with datatype <code>Protocol.DataType.TEXT</code>
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
-        packet = packet.clone();
+        // Translation needed to translate the used packet protocol to the protocol used in the GUI
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
         if(packet.getDataType() == Protocol.DataType.TEXT){
+            // If packet is of type Protocol.DataType.TEXT, add it to the queue of the source
             for(int i = 0; i < clientModel.size(); i++){
                 if((clientModel.get(i).getId() == packet.getSource())){
                     addChatMessage(new ChatMessage(new String(packet.getData()), clientModel.get(i).getName(), new Date(), packet.getDestination(), packet.getSource()));
@@ -112,6 +135,7 @@ public class MessageController implements DataListener, AckListener{
             gui.getList1().revalidate();
             gui.getList1().repaint();
         }else if(packet.getDataType() == Protocol.DataType.PING){
+            // If packet is of type Protocol.Datatype.PING, add a client to the clientModel and/or update the 'last seen' date
             int client = -1;
             for(int i = 0; i < clientModel.size(); i++){
                 if(clientModel.get(i).getId() == packet.getSource()){
@@ -127,12 +151,13 @@ public class MessageController implements DataListener, AckListener{
             gui.getList1().revalidate();
             gui.getList1().repaint();
         }else if(packet.getDataType() == Protocol.DataType.FILE){
+            // If packet is of type Protocol.DataType.FILE, use FileReceiver to determine further actions.
             fileReceiver.onReceive(packet);
         }
     }
 
     /**
-     * Handles the file control.
+     * Handles the file control. Splits up an packet and sends it to the NetworkManager as a packet.
      * @param path The path of the file that needs to be send
      */
     public void sendFile(Path path){
@@ -160,14 +185,13 @@ public class MessageController implements DataListener, AckListener{
             CSlength += CStocount.length - 6;
         }
 
+        // Send data to other client(s) using the NetworkManager
         for(byte[] toSendData: CS){
             Packet packet;
-
             byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
             packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
             System.out.println("Sending packet to " + destination);
             networkManager.getOutgoingPacketHandler().send(packet);
-
         }
 
 
@@ -263,10 +287,20 @@ public class MessageController implements DataListener, AckListener{
         return chatModel;
     }
 
+    /**
+     * Calls gui.updateList2().
+     * @see gui.Gui
+     */
     public void updateList2() {
         gui.updateList2();
     }
 
+    /**
+     * Set the message of a message in an index of chatModel.
+     * @param i An entry of chatModel to alter.
+     * @param j An entry of chatModel -> DefaultListModel to alter.
+     * @param s The change that should be made.
+     */
     public void setMessage(int i, int j, String s) {
         chatModel.get(i).get(j).setMessage(s);
         updateList2();

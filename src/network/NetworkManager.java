@@ -69,6 +69,7 @@ public class NetworkManager {
             //Get our client ID and set Protocol.CLIENT_ID
             try {
                 Protocol.CLIENT_ID = this.getClientId();
+                Protocol.CLIENT_ID = 3;
             } catch (ClientIdNotAvailableException e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
