@@ -33,19 +33,19 @@ public class MessageController implements DataListener, AckListener{
     /**
      * The <code>Gui</code> that needs to be controlled.
      */
-    private final Gui gui;
+    private Gui gui;
     /**
      * The <code>NetworkManager</code> that is used to control the network.
      */
-    private final NetworkManager networkManager;
+    private NetworkManager networkManager;
     /**
      * The <code>FileReceiver</code> that is used to control(and display the status) of the incoming files.
      */
-    private final FileReceiver fileReceiver;
+    private FileReceiver fileReceiver;
     /**
      * The <code>FileReceiver</code> that is used to display the status of the outgoing files.
      */
-    private final FileReceiver fileAcker;
+    private FileReceiver fileAcker;
     /**
      * The Model that is used to store all chats (in <code>HashMap</code>. DefaultListModel is used because it can be used to easily populate a JList.
      */
@@ -76,7 +76,7 @@ public class MessageController implements DataListener, AckListener{
         gui = new Gui(this);
         this.networkManager = networkManager;
         if(this.networkManager == null){
-            /System.out.println("networkManager is null");
+            //System.out.println("networkManager is null");
             // Running this Class with a null networkManager is not possible.
         }
 
@@ -119,7 +119,7 @@ public class MessageController implements DataListener, AckListener{
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
-        packet = packet.clone();
+        packet = packet.deepCopy();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
