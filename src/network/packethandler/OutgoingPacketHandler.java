@@ -22,7 +22,7 @@ public class OutgoingPacketHandler extends PacketHandler {
 
     // -----<=>-----< Fields >-----<=>----- \\
     private final ConcurrentHashMap<List<Byte>, FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
-    private NetworkManager networkManager;
+    private final NetworkManager networkManager;
     private long lastPingSend = 0;
     private final ArrayList<Packet> filePacketBuffer = new ArrayList<>();
 
@@ -93,6 +93,7 @@ public class OutgoingPacketHandler extends PacketHandler {
      * </p>
      * @param packet Packet the packet that will be broadcasted to the multicast network
      */
+
     public void send(Packet packet) {
         InetAddress group = networkManager.getGroup();
         if (packet.getDestination() == 0) {
@@ -167,7 +168,7 @@ public class OutgoingPacketHandler extends PacketHandler {
         return this.lastPingSend;
     }
 
-    public void scheduleForResend(Packet packet) {
+    private void scheduleForResend(Packet packet) {
         boolean resend = true;
         FloatingPacket floatingPacket = null;
 

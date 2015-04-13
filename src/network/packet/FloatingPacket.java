@@ -63,6 +63,10 @@ public class FloatingPacket extends Packet {
         return retries <= 0;
     }
 
+    /**
+     * Returns a String representation of a Floating Packet using the super constructor
+     * @return String
+     */
     public String toString(){
         String out = super.toString();
         out += String.format("\t next hop: %s\n", sentOn);

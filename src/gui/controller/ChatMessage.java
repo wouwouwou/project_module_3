@@ -34,7 +34,7 @@ public class ChatMessage implements Message {
     /**
      * The source of the message.
      */
-    private int source;
+    private final int source;
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\

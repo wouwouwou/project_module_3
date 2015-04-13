@@ -14,7 +14,7 @@ public class ClientMapPingListener implements DataListener {
 
 
     // -----<=>-----< Fields >-----<=>----- \\
-    NetworkManager networkManager;
+    private final NetworkManager networkManager;
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\

@@ -30,11 +30,11 @@ public class FileReceiver {
     /**
      * A map with received data.
      */
-    Map<List, SortedMap<Integer, byte[]>> receivedMap = new HashMap<>();
+    private final Map<List, SortedMap<Integer, byte[]>> receivedMap = new HashMap<>();
     /**
      * Lock, used to lock the method <code>onReceive</code>.
      */
-    Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\

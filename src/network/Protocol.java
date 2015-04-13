@@ -32,7 +32,7 @@ public class Protocol {
     public static final short MAX_PACKET_BUFFER_SIZE = 500;
 
 
-    //Number of simulanious packets before file packets are put in to a buffer.
+    //Number of simultaneous packets before file packets are put in to a buffer.
     public static final int FILE_SEND_BUFFER_SIZE = 40;
 
     //Payload and buffer size
@@ -51,15 +51,15 @@ public class Protocol {
 
     //Nested classes
     public static class Flags {
-        public static byte DATA = 1;
-        public static byte ACK = 2;
-        public static byte BROADCAST = 4;
+        public static final byte DATA = 1;
+        public static final byte ACK = 2;
+        public static final byte BROADCAST = 4;
     }
 
     public static class DataType{
-        public static byte PING = 1;
-        public static byte TEXT = 2;
-        public static byte FILE = 3;
+        public static final byte PING = 1;
+        public static final byte TEXT = 2;
+        public static final byte FILE = 3;
     }
 
 

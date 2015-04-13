@@ -13,8 +13,8 @@ abstract class PacketHandler implements Runnable {
 
 
     // -----<=>-----< Fields >-----<=>----- \\
-    MulticastSocket socket;
-    private Thread thread;
+    final MulticastSocket socket;
+    private final Thread thread;
     NetworkManager networkManager;
 
 

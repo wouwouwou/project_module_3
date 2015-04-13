@@ -39,38 +39,38 @@ public class MessageController implements DataListener, AckListener{
     /**
      * The <code>Gui</code> that needs to be controlled.
      */
-    private Gui gui;
+    private final Gui gui;
 
     /**
      * The <code>NetworkManager</code> that is used to control the network.
      */
-    private NetworkManager networkManager;
+    private final NetworkManager networkManager;
 
     /**
      * The <code>FileReceiver</code> that is used to control(and display the status) of the incoming files.
      */
-    private FileReceiver fileReceiver;
+    private final FileReceiver fileReceiver;
 
     /**
      * The <code>FileReceiver</code> that is used to display the status of the outgoing files.
      */
-    private FileReceiver fileAcker;
+    private final FileReceiver fileAcker;
 
     /**
      * The Model that is used to store all chats (in <code>HashMap</code>. DefaultListModel is used because it can be used to easily populate a JList.
      */
-    private HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
+    private final HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
 
     /**
      * The Model that is used to store all clients. DefaultListModel is used because it can be used to easily populate a JList.
      */
-    private DefaultListModel<Client> clientModel = new DefaultListModel<>();
+    private final DefaultListModel<Client> clientModel = new DefaultListModel<>();
 
     /**
      * The Model that is used to store all files that are transferred
      * Unused since <code>ProcessMessage</code> is extending <code>ChatMessage</code>, it can be stored in <code>chatModel</code>.
      */
-    private DefaultListModel<ProcessMessage> processMessage = new DefaultListModel<>();
+    private final DefaultListModel<ProcessMessage> processMessage = new DefaultListModel<>();
 
     /**
      * The amount of files sent (used to determine the unique id)
@@ -344,7 +344,7 @@ public class MessageController implements DataListener, AckListener{
      * Calls gui.updateList2().
      * @see gui.Gui
      */
-    public void updateList2() {
+    private void updateList2() {
         gui.updateList2();
     }
 
