@@ -114,7 +114,7 @@ public class Gui extends JFrame {
                 list2.setModel(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()));
             }
         }catch (IllegalArgumentException e){
-
+            e.printStackTrace();
         }
         list2.setCellRenderer(new ListRenderer(messageController.getOwnID()));
     }

@@ -99,8 +99,6 @@ public class FileHandler {
                 fos.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
