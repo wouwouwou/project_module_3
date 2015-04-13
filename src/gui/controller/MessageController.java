@@ -166,6 +166,8 @@ public class MessageController implements DataListener, AckListener{
             }
             if(client > 0){
                 clientModel.get(client).setDate();
+                // Update client name
+                clientModel.get(client).setName(new String(packet.getData()));
             }else{
                 addClient(packet.getSource(), new String(packet.getData()));
             }

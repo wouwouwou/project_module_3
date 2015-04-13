@@ -12,7 +12,7 @@ public class Client {
 
     // -----<=>-----< Fields >-----<=>----- \\
     // The name of a client
-    private final String name;
+    private String name;
 
     // The id of a client
     private final int id;
@@ -88,4 +88,7 @@ public class Client {
         this.date = new Date();
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }
