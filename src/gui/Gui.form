@@ -20,7 +20,7 @@
         <properties>
           <dividerLocation value="190"/>
           <dividerSize value="1"/>
-          <lastDividerLocation value="190"/>
+          <lastDividerLocation value="-1"/>
         </properties>
         <border type="none"/>
         <children>
@@ -32,16 +32,6 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="bd95d" class="javax.swing.JTextField" binding="messageField">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <margin top="10" left="10" bottom="10" right="10"/>
-                </properties>
-              </component>
               <scrollpane id="1706c" binding="scrollPane">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -67,6 +57,7 @@
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <margin top="2" left="14" bottom="2" right="7"/>
                   <text value="Send"/>
                 </properties>
               </component>
@@ -75,8 +66,23 @@
                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <margin top="2" left="7" bottom="2" right="14"/>
                   <text value="File..."/>
                 </properties>
+              </component>
+              <component id="a87b6" class="javax.swing.JFormattedTextField" binding="messageField">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="3" indent="1" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <margin top="0" left="0" bottom="0" right="0"/>
+                  <toolTipText value="Enter your message"/>
+                </properties>
+                <clientProperties>
+                  <html.disable class="java.lang.Boolean" value="true"/>
+                </clientProperties>
               </component>
             </children>
           </grid>

@@ -84,11 +84,9 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
         }else{
             Client entry = (Client) o;
             String routevia = "";
-            if(!entry.getName().equals(entry.getRoute())){
-                routevia = "<font color='gray' size=-1'>via " + entry.getRoute() + "</font>";
-            }
             String lastseentext = "With free penguins!";
             if(entry.getId() != 0) {
+                routevia = "<font color='gray' size=-1'>via " + entry.getRoute() + "</font>";
                 lastseentext = "<font color='gray' size=-1'>Laatst gezien: " + lastSeen(entry.getDate()) + "</font>";
             }
             if(entry.isRead()){

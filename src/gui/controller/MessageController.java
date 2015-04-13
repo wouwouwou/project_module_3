@@ -178,7 +178,6 @@ public class MessageController implements DataListener, AckListener{
                 }
             }
 
-
             if(client > 0){
                 // Check if 'via' was changed.
                 for(int i = 0; i < clientModel.size(); i++){
