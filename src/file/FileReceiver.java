@@ -57,7 +57,7 @@ public class FileReceiver {
     public void onReceive(Packet packet) {
         lock.lock();
         byte[] data = packet.getData();
-        packet = packet.clone();
+        packet = packet.deepCopy();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
@@ -103,7 +103,21 @@ public class FileReceiver {
             System.err.println("Files@!");
             receivedMap.get(key).put(fh.getSequenceNumber(data), data);
 
-            this.updateMessage(key, "Incoming file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
+            for(int j = 0; j < messageController.getClientModel().size(); j++){
+                if(messageController.getChatModel().get(j) != null) {
+                    for (int k = 0; k < messageController.getChatModel().get(j).size(); k++) {
+                        if (messageController.getChatModel().get(j).get(k) instanceof ProcessMessage) {
+                            // Check if we need to update this processmessage.
+                            List testKey = ((ProcessMessage)messageController.getChatModel().get(j).get(k)).getFileId();
+                            if(testKey == key){
+                                messageController.getChatModel().get(j).get(k).setMessage("Incoming file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
+                                messageController.updateList2();
+                            }
+                        }
+                    }
+                }
+            }
+            //this.updateMessage(key, "Incoming file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
         }
         // Check completeness
         // Complete: call FileHandler (save to file) and flush data from map.

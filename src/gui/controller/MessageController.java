@@ -111,7 +111,9 @@ public class MessageController implements DataListener, AckListener{
     @Override
     public void onAck(Packet packet) {
         System.out.println("We have an ack!");
-        fileAcker.onReceive(packet);
+        if(packet.getDataType() == Protocol.DataType.FILE) {
+            fileAcker.onReceive(packet);
+        }
     }
 
     /**
