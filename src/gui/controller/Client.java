@@ -30,6 +30,10 @@ public class Client {
      * Determines whether all messages of the client have been read.
      */
     private Boolean read;
+    /**
+     * The route by which the client is routed.
+     */
+    private String route;
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
@@ -102,5 +106,20 @@ public class Client {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Sets the route to the client (first hop)
+     * @param route Sets the name of the first hop to the client.
+     */
+    public void setRoute(String route) {
+        this.route = route;
+    }
+    /**
+     * Gets the name of the first hop to the client.
+     * @return String first hop
+     */
+    public String getRoute(){
+        return route;
     }
 }
