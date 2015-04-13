@@ -358,8 +358,10 @@ public class NetworkManager {
      * Increases the pings missed in the connectedClients map
      * <p>
      *     Increases the pings missed on every entry in the connectedClients Map and resets DVR if changes have occured.
-     *     Method will mostly be called on every #Protocol.PING_INTERVAL
+     *     Method will mostly be called on every #Protocol.PING_INTERVAL to increase the pings missed
+     *     Every time a ping comes in or a new discovery packet comes in, the pings missed for that client will be reset.
      * </p>
+     * @see Protocol#PING_INTERVAL
      */
     public void increasePingRound() {
         for(Byte key: connectedClients.keySet()){
