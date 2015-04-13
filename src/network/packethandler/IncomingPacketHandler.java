@@ -64,7 +64,7 @@ public class IncomingPacketHandler extends PacketHandler {
         dataListeners.remove(listener);
     }
 
-    public boolean isDuplicate(Packet packet){
+    private boolean isDuplicate(Packet packet){
         return lastPackets.contains(packet.getFloatingKey());
     }
 
@@ -130,7 +130,7 @@ public class IncomingPacketHandler extends PacketHandler {
      * </p>
      * @param packet byte[] A received packet
      */
-    public void handle(byte[] packet){
+    private void handle(byte[] packet){
         switch (packet[0]){
             case Protocol.DISCOVERY_PACKET:
                 handleDiscovery(packet);
@@ -151,7 +151,7 @@ public class IncomingPacketHandler extends PacketHandler {
      * </p>
      * @param packet byte[] The packet to be handled
      */
-    public void handleDiscovery(byte[] packet){
+    private void handleDiscovery(byte[] packet){
         short seq = (short) ((Protocol.fixSign(packet[2]) << 8) + Protocol.fixSign(packet[3]));
         byte length = packet[1];
         boolean forward = false;
@@ -195,7 +195,7 @@ public class IncomingPacketHandler extends PacketHandler {
 
     }
 
-    public void handleCommunication(byte[] packet){
+    private void handleCommunication(byte[] packet){
         if(packet[3] == Protocol.CLIENT_ID){
             if ((packet[8] & Protocol.Flags.DATA) != 0){
 

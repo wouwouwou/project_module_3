@@ -22,7 +22,7 @@ public class OutgoingPacketHandler extends PacketHandler {
 
     // -----<=>-----< Fields >-----<=>----- \\
     private final ConcurrentHashMap<List<Byte>, FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
-    private NetworkManager networkManager;
+    private final NetworkManager networkManager;
     private long lastPingSend = 0;
     private final ArrayList<Packet> filePacketBuffer = new ArrayList<>();
 
@@ -167,7 +167,7 @@ public class OutgoingPacketHandler extends PacketHandler {
         return this.lastPingSend;
     }
 
-    public void scheduleForResend(Packet packet) {
+    private void scheduleForResend(Packet packet) {
         boolean resend = true;
         FloatingPacket floatingPacket = null;
 

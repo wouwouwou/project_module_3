@@ -121,7 +121,7 @@ public class NetworkManager {
      * @return client id
      * @throws ClientIdNotAvailableException when no Id could be generated and causes the process to terminate with error code -1
      */
-    public int getClientId() throws ClientIdNotAvailableException {
+    private int getClientId() throws ClientIdNotAvailableException {
         InetAddress addr = null;
         try {
             Enumeration<InetAddress> addrs = NetworkInterface.getNetworkInterfaces().nextElement().getInetAddresses();
