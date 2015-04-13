@@ -116,6 +116,7 @@ public class MessageController implements DataListener, AckListener{
             ChatMessage message = new ChatMessage(gui.getMessageField().getText(), "ikzelf", new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
             addChatMessage(message);
             gui.getMessageField().setText("");
+            gui.setupAutoScroll();
         }
     }
 
@@ -343,5 +344,9 @@ public class MessageController implements DataListener, AckListener{
     public void setMessage(int i, int j, String s) {
         chatModel.get(i).get(j).setMessage(s);
         updateList2();
+    }
+
+    public boolean getSoundEnabled() {
+        return gui.getSoundEnabled();
     }
 }

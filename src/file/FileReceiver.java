@@ -1,5 +1,6 @@
 package file;
 
+import gui.SoundPlayer;
 import gui.controller.MessageController;
 import gui.controller.ProcessMessage;
 import network.Protocol;
@@ -80,9 +81,20 @@ public class FileReceiver {
                     for(int k = 0; k < messageController.getChatModel().get(keySet).size(); k++){
                         if(messageController.getChatModel().get(keySet).get(k) instanceof ProcessMessage && ((ProcessMessage) messageController.getChatModel().get(keySet).get(k)).getFileId().get(0)== key.get(0) && ((ProcessMessage) messageController.getChatModel().get(keySet).get(k)).getFileId().get(1) == key.get(1)){
                             if(isAck){
-                                messageController.setMessage(keySet, k, "Outgoing file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
+                                if(receivedMap.get(key.size()).size() == fh.getTotalPackets(data)){
+                                    messageController.setMessage(keySet, k, "Transfer complete!");
+                                }else{
+                                    messageController.setMessage(keySet, k, "Outgoing file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
+                                }
                             }else{
-                                messageController.setMessage(keySet, k, "Incoming file. Send " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
+                                if(receivedMap.get(key).size() == fh.getTotalPackets(data)){
+                                    messageController.setMessage(keySet, k, "Transfer complete!");
+                                    if(messageController.getSoundEnabled()) {
+                                        SoundPlayer.playSound();
+                                    }
+                                }else{
+                                    messageController.setMessage(keySet, k, "Incoming file. Send " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
+                                }
                             }
                         }
                     }
@@ -92,7 +104,6 @@ public class FileReceiver {
             // Check completeness
             // Complete: call FileHandler (save to file) and flush data from map.
             if (receivedMap.get(key).size() == fh.getTotalPackets(data)) {
-                System.err.println("Plakken!");
                 List<byte[]> list = new ArrayList<>(receivedMap.get(key).values());
                 // Remove the headers
                 List<byte[]> listbytearrayR = fh.removeHeaders(list);
