@@ -130,7 +130,7 @@ public class FileReceiver {
                             if(receivedMap.get(key).size() == fh.getTotalPackets(data)){
                                 messageController.setMessage(keySet, k, "Transfer complete!");
                             }else{
-                                messageController.setMessage(keySet, k, "Outgoing file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
+                                messageController.setMessage(keySet, k, "Outgoing file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data) + ". (" + (Math.round(receivedMap.get(key).size() / fh.getTotalPackets(data)) + "%)"));
                             }
                         }else{
                             if(receivedMap.get(key).size() == fh.getTotalPackets(data)){
@@ -139,7 +139,7 @@ public class FileReceiver {
                                     SoundPlayer.playSound();
                                 }
                             }else{
-                                messageController.setMessage(keySet, k, "Incoming file. Send " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
+                                messageController.setMessage(keySet, k, "Incoming file. Send " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data) + ". (" + (Math.round(receivedMap.get(key).size() / fh.getTotalPackets(data)) + "%)"));
                             }
                         }
                     }
