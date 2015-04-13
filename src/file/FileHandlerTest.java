@@ -9,7 +9,7 @@ import java.util.List;
  * @since 8-4-15
  */
 public class FileHandlerTest {
-    FileReceiver fr = new FileReceiver(null);
+    FileReceiver fr = new FileReceiver(null, true);
 
     public static void main(String[] args){
         new FileHandlerTest();
