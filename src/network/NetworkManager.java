@@ -155,7 +155,6 @@ public class NetworkManager {
                 routingTable.set(index, entry[0]);
                 routingTable.set(index + 1, entry[1]);
                 routingTable.set(index + 2, entry[2]);
-                IncomingPacketHandler.printArray(routingTable.toArray());
             } else {
                 connectedClients.put(entry[0], (byte) 0);
                 routingTable.add(entry[0]);
@@ -229,7 +228,6 @@ public class NetworkManager {
      * </p>
      */
     public void sendTable(){
-        System.out.println("Sending table");
         byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
 
         packet[0] = Protocol.DISCOVERY_PACKET;
@@ -249,8 +247,6 @@ public class NetworkManager {
         }
 
         System.arraycopy(table, 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
-
-        IncomingPacketHandler.printArray(routingTable.toArray());
         try {
             socket.send(new DatagramPacket(packet, packet.length, group, Protocol.GROUP_PORT));
         } catch (IOException e) {
