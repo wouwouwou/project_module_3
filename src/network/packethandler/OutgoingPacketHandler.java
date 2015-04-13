@@ -154,6 +154,14 @@ public class OutgoingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Handles an Acknowledgement packet
+     * <p>
+     *     Finds the floating packet that has been acknowledged and
+     * </p>
+     * @param ackPacket
+     * @return
+     */
     //TODO Structure change? | Woeter Roeter
     public Packet handleACK(Packet ackPacket){
         if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
