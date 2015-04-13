@@ -81,7 +81,7 @@ public class FileReceiver {
                     for(int k = 0; k < messageController.getChatModel().get(keySet).size(); k++){
                         if(messageController.getChatModel().get(keySet).get(k) instanceof ProcessMessage && ((ProcessMessage) messageController.getChatModel().get(keySet).get(k)).getFileId().get(0)== key.get(0) && ((ProcessMessage) messageController.getChatModel().get(keySet).get(k)).getFileId().get(1) == key.get(1)){
                             if(isAck){
-                                if(receivedMap.get(key.size()).size() == fh.getTotalPackets(data)){
+                                if(receivedMap.get(key).size() == fh.getTotalPackets(data)){
                                     messageController.setMessage(keySet, k, "Transfer complete!");
                                 }else{
                                     messageController.setMessage(keySet, k, "Outgoing file. Received " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data));
