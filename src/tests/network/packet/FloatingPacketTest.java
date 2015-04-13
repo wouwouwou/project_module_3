@@ -5,8 +5,6 @@ import network.packet.Packet;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Unit test for network.packet.FloatingPacket
  * @author Wouter Bos

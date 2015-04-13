@@ -12,20 +12,26 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * @author Tristan de Boer
  * @since 8-4-15
+ * Handles the packets that come in to the queue.
  */
 public class FileReceiver {
 
+
+    // -----<=>-----< Fields >-----<=>----- \\
     private final MessageController messageController;
     private final boolean isAck;
     Map<List, SortedMap<Integer, byte[]>> receivedMap = new HashMap<>();
     Lock lock = new ReentrantLock();
 
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     public FileReceiver(MessageController messageController, boolean isAck) {
         this.messageController = messageController;
         this.isAck = isAck;
     }
 
-
+    
+    // -----<=>-----< Methods >-----<=>----- \\
     public void onReceive(Packet packet) {
         lock.lock();
         byte[] data = packet.getData();
@@ -87,7 +93,7 @@ public class FileReceiver {
             // Complete: call FileHandler (save to file) and flush data from map.
             if (receivedMap.get(key).size() == fh.getTotalPackets(data)) {
                 System.err.println("Plakken!");
-                List<byte[]> list = new ArrayList<byte[]>(receivedMap.get(key).values());
+                List<byte[]> list = new ArrayList<>(receivedMap.get(key).values());
                 // Remove the headers
                 List<byte[]> listbytearrayR = fh.removeHeaders(list);
                 int DRlength = 0;
@@ -110,6 +116,8 @@ public class FileReceiver {
 
     }
 
+
+    // -----<=>-----< Static Method >-----<=>----- \\
     public static int byteArrayToInt(byte[] b)
     {
         int value = 0;

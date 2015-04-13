@@ -6,9 +6,9 @@ import network.Protocol;
 /**
  * @author Wouter Bos
  * @since 8-4-15
- * A packet has an incomplete header
+ * Specific Exception Class
  * <p>
- *     Thrown when a packet is not at-least the length of the header, this is therefore a faulty packet
+ *     Thrown when a packet is not at least the length of the header. This is therefore a faulty packet
  * </p>
  * @see //TODO reference to our protocol implementation
  */

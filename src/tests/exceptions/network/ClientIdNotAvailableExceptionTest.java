@@ -4,8 +4,6 @@ import exceptions.network.ClientIdNotAvailableException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * @author Wouter Bos
  * @since 10-4-15

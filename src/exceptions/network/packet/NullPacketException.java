@@ -5,9 +5,10 @@ import exceptions.network.InvalidPacketException;
 /**
  * @author Wouter Bos
  * @since 8-4-15
- * A null packet is a packet that is empty
+ * Specific Exception Class.
  * <p>
- *     A Null packet is a packet with Packet.type = Protocol.NULL_PACKET
+ *     Thrown if a Null-packet has been received. (A null packet is a packet that is empty, so the
+ *     Packet.Type equals Protocol.NULL_PACKET)
  * </p>
  * @see //TODO reference to our protocol implementation
  */
