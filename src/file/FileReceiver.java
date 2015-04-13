@@ -57,7 +57,7 @@ public class FileReceiver {
     public void onReceive(Packet packet) {
         lock.lock();
         byte[] data = packet.getData();
-        packet = packet.clone();
+        packet = packet.deepCopy();
         if(packet.hasFlag(Protocol.Flags.BROADCAST)){
             packet.setDestination((byte) 0);
         }
