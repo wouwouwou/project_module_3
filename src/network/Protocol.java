@@ -33,7 +33,7 @@ public class Protocol {
     public static final int RECEIVE_BUFFER_BYTES_SIZE = 4096;
     public static final int MAX_COMMUNICATION_PAYLOAD_SIZE = RECEIVE_BUFFER_BYTES_SIZE - COMMUNICATION_HEADER_LENGTH;
     public static final byte MAX_RETRIES = 5;
-    public static final Byte MAX_MISSED_PINGROUNDS = 2;
+    public static final Byte MAX_MISSED_PINGROUNDS = 4;
 
 
     public static int CLIENT_ID = 0;
