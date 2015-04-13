@@ -27,6 +27,10 @@ public class FileHandler {
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
+
+    /**
+     * The maximum size of the data that can be added to a data packet.
+     */
     public FileHandler(){
         MAX_DATA_LENGTH = Protocol.MAX_COMMUNICATION_PAYLOAD_SIZE - 6;
     }

@@ -5,11 +5,13 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
+ * Tests whether a certain file can be split up to a certain packet size. Headers will be added. After that, we check
+ * that packets can be rejoined to a file.
  * @author Tristan de Boer
  * @since 8-4-15
  */
 public class FileHandlerTest {
-    FileReceiver fr = new FileReceiver(null, true);
+    FileReceiver fr = new FileReceiver(null, false);
 
     public static void main(String[] args){
         new FileHandlerTest();
