@@ -107,7 +107,7 @@ public class MessageController implements DataListener, AckListener{
      * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>. Sends the message to it's own listener and to the NetworkLayer.
      */
     public void sendMessage() {
-        if(gui.getMessageField().getText() != "") {
+        if(!gui.getMessageField().getText().equals("")) {
             Packet packet = networkManager.constructPacket((byte) clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
             networkManager.getOutgoingPacketHandler().send(packet);
 

@@ -9,6 +9,7 @@ import network.packet.Packet;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,8 +24,9 @@ public class OutgoingPacketHandler extends PacketHandler {
     private final ConcurrentHashMap<List<Byte>, FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
     private NetworkManager networkManager;
     private long lastPingSend = 0;
+    private final ArrayList<Packet> filePacketBuffer = new ArrayList<>();
 
-
+    
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     public OutgoingPacketHandler(NetworkManager networkManager){
         super(networkManager);
@@ -38,6 +40,12 @@ public class OutgoingPacketHandler extends PacketHandler {
         while (true) {
             if (System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.CONVERGE_TIME) {
                 synchronized (floatingPacketMap) {
+                    while(floatingPacketMap.size() < Protocol.FILE_SEND_BUFFER_SIZE && filePacketBuffer.size() > 0){
+                        synchronized (filePacketBuffer) {
+                            send(filePacketBuffer.get(0));
+                            filePacketBuffer.remove(0);
+                        }
+                    }
                     for (FloatingPacket packet : floatingPacketMap.values()) {
                         if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
                             this.send(packet);
@@ -104,33 +112,42 @@ public class OutgoingPacketHandler extends PacketHandler {
             //TODO Synchronized might break because it is called from a synchronized block in run()
             synchronized (floatingPacketMap) {
                 try {
-                    if(floatingPacketMap.containsKey((packet.getFloatingKey()))){
-                        floatingPacketMap.remove(packet.getFloatingKey());
-                    }
+                    if (packet.getDataType() == Protocol.DataType.FILE && !packet.hasFlag(Protocol.Flags.ACK) && floatingPacketMap.size() > Protocol.FILE_SEND_BUFFER_SIZE){
+                        synchronized (filePacketBuffer) {
+                            //ADD the file to a buffer.
+                            filePacketBuffer.add(packet);
+                        }
+                    } else {
+
+                        if (floatingPacketMap.containsKey((packet.getFloatingKey()))) {
+                            floatingPacketMap.remove(packet.getFloatingKey());
+                        }
 
 
-                    //Try to find a route
-                    byte[] route;
-                    route = networkManager.getTableEntryByDestination(packet.getDestination());
+                        //Try to find a route
+                        byte[] route;
+                        route = networkManager.getTableEntryByDestination(packet.getDestination());
 
-                    if(route == null) {
-                        //If there is no known route, throw an Exception and schedule the packet for a retry.
-                        if(packet.getSource() == Protocol.CLIENT_ID) {
+                        if (route == null) {
+                            //If there is no known route, throw an Exception and schedule the packet for a retry.
+                            if (packet.getSource() == Protocol.CLIENT_ID) {
+                                scheduleForResend(packet);
+                            }
+                            throw new IOException(String.format("Destination %s unreachable.", packet.getDestination()));
+                        }
+
+                        packet.setNextHop(route[2]);
+                        socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
+
+                        if (packet.getFlags() == Protocol.Flags.DATA && packet.getSource() == Protocol.CLIENT_ID) {
                             scheduleForResend(packet);
                         }
-                        throw new IOException(String.format("Destination %s unreachable.", packet.getDestination()));
+
                     }
-
-                    packet.setNextHop(route[2]);
-                    socket.send(new DatagramPacket(packet.toBytes(), packet.toBytes().length, group, Protocol.GROUP_PORT));
-
-                    if (packet.getFlags() == Protocol.Flags.DATA && packet.getSource() == Protocol.CLIENT_ID) {
-                        scheduleForResend(packet);
-                    }
-
                 } catch (IOException e) {
                     //This does not need further handling, packet already scheduled for resend.
                 }
+
             }
         }
     }
