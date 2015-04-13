@@ -222,6 +222,7 @@ public class IncomingPacketHandler extends PacketHandler {
 
             try {
                 networkManager.send(new Packet(packet));
+                System.out.println("Routed: "+packet);
             } catch (InvalidPacketException e) {
                 e.printStackTrace();
             }

@@ -229,6 +229,8 @@ public class NetworkManager {
      * </p>
      */
     public void sendTable(){
+        System.out.println(routingTable);
+
         byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
 
         packet[0] = Protocol.DISCOVERY_PACKET;
