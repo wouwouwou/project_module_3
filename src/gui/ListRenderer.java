@@ -21,18 +21,29 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
 
 
     // -----<=>-----< Fields >-----<=>----- \\
-    // The width of the profile image
+    /**
+     * The width of the profile image.
+     */
     private static final int NEW_WIDTH = 40;
 
-    // The height of the profile image
+    /**
+     * The height of the profile image.
+     */
     private static final int NEW_HEIGHT = 40;
 
-    // The id of a the source of the entry (not used)
+    /**
+     * The id of the source of an entry.
+     */
     @SuppressWarnings("unused")
     private int id;
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
+
+    /**
+     * Generates a new <code>ListRenderer</code>
+     * @param id
+     */
     public ListRenderer(int id){
         this.id = id;
         setOpaque(true);

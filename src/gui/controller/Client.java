@@ -11,16 +11,24 @@ public class Client {
 
 
     // -----<=>-----< Fields >-----<=>----- \\
-    // The name of a client
+    /**
+     * The name of a client.
+     */
     private String name;
 
-    // The id of a client
+    /**
+     * The ID of a client.
+     */
     private final int id;
 
-    // The last time the client has been seen
+    /**
+     * The last time a client has been seen.
+     */
     private Date date;
 
-    // Determines whether you've read the last messages of this client
+    /**
+     * Determines whether all messages of the client have been read.
+     */
     private Boolean read;
 
 
@@ -88,6 +96,10 @@ public class Client {
         this.date = new Date();
     }
 
+    /**
+     * Sets the name of a client.
+     * @param name New name
+     */
     public void setName(String name) {
         this.name = name;
     }

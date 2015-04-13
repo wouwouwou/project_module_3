@@ -11,19 +11,29 @@ public class ChatMessage implements Message {
 
 
     // -----<=>-----< Fields >-----<=>----- \\
-    // The message
+    /**
+     * The message.
+     */
     private String message;
 
-    // The name of the sender of a message
+    /**
+     * The name of the sender of a chatmessage.
+     */
     private final String name;
 
-    // The date a message has been send
+    /**
+     * The time the message has been sent.
+     */
     private final Date date;
 
-    // The destination of a message
+    /**
+     * The destination of the message (broadcast or a private chat).
+     */
     private final int destination;
 
-    // The source of a message
+    /**
+     * The source of the message.
+     */
     private int source;
 
 

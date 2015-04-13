@@ -280,19 +280,6 @@ public class MessageController implements DataListener, AckListener{
     }
 
     /**
-     * Remove the client with <code>id</code> from <code>clientModel</code>.
-     * @param id The id to delete
-     */
-    @SuppressWarnings("unused")
-    private void changeClients(int id){
-        for(int i = 0; i < clientModel.size(); i++){
-            if(clientModel.get(i).getId() == id){
-                clientModel.remove(i);
-            }
-        }
-    }
-
-    /**
      * Adds an client to <code>clientModel</code>.
      * @param id The id of a client that has to be added
      * @param name The name of the client that has to be added
@@ -346,6 +333,10 @@ public class MessageController implements DataListener, AckListener{
         updateList2();
     }
 
+    /**
+     * Returns whether sounds are enabled.
+     * @return Boolean
+     */
     public boolean getSoundEnabled() {
         return gui.getSoundEnabled();
     }
