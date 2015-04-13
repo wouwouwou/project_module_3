@@ -13,8 +13,9 @@ import java.io.InputStream;
 public class SoundPlayer {
     /**
      * Plays a sound (in this case pingu.wav).
+     * @param b
      */
-    public static synchronized void playSound() {
+    public static synchronized void playSound(final boolean b) {
         new Thread(new Runnable() {
             // The wrapper thread is unnecessary, unless it blocks on the
             // Clip finishing; see comments.
@@ -24,7 +25,12 @@ public class SoundPlayer {
                     // get the sound file as a resource out of my jar file;
                     // the sound file must be in the same directory as this class file.
                     // the input stream portion of this recipe comes from a javaworld.com article.
-                    InputStream inputStream = getClass().getResourceAsStream("/gui/sources/pingu.wav");
+                    InputStream inputStream;
+                    if(b){
+                        inputStream = getClass().getResourceAsStream("/gui/sources/pinguplay.wav");
+                    }else {
+                        inputStream = getClass().getResourceAsStream("/gui/sources/pingu.wav");
+                    }
                     AudioStream audioStream = new AudioStream(inputStream);
                     AudioPlayer.player.start(audioStream);
                 }
@@ -41,6 +47,6 @@ public class SoundPlayer {
      * @param args None
      */
     public static void main(String[] args){
-        playSound();
+        playSound(false);
     }
 }

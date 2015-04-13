@@ -136,7 +136,7 @@ public class FileReceiver {
                             if(receivedMap.get(key).size() == fh.getTotalPackets(data)){
                                 messageController.setMessage(keySet, k, "Transfer complete!");
                                 if(messageController.getSoundEnabled()) {
-                                    SoundPlayer.playSound();
+                                    SoundPlayer.playSound(false);
                                 }
                             }else{
                                 messageController.setMessage(keySet, k, "Incoming file. Sent " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data) + ". (" + (Math.round(receivedMap.get(key).size() / fh.getTotalPackets(data)) + "%)"));

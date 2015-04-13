@@ -127,7 +127,6 @@ public class MessageController implements DataListener, AckListener{
      */
     @Override
     public void onAck(Packet packet) {
-        System.out.println("We have an ack!");
         if(packet.getDataType() == Protocol.DataType.FILE) {
             fileAcker.onReceive(packet);
         }
@@ -135,6 +134,16 @@ public class MessageController implements DataListener, AckListener{
 
     /**
      *  Receive a message and determine what to do. An packet with datatype <code>Protocol.DataType.TEXT</code>
+     *  <p>
+     *      If the packet has DataType <code>Protocol.DataType.TEXT</code>, a new chat message will be added to the entry
+     *      of chatModel that has the same user assigned as the clientModel.
+     *
+     *      If a packet has DataType <code>Protocol.DataType.PING</code>, the 'last seen' of a user will be updated and
+     *      his name will be updated.
+     *
+     *      If the packet has DataType <code>Packet.DataType.FILE</code>, the packet will be sent to a <code>FileReceiver</code>.
+     *      This will be done in a Thread, so that the GUI can continue.
+     *  </p>
      *  @param packet The message the sender has got to tell.
      */
     public void onReceive(Packet packet) {
@@ -151,8 +160,10 @@ public class MessageController implements DataListener, AckListener{
                     break;
                 }
             }
-            if(gui.getSoundEnabled()) {
-                SoundPlayer.playSound();
+            if(new String(packet.getData()).equals("/pinguplay")){
+                SoundPlayer.playSound(true);
+            }else if(gui.getSoundEnabled()) {
+                SoundPlayer.playSound(false);
             }
             gui.getList1().revalidate();
             gui.getList1().repaint();
@@ -191,6 +202,11 @@ public class MessageController implements DataListener, AckListener{
 
     /**
      * Handles the file control. Splits up an packet and sends it to the NetworkManager as a packet.
+     * <p>
+     *     This thread opens a file and splits it to bytearrays of a certain length. Headers are added to the byte arrays
+     *     (see https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit#gid=0).
+     *     Packets are generated with that bytearrays and these packets are sent to the networkManager.
+     * </p>
      * @param path The path of the file that needs to be send
      */
     public void sendFile(final Path path){
@@ -256,7 +272,7 @@ public class MessageController implements DataListener, AckListener{
         try{
             chatModel.get(queue).addElement(message);
         }catch(NullPointerException e){
-            //System.out.println("Created new queue");
+            // If the queue doesn't exist, create a new one.
             chatModel.put(queue, new DefaultListModel<ChatMessage>());
             chatModel.get(queue).addElement(message);
         }
