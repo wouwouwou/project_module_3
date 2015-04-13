@@ -69,7 +69,7 @@ public class MessageController implements DataListener, AckListener{
      */
     public MessageController(NetworkManager networkManager) {
         // fileReceiver will be set once.
-        fileReceiver = new FileReceiver(this);
+        fileReceiver = new FileReceiver(this, false);
         fileAcker = new FileReceiver(this, true);
 
 
@@ -154,7 +154,15 @@ public class MessageController implements DataListener, AckListener{
             gui.getList1().repaint();
         }else if(packet.getDataType() == Protocol.DataType.FILE){
             // If packet is of type Protocol.DataType.FILE, use FileReceiver to determine further actions.
-            fileReceiver.onReceive(packet);
+            final Packet finalPacket = packet;
+            new Thread(
+                    new Runnable() {
+
+                        public void run() {
+                            fileReceiver.onReceive(finalPacket);
+                        }
+                    }).start();
+
         }
     }
 
@@ -162,40 +170,47 @@ public class MessageController implements DataListener, AckListener{
      * Handles the file control. Splits up an packet and sends it to the NetworkManager as a packet.
      * @param path The path of the file that needs to be send
      */
-    public void sendFile(Path path){
-        FileHandler fileHandler = new FileHandler();
-        // Open file
-        byte[] bytearrayS = fileHandler.openFile(path);
-        //System.out.println("bytearrayS size: " + bytearrayS.length);
+    public void sendFile(final Path path){
+        new Thread(
+                new Runnable() {
+
+                    public void run() {
+                        FileHandler fileHandler = new FileHandler();
+                        // Open file
+                        byte[] bytearrayS = fileHandler.openFile(path);
+                        //System.out.println("bytearrayS size: " + bytearrayS.length);
 
 
-        // Split file to multiple byte arrays
-        List<byte[]> listbytearrayS = fileHandler.splitToPacketData(bytearrayS);
-        int listbytearraySlength = 0;
-        for(byte[] listbytearrayStocount: listbytearrayS){
-            listbytearraySlength += listbytearrayStocount.length;
-        }
-        //System.out.println("listbytearrayS size: " + listbytearraySlength);
+                        // Split file to multiple byte arrays
+                        List<byte[]> listbytearrayS = fileHandler.splitToPacketData(bytearrayS);
+                        int listbytearraySlength = 0;
+                        for(byte[] listbytearrayStocount: listbytearrayS){
+                            listbytearraySlength += listbytearrayStocount.length;
+                        }
+                        //System.out.println("listbytearrayS size: " + listbytearraySlength);
 
-        // Add file name to data
-        listbytearrayS.add(path.getFileName().toString().getBytes());
-        // Add information
-        filecount++;
-        List<byte[]> CS = fileHandler.addHeaders(listbytearrayS, filecount);
-        int CSlength = 0;
-        for(byte[] CStocount: CS){
-            CSlength += CStocount.length - 6;
-        }
+                        // Add file name to data
+                        listbytearrayS.add(path.getFileName().toString().getBytes());
+                        // Add information
+                        filecount++;
+                        List<byte[]> CS = fileHandler.addHeaders(listbytearrayS, filecount);
+                        int CSlength = 0;
+                        for(byte[] CStocount: CS){
+                            CSlength += CStocount.length - 6;
+                        }
 
-        // Send data to other client(s) using the NetworkManager
-        for(byte[] toSendData: CS){
-            Packet packet;
-            byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
-            packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
-            System.out.println("Sending packet to " + destination);
-            networkManager.getOutgoingPacketHandler().send(packet);
-        }
+                        // Send data to other client(s) using the NetworkManager
+                        for(byte[] toSendData: CS){
+                            Packet packet;
+                            byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
+                            packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
+                            System.out.println("Sending packet to " + destination);
+                            networkManager.getOutgoingPacketHandler().send(packet);
+                        }
 
+
+                    }
+                }).start();
 
     }
 
