@@ -13,7 +13,6 @@ public class NameDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JFormattedTextField formattedTextField1;
     private JTextField textField1;
 
 
