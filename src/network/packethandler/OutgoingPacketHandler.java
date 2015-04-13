@@ -88,12 +88,10 @@ public class OutgoingPacketHandler extends PacketHandler {
             byte[] packetBytes = packet.toBytes();
             for (Byte i: networkManager.getConnectedClients().keySet()) {
                 if (i != Protocol.CLIENT_ID) {
-                    System.out.println("Sending to " + i);
                     packetBytes[3] = i;
 
                     try {
                         this.send(new Packet(packetBytes));
-                        System.out.println("Sent");
                     } catch (InvalidPacketException e) {
                         e.printStackTrace();
                     }

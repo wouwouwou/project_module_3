@@ -195,7 +195,6 @@ public class IncomingPacketHandler extends PacketHandler {
                     if(!isDuplicate(p)) {
                         notifyDataListeners(p);
                         lastPackets.add(p.getFloatingKey());
-                        System.out.println(lastPackets.size());
                         if(lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE){
                             lastPackets.remove(0);
                         }
@@ -228,7 +227,6 @@ public class IncomingPacketHandler extends PacketHandler {
 
     private void notifyDataListeners(Packet packet) {
         if(packet != null) {
-            System.out.println("Recieve triggered");
             for (DataListener listener : dataListeners) {
                 listener.onReceive(packet);
             }
@@ -237,7 +235,6 @@ public class IncomingPacketHandler extends PacketHandler {
 
     private void notifyAckListeners(Packet packet) {
         if(packet != null) {
-            System.out.println("Non-null packet: " + "\n" + packet);
             for (AckListener listener : ackListeners) {
                 listener.onAck(packet);
             }

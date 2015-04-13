@@ -148,7 +148,6 @@ public class NetworkManager {
      * @see <a href="https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit?usp=sharing">routingEntry</a>
      */
     public void putTableEntry(byte[] entry) {
-        System.out.println("Adding table entry");
         if(entry.length == 3){
             int index = getTableIndexByDestination(entry[0]);
             if(index != -1){
