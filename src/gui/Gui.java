@@ -275,11 +275,8 @@ public class Gui extends JFrame {
     /**
      * Returns the value of 'play sound' checkbox.
      */
-    public boolean getSoundEnabled(){
-        if(messageController.getOwnID() == 1){
-            return true;
-        }
-        return playSoundCheckBox.isSelected();
+    public boolean getSoundEnabled() {
+        return messageController.getOwnID() == 1 || playSoundCheckBox.isSelected();
     }
 
 }
