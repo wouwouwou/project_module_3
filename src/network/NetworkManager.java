@@ -361,7 +361,7 @@ public class NetworkManager {
     public void increasePingRound() {
         for(Byte key: connectedClients.keySet()){
             connectedClients.put(key, (byte) (connectedClients.get(key) + 1));
-            if(connectedClients.get(key) > Protocol.MAX_MISSED_PINGROUNDS){
+            if(connectedClients.get(key) > Protocol.MAX_MISSED_PINGROUNDS){ //TODO possible discrepancies with IPH handleDiscovery() / Tim
                 dropTable();
                 setDiscoverySequenceNum((short) (discoverySequenceNum + 1));
                 sendTable();

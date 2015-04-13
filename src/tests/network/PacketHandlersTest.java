@@ -10,7 +10,6 @@ import network.packethandler.IncomingPacketHandler;
 import network.packethandler.OutgoingPacketHandler;
 import org.junit.Before;
 import org.junit.Test;
-import test.PrintingAckListener;
 
 import java.util.ArrayList;
 
@@ -24,14 +23,14 @@ public class PacketHandlersTest {
 
     private static final String NAME = "WoeterRoeter";
     private NetworkManager manager;
-    private MessageController messageController;
-    private PrintingAckListener ackListener;
+    private DataListener messageController;
+    private AckListener ackListener;
 
     @Before
     public void setUp() throws Exception {
         manager = new NetworkManager(NAME);
         messageController = new MessageController(manager);
-        ackListener = new PrintingAckListener();
+        ackListener = new MessageController(manager);
     }
 
     @Test
@@ -40,8 +39,8 @@ public class PacketHandlersTest {
         testRemoveDataListeners();
         testAddDataListener();
         testGetAckListeners();
-        testAddAckListener();
         testRemoveAckListener();
+        testAddAckListener();
         testGetBuffer();
     }
 
@@ -51,7 +50,7 @@ public class PacketHandlersTest {
 
     private void testRemoveAckListener() {
         manager.getIncomingPacketHandler().removeAckListener(ackListener);
-        assert (manager.getIncomingPacketHandler().getAckListeners().isEmpty());
+        assert !(manager.getIncomingPacketHandler().getAckListeners().contains(ackListener));
     }
 
     private void testAddAckListener() {
@@ -61,7 +60,7 @@ public class PacketHandlersTest {
 
     private void testGetAckListeners() {
         ArrayList<AckListener> ackListeners = manager.getIncomingPacketHandler().getAckListeners();
-        assert (ackListeners.isEmpty());
+        assert (ackListeners.equals(manager.getIncomingPacketHandler().getAckListeners()));
     }
 
     private void testAddDataListener() {
@@ -70,6 +69,7 @@ public class PacketHandlersTest {
     }
 
     private void testRemoveDataListeners() {
+        manager.getIncomingPacketHandler().addDataListener(messageController);
         manager.getIncomingPacketHandler().removeDataListener(messageController);
         assert !(manager.getIncomingPacketHandler().getDataListeners().contains(messageController));
     }
