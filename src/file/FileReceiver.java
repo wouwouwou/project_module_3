@@ -139,7 +139,7 @@ public class FileReceiver {
                                     SoundPlayer.playSound();
                                 }
                             }else{
-                                messageController.setMessage(keySet, k, "Incoming file. Send " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data) + ". (" + (Math.round(receivedMap.get(key).size() / fh.getTotalPackets(data)) + "%)"));
+                                messageController.setMessage(keySet, k, "Incoming file. Sent " + receivedMap.get(key).size() + "/" + fh.getTotalPackets(data) + ". (" + (Math.round(receivedMap.get(key).size() / fh.getTotalPackets(data)) + "%)"));
                             }
                         }
                     }
