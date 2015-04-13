@@ -6,7 +6,8 @@ import sun.audio.AudioStream;
 import java.io.InputStream;
 
 /**
- * Created by tristan on 13-4-15.
+ * @author Tristan de Boer
+ * @since 13-4-15
  */
 public class SoundPlayer {
     public static synchronized void playSound() {
@@ -25,7 +26,7 @@ public class SoundPlayer {
                 }
                 catch (Exception e)
                 {
-
+                    e.printStackTrace();
                 }
             }
         }).start();
