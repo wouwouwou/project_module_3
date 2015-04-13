@@ -150,14 +150,12 @@ public class NetworkManager {
      * @see <a href="https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit?usp=sharing">routingEntry</a>
      */
     public void putTableEntry(byte[] entry) {
-        System.out.println("Adding table entry");
         if(entry.length == 3){
             int index = getTableIndexByDestination(entry[0]);
             if(index != -1){
                 routingTable.set(index, entry[0]);
                 routingTable.set(index + 1, entry[1]);
                 routingTable.set(index + 2, entry[2]);
-                IncomingPacketHandler.printArray(routingTable.toArray());
             } else {
                 connectedClients.put(entry[0], (byte) 0);
                 routingTable.add(entry[0]);
@@ -231,7 +229,6 @@ public class NetworkManager {
      * </p>
      */
     public void sendTable(){
-        System.out.println("Sending table");
         byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
 
         packet[0] = Protocol.DISCOVERY_PACKET;
@@ -251,8 +248,6 @@ public class NetworkManager {
         }
 
         System.arraycopy(table, 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
-
-        IncomingPacketHandler.printArray(routingTable.toArray());
         try {
             socket.send(new DatagramPacket(packet, packet.length, group, Protocol.GROUP_PORT));
         } catch (IOException e) {
@@ -367,8 +362,9 @@ public class NetworkManager {
     public void increasePingRound() {
         for(Byte key: connectedClients.keySet()){
             connectedClients.put(key, (byte) (connectedClients.get(key) + 1));
-            if(connectedClients.get(key) > Protocol.MAX_MISSED_PINGROUNDS){
+            if(connectedClients.get(key) > Protocol.MAX_MISSED_PINGROUNDS){ //TODO possible discrepancies with IPH handleDiscovery() / Tim
                 dropTable();
+                setDiscoverySequenceNum((short) (discoverySequenceNum + 1));
                 sendTable();
                 connectedClients.remove(key); }
         }

@@ -47,11 +47,12 @@ public class OutgoingPacketHandler extends PacketHandler {
                 }
             }
 
-            if(System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.TABLE_DROP_INTERVAL || (networkManager.getConnectedClients().size() == 0 && System.currentTimeMillis() > networkManager.getLastTableDrop() + 500)){
+            if(System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.TABLE_DROP_INTERVAL){
                 networkManager.dropTable();
                 networkManager.setDiscoverySequenceNum((short) (networkManager.getDiscoverySequenceNum() + 1));
                 networkManager.sendTable();
             }
+
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -61,6 +62,7 @@ public class OutgoingPacketHandler extends PacketHandler {
 
             // Broadcasts a ping
             if (System.currentTimeMillis() > getLastPingSend() + Protocol.PING_INTERVAL) {
+                networkManager.sendTable();
                 Packet pingPacket = networkManager.constructPing();
                 send(pingPacket);
                 //System.out.println("broadcasting Ping: " + "\tname: " + networkManager.getClientName() + "\n" + pingPacket);
@@ -89,12 +91,10 @@ public class OutgoingPacketHandler extends PacketHandler {
             byte[] packetBytes = packet.toBytes();
             for (Byte i: networkManager.getConnectedClients().keySet()) {
                 if (i != Protocol.CLIENT_ID) {
-                    System.out.println("Sending to " + i);
                     packetBytes[3] = i;
 
                     try {
                         this.send(new Packet(packetBytes));
-                        System.out.println("Sent");
                     } catch (InvalidPacketException e) {
                         e.printStackTrace();
                     }
@@ -137,8 +137,6 @@ public class OutgoingPacketHandler extends PacketHandler {
 
     //TODO Structure change? | Woeter Roeter
     public Packet handleACK(Packet ackPacket){
-        System.out.println("Ack received!");
-        System.out.println(floatingPacketMap.containsKey(ackPacket.getFloatingKey()));
         if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
             Packet original = floatingPacketMap.get(ackPacket.getFloatingKey());
             floatingPacketMap.remove(ackPacket.getFloatingKey());

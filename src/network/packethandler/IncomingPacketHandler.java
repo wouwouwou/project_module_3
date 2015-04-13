@@ -126,7 +126,6 @@ public class IncomingPacketHandler extends PacketHandler {
     public void handle(byte[] packet){
         switch (packet[0]){
             case Protocol.DISCOVERY_PACKET:
-                System.out.println("New Discovery Packet recieved");
                 handleDiscovery(packet);
                 break;
             case Protocol.COMMUNICATION_PACKET:
@@ -149,11 +148,8 @@ public class IncomingPacketHandler extends PacketHandler {
         short seq = (short) ((Protocol.fixSign(packet[2]) << 8) + Protocol.fixSign(packet[3]));
         byte length = packet[1];
         boolean forward = false;
-        IncomingPacketHandler.printArray(packet);
-        System.out.printf("Discovery Packet: {seq: %s, length: %s}\n", seq, length);
 
         if(seq > networkManager.getDiscoverySequenceNum()){
-            System.out.println("Dropping tables");
             //D-D-D-D-D-Drop that bass, ehh... table ;D
             networkManager.dropTable();
             networkManager.setDiscoverySequenceNum(seq);
@@ -168,7 +164,6 @@ public class IncomingPacketHandler extends PacketHandler {
 
 
         } else if (seq == networkManager.getDiscoverySequenceNum()){
-            System.out.println("Adding entries (if available)");
             //If this is just an addition to the existing table
 
             for(int i = Protocol.DISCOVERY_HEADER_LENGTH; i < Protocol.DISCOVERY_HEADER_LENGTH + length; i+=3){
@@ -187,7 +182,6 @@ public class IncomingPacketHandler extends PacketHandler {
         //Forward this packet if we have to
         if(forward){
             networkManager.sendTable();
-            printArray(networkManager.getRoutingTable());
         }
 
 
@@ -205,7 +199,6 @@ public class IncomingPacketHandler extends PacketHandler {
                     if(!isDuplicate(p)) {
                         notifyDataListeners(p);
                         lastPackets.add(p.getFloatingKey());
-                        System.out.println(lastPackets.size());
                         if(lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE){
                             lastPackets.remove(0);
                         }
@@ -238,7 +231,6 @@ public class IncomingPacketHandler extends PacketHandler {
 
     private void notifyDataListeners(Packet packet) {
         if(packet != null) {
-            System.out.println("Recieve triggered");
             for (DataListener listener : dataListeners) {
                 listener.onReceive(packet);
             }
@@ -247,7 +239,6 @@ public class IncomingPacketHandler extends PacketHandler {
 
     private void notifyAckListeners(Packet packet) {
         if(packet != null) {
-            System.out.println("Non-null packet: " + "\n" + packet);
             for (AckListener listener : ackListeners) {
                 listener.onAck(packet);
             }
