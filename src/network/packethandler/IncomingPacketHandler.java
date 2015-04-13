@@ -26,6 +26,13 @@ public class IncomingPacketHandler extends PacketHandler {
     private byte[] buffer;
 
 
+    //TODO: Verwijderen
+    private int forwardedFileDATA = 0;
+    private int forwardedFileACK = 0;
+    private int recievedFileDATA = 0;
+    private int recievedFileACK = 0;
+
+
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * Constructs a new IncomingPacketHandler, this is done by the NetworkHandler.
@@ -189,6 +196,7 @@ public class IncomingPacketHandler extends PacketHandler {
     }
 
     public void handleCommunication(byte[] packet){
+        handleCounters(packet);
         if(packet[3] == Protocol.CLIENT_ID){
             if ((packet[8] & Protocol.Flags.DATA) != 0){
 
@@ -226,6 +234,33 @@ public class IncomingPacketHandler extends PacketHandler {
                 e.printStackTrace();
             }
         }
+
+    }
+
+    private void handleCounters(byte[] packet) {
+        try {
+            Packet packet1 = new Packet(packet);
+            if(packet1.getDataType() == Protocol.DataType.FILE){
+                if(packet1.getDestination() == Protocol.CLIENT_ID) {
+                    if (packet1.hasFlag(Protocol.Flags.ACK)) {
+                        recievedFileACK += 1;
+                    } else {
+                        recievedFileDATA += 1;
+                    }
+                } else if (packet1.getNextHop() == Protocol.CLIENT_ID){
+                    if (packet1.hasFlag(Protocol.Flags.ACK)) {
+                        forwardedFileACK += 1;
+                    } else {
+                        forwardedFileDATA += 1;
+                    }
+                }
+            }
+
+        } catch (InvalidPacketException e) {
+            e.printStackTrace();
+        }
+        System.out.println(String.format("\n\n\n\n\n\nRecieved:\t DATA: %s \t ACKs: %s ", recievedFileDATA, recievedFileACK));
+        System.out.println(String.format("Forwarded:\t DATA: %s \t ACKs: %s ", forwardedFileDATA, forwardedFileACK));
 
     }
 
