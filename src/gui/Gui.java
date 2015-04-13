@@ -96,6 +96,11 @@ public class Gui extends JFrame {
      */
     public void messagesList(){
         try{
+            if(currentView == 0){
+                fileButton.setEnabled(false);
+            }else{
+                fileButton.setEnabled(true);
+            }
             messageController.getClientModel().get(currentView).setRead(true);
             if(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()) == null){
                 list2.setModel(new DefaultListModel<>());
