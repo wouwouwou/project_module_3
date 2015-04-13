@@ -10,12 +10,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Handles the packets that come in to the queue.
  * @author Tristan de Boer
  * @since 8-4-15
+ * Handles the packets that come in to the queue.
  */
 public class FileReceiver {
 
+
+    // -----<=>-----< Fields >-----<=>----- \\
     /**
      * The <code>messageController</code> to send the messages to.
      */
@@ -31,6 +33,8 @@ public class FileReceiver {
      */
     Lock lock = new ReentrantLock();
 
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * New FileReceiver. <code>MessageController</code> is used to send messages to to view in GUI.
      * @param messageController
@@ -50,6 +54,7 @@ public class FileReceiver {
     }
 
 
+    // -----<=>-----< Methods >-----<=>----- \\
     /**
      * Receive and process a new packet.
      * @param packet The packet that was received.
@@ -63,7 +68,6 @@ public class FileReceiver {
         }
         FileHandler fh = new FileHandler();
         List key = new ArrayList();
-
         key.add(fh.getFileNumber(data));
         key.add(packet.getSource());
             // ReceivedMap doesn't contain key, add the key.
@@ -172,6 +176,9 @@ public class FileReceiver {
             }
         }
     }
+
+
+    // -----<=>-----< Static Method >-----<=>----- \\
     /**
      * Convert four bytes to an integer of 32 bits.
      * @param b The bytes that need to be converted

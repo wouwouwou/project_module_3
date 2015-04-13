@@ -16,6 +16,9 @@ import java.io.File;
  * @since 7-4-15
  */
 public class Gui extends JFrame {
+
+
+    // -----<=>-----< Fields >-----<=>----- \\
     // Default font used in application
     private static final Font DEFAULT_FONT = new Font("Ubuntu", Font.PLAIN, 15);
     // The controller of this gui.
@@ -44,6 +47,8 @@ public class Gui extends JFrame {
      */
     private int currentView = 0;
 
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * Setup the GUI.
      */
@@ -77,6 +82,8 @@ public class Gui extends JFrame {
         setVisible(true);
     }
 
+
+    // -----<=>-----< Methods >-----<=>----- \\
     /**
      * Scrolls scrollPane to the bottom of the screen.
      */
@@ -85,8 +92,7 @@ public class Gui extends JFrame {
     }
 
 
-    // ------------------- Set up the GUI functions -----------------------------------------------------------------------------------------------
-
+    // -----<=>-----< Set up the GUI functions >-----<=>----- \\
     /**
      * Sets up the messages list.
      * <p>
@@ -172,8 +178,8 @@ public class Gui extends JFrame {
         list2.repaint();
     }
 
-    //  ------------------- Action listeners -----------------------------------------------------------------------------------------------
 
+    // -----<=>-----< Action listeners >-----<=>----- \\
     /**
      * Adds an action listener to the <code>messageField</code>. If <key>ENTER</key> is pressed, the message will be send.
      */
@@ -232,6 +238,8 @@ public class Gui extends JFrame {
         });
     }
 
+
+    // -----<=>-----< Getters >-----<=>----- \\
     /**
      * Returns <code>currentView</code>.
      * @return currentView

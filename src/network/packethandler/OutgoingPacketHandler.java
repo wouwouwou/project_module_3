@@ -18,18 +18,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class OutgoingPacketHandler extends PacketHandler {
 
-    // Fields
+
+    // -----<=>-----< Fields >-----<=>----- \\
     private final ConcurrentHashMap<List<Byte>, FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
     private NetworkManager networkManager;
     private long lastPingSend = 0;
 
-    // Constructor(s)
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     public OutgoingPacketHandler(NetworkManager networkManager){
         super(networkManager);
         this.networkManager = networkManager;
     }
 
-    // Methods
+
+    // -----<=>-----< Queries & Methods >-----<=>----- \\
     @Override
     public void run() {
         while (true) {
@@ -144,7 +147,6 @@ public class OutgoingPacketHandler extends PacketHandler {
         return null;
     }
 
-    // Queries
     public long getLastPingSend() {
         return this.lastPingSend;
     }

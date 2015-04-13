@@ -5,21 +5,22 @@ import exceptions.network.InvalidPacketException;
 import network.Protocol;
 
 /**
+ * @author Tim Hintzbergen
+ * @since 7-4-15
  * Extends Packet, a floating packet has a timestamp.
  * <p>
  *     A floating packet represents an unacknowledged packet:
  *      - If the timestamp is reached, a new packet is constructed from this object.
  *      - This new packet is sent again and the timestamp is refreshed.
  * </p>
- * @author Tim Hintzbergen
- * @since 7-4-15
  */
 public class FloatingPacket extends Packet {
 
-    // -----<=>-----< Fields >-----<=>----- \\
 
+    // -----<=>-----< Fields >-----<=>----- \\
     private long sentOn;
     private byte retries;
+
 
     // -----<=>-----< Constructors >-----<=>----- \\
     /**
@@ -35,8 +36,8 @@ public class FloatingPacket extends Packet {
         this.sentOn = System.currentTimeMillis();
     }
 
-    // -----<=>-----< Getters & Setters >-----<=>----- \\
 
+    // -----<=>-----< Getters & Setters >-----<=>----- \\
     public long getSentOn(){
         return sentOn;
     }

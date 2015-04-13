@@ -5,16 +5,18 @@ import network.NetworkManager;
 import java.net.MulticastSocket;
 
 /**
- * Abstract class for handling with packets.
  * @author Wouter Bos
  * @since 8-4-15.
+ * Abstract class for handling with packets.
  */
 abstract class PacketHandler implements Runnable {
+
 
     // -----<=>-----< Fields >-----<=>----- \\
     MulticastSocket socket;
     private Thread thread;
     NetworkManager networkManager;
+
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     PacketHandler(NetworkManager networkManager) {
@@ -23,6 +25,7 @@ abstract class PacketHandler implements Runnable {
         this.thread = new Thread(this);
         this.thread.start();
     }
+
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**
