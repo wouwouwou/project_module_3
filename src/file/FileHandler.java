@@ -97,7 +97,7 @@ public class FileHandler {
                 FileOutputStream fos = new FileOutputStream(p.toFile());
                 fos.write(listdata);
                 fos.close();
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
