@@ -81,6 +81,11 @@ public class MessageController implements DataListener, AckListener{
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      *  Creates a new GUI that is linked to field <code>gui</code>.
+     *  <p>
+     *      Start a new <code>MessageController</code>, with a fileReceiver (a class that handles incoming datapackets),
+     *      fileAcker (a class that handles incoming ACK's of sent datapackets), a <code>Gui</code>, a <code>networkManager</code>.
+     *      It also adds an AckListener and a DataListener to the <code>FileReceiver</code>.
+     *  </p>
      *  @param networkManager The networkmanager that can be called.
      */
     public MessageController(NetworkManager networkManager) {
