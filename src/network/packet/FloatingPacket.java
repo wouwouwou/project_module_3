@@ -62,4 +62,11 @@ public class FloatingPacket extends Packet {
         retries -= 1;
         return retries <= 0;
     }
+
+    public String toString(){
+        String out = super.toString();
+        out += String.format("\t next hop: %s\n", sentOn);
+        out += String.format("\t next hop: %s\n", retries);
+        return out;
+    }
 }

@@ -196,7 +196,6 @@ public class IncomingPacketHandler extends PacketHandler {
     }
 
     public void handleCommunication(byte[] packet){
-        handleCounters(packet);
         if(packet[3] == Protocol.CLIENT_ID){
             if ((packet[8] & Protocol.Flags.DATA) != 0){
 
@@ -256,11 +255,13 @@ public class IncomingPacketHandler extends PacketHandler {
                 }
             }
 
+            System.out.println(packet1);
+            System.out.println(String.format("\n\n\n\n\n\nRecieved:\t DATA: %s \t ACKs: %s ", recievedFileDATA, recievedFileACK));
+            System.out.println(String.format("Forwarded:\t DATA: %s \t ACKs: %s ", forwardedFileDATA, forwardedFileACK));
         } catch (InvalidPacketException e) {
             e.printStackTrace();
         }
-        System.out.println(String.format("\n\n\n\n\n\nRecieved:\t DATA: %s \t ACKs: %s ", recievedFileDATA, recievedFileACK));
-        System.out.println(String.format("Forwarded:\t DATA: %s \t ACKs: %s ", forwardedFileDATA, forwardedFileACK));
+
 
     }
 

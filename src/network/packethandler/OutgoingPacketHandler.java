@@ -46,8 +46,9 @@ public class OutgoingPacketHandler extends PacketHandler {
                             filePacketBuffer.remove(0);
                         }
                     }
+
                     for (FloatingPacket packet : floatingPacketMap.values()) {
-                        if (packet.getSentOn() + Protocol.TIMEOUT < System.currentTimeMillis()) {
+                        if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Protocol.MAX_RETRIES - packet.getRetries()) < System.currentTimeMillis()) {
                             this.send(packet);
                             packet.setSentOn(System.currentTimeMillis());
                         }
