@@ -19,17 +19,27 @@ import java.util.List;
  */
 public class FileHandler {
 
+
+    // -----<=>-----< Fields >-----<=>----- \\
     /**
      * The maximum length of the data contained in the packet.
      */
     private static int MAX_DATA_LENGTH;
 
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     public FileHandler(){
         MAX_DATA_LENGTH = Protocol.MAX_COMMUNICATION_PAYLOAD_SIZE - 6;
     }
 
+
+    // -----<=>-----< Queries & Methods >-----<=>----- \\
     /**
-     *  Adds headers to a List of bytearrays (to keep them in order and check if they all are available).
+     *  Adds headers to a List of byte-arrays (to keep them in order and check if they all are available)
+     *  and returns the new list.
+     *  @param dataArray
+     *  @param filenumber
+     *  @return
      */
     public List<byte[]> addHeaders(List<byte[]> dataArray, int filenumber){
         List<byte[]> result = new ArrayList<>();
@@ -37,9 +47,8 @@ public class FileHandler {
         for(byte[] data: dataArray){
             byte[] res = new byte[data.length + 6];
             int header1 = partCount << 16 | dataArray.size();
-            int header2 = filenumber;
             System.arraycopy(ByteBuffer.allocate(4).putInt(header1).array(), 0, res, 0, 4);
-            System.arraycopy(ByteBuffer.allocate(4).putInt(header2).array(), 2, res, 4, 2);
+            System.arraycopy(ByteBuffer.allocate(4).putInt(filenumber).array(), 2, res, 4, 2);
             System.arraycopy(data, 0, res, 6, data.length);
             result.add(res);
             partCount++;
@@ -48,7 +57,9 @@ public class FileHandler {
     }
 
     /**
-     *  Removes the headers from an List of bytearrays
+     *  Removes the headers from an List of byte-arrays and returns this list.
+     *  @param headerArray
+     *  @return
      */
     public List<byte[]> removeHeaders(List<byte[]> headerArray){
         List<byte[]> result = new ArrayList<>();
@@ -63,9 +74,9 @@ public class FileHandler {
     /**
      * Opens a file from path and returns the byte array of the file
      * @param file The absolute path to the file.
+     * @return
      */
     public byte[] openFile(Path file){
-
         try {
             return Files.readAllBytes(file);
         } catch (IOException e) {
@@ -75,7 +86,7 @@ public class FileHandler {
     }
 
     /**
-     * Writes data to a filename.
+     * Writes data to a filename in a PenguinDir.
      * @param listdata The data that has to be written
      * @param filename The filename
      */
@@ -95,11 +106,14 @@ public class FileHandler {
     }
 
     /**
-     * Create PenguinDir (if not exists)
+     * Create PenguinDir (if not exists).
+     * @param filename
+     * @return
      */
     public boolean createDir(File filename){
         return (filename.exists() || (!filename.exists() && filename.mkdir()));
     }
+
     /**
      * Converges a List of bytes to a single byte array.
      * @param listData List of bytes
@@ -147,6 +161,8 @@ public class FileHandler {
 
     /**
      * Returns the total amount of packets to be expected for this file.
+     * @param data
+     * @return
      */
     public int getTotalPackets(byte[] data){
         byte[] totalArray = new byte[4];
@@ -156,6 +172,8 @@ public class FileHandler {
 
     /**
      * Returns the number of this file.
+     * @param
+     * @return
      */
     public int getFileNumber(byte[] data){
         byte[] fileArray = new byte[4];
@@ -163,6 +181,8 @@ public class FileHandler {
         return byteArrayToInt(fileArray);
     }
 
+
+    // -----<=>-----< Static Method >-----<=>----- \\
     /**
      * Converts a byte array to an integer.
      * @param b The byte array

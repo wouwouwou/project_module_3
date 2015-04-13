@@ -18,13 +18,15 @@ import java.util.List;
  */
 public class IncomingPacketHandler extends PacketHandler {
 
-    // Fields
+
+    // -----<=>-----< Fields >-----<=>----- \\
     private ArrayList<DataListener> dataListeners;
     private ArrayList<AckListener> ackListeners;
     private ArrayList<List<Byte>> lastPackets;
     private byte[] buffer;
 
-    // Constructor(s)
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * Constructs a new IncomingPacketHandler, this is done by the NetworkHandler.
      * The IncomingPacketHandler is then started in a new Thread
@@ -39,6 +41,8 @@ public class IncomingPacketHandler extends PacketHandler {
         lastPackets = new ArrayList<>();
     }
 
+
+    // -----<=>-----< Queries & Methods >-----<=>----- \\
     public void addDataListener(DataListener listener){
         if (!dataListeners.contains(listener)) {
             dataListeners.add(listener);

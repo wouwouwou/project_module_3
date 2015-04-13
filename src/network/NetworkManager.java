@@ -19,8 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class NetworkManager {
 
-    private final String clientName;
+
     // -----<=>-----< Fields >-----<=>----- \\
+    private final String clientName;
     private MulticastSocket socket;
     private IncomingPacketHandler incomingPacketHandler;
     private OutgoingPacketHandler outgoingPacketHandler;
@@ -108,6 +109,7 @@ public class NetworkManager {
     public void send(Packet packet){
         outgoingPacketHandler.send(packet);
     }
+
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**

@@ -11,12 +11,19 @@ import network.packet.Packet;
  * Listens for pings and modifies/(resets) the networkManager.connectedClients Map
  */
 public class ClientMapPingListener implements DataListener {
+
+
+    // -----<=>-----< Fields >-----<=>----- \\
     NetworkManager networkManager;
 
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     public ClientMapPingListener(NetworkManager networkManager){
         this.networkManager = networkManager;
     }
 
+
+    // -----<=>-----< Methods >-----<=>----- \\
     @Override
     public void onReceive(Packet packet) {
         if (packet.getDataType() == Protocol.DataType.PING){

@@ -8,14 +8,15 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Represents a packet
- * Sets up a basic packet, for easy construction and reading
  * @author Tim Hintzbergen
  * @since 7-4-15
+ * Represents a packet
+ * Sets up a basic packet, for easy construction and reading
  */
 public class Packet {
-    // -----<=>-----< Fields >-----<=>----- \\
 
+
+    // -----<=>-----< Fields >-----<=>----- \\
     private byte[] data = new byte[0];
     private int sequenceNumber = 0;
     private byte type = Protocol.COMMUNICATION_PACKET;
@@ -24,6 +25,7 @@ public class Packet {
     private byte destination = 0;
     private byte flags = 0;
     private byte nextHop = 0;
+
 
     // -----<=>-----< Constructors >-----<=>----- \\
     /**
@@ -72,6 +74,7 @@ public class Packet {
         }
     }
 
+
     // -----<=>-----< Methods >-----<=>----- \\
     /**
      * Prints the data in a packet to the standard out (as a String)
@@ -79,6 +82,7 @@ public class Packet {
     public void print() {
         System.out.println(new String(this.getData()));
     }
+
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**

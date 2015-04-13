@@ -13,11 +13,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Generates a ListCell based on a JLabel for use in an JList.
  * @author Tistan de Boer
  * @since 7-4-15
+ * Generates a ListCell based on a JLabel for use in an JList.
  */
 public class ListRenderer extends JLabel implements ListCellRenderer {
+
+
+    // -----<=>-----< Fields >-----<=>----- \\
     // The width of the profile image
     private static final int NEW_WIDTH = 40;
 
@@ -28,12 +31,16 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
     @SuppressWarnings("unused")
     private int id;
 
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     public ListRenderer(int id){
         this.id = id;
         setOpaque(true);
         setIconTextGap(24);
     }
 
+
+    // -----<=>-----< Queries >-----<=>----- \\
     @Override
     public Component getListCellRendererComponent(JList jList, Object o, int i, boolean b, boolean b1) {
         if(o instanceof ChatMessage) {
@@ -62,7 +69,7 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
             if(entry.isRead()){
                 setText("<html>"+entry.getName() +  "<br>"+lastseentext+"</html>");
             }else{
-                setText("<html>"+entry.getName() +  "&emsp;<span color='GREEN'>\u272A Nieuw bericht!</span><br><font color='gray' size=-1'>Laatst gezien: " + lastSeen(entry.getDate())+"</font></html>");
+                setText("<html>"+entry.getName() +  "&emsp;<span color='GREEN'>\u272A Nieuw bericht!</span><br><font color='gray' size=-1'>Laatst gezien:&nbsp;" + lastSeen(entry.getDate())+"</font></html>");
             }
             if(b){
                 setBackground(Color.LIGHT_GRAY);

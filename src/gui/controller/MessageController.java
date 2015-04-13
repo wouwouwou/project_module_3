@@ -17,59 +17,74 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Controls the GUI.
  * @author Tistan de Boer
  * @since 8-4-15
+ * Controls the GUI. Implements network.DataListener and network.AckListener
  */
 public class MessageController implements DataListener, AckListener{
+
+
+    // -----<=>-----< Fields >-----<=>----- \\
     /**
      * The name of the user himself. In this case 'Ikzelf', which stands for 'I' in Dutch.
      */
     private static final String OWN_NAME = "Ikzelf";
+
     /**
      * The ID of the client himself, determined by the NetworkManager.
      */
     private static int OWN_ID;
+
     /**
      * The <code>Gui</code> that needs to be controlled.
      */
     private Gui gui;
+
     /**
      * The <code>NetworkManager</code> that is used to control the network.
      */
     private NetworkManager networkManager;
+
     /**
      * The <code>FileReceiver</code> that is used to control(and display the status) of the incoming files.
      */
     private FileReceiver fileReceiver;
+
     /**
      * The <code>FileReceiver</code> that is used to display the status of the outgoing files.
      */
     private FileReceiver fileAcker;
+
     /**
      * The Model that is used to store all chats (in <code>HashMap</code>. DefaultListModel is used because it can be used to easily populate a JList.
      */
     private HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
+
     /**
      * The Model that is used to store all clients. DefaultListModel is used because it can be used to easily populate a JList.
      */
     private DefaultListModel<Client> clientModel = new DefaultListModel<>();
+
     /**
      * The Model that is used to store all files that are transferred
      * @unused Since <code>ProcessMessage</code> is extending <code>ChatMessage</code>, it can be stored in <code>chatModel</code>.
      */
     private DefaultListModel<ProcessMessage> processMessage = new DefaultListModel<>();
+
     /**
      * The amount of files sent (used to determine the unique id)
      */
     private int filecount = 0;
+
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      *  Creates a new GUI that is linked to field <code>gui</code>.
      *  @param networkManager The networkmanager that can be called.
      */
     public MessageController(NetworkManager networkManager) {
         // fileReceiver will be set once.
-        fileReceiver = new FileReceiver(this);
+        fileReceiver = new FileReceiver(this, false);
         fileAcker = new FileReceiver(this, true);
 
 
@@ -87,13 +102,12 @@ public class MessageController implements DataListener, AckListener{
     }
 
 
-    // ------------------- Actions that can be called ----------------------------------------------------------------------------
-
+    // -----<=>-----< Actions that can be called >-----<=>----- \\
     /**
      * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>. Sends the message to it's own listener and to the NetworkLayer.
      */
     public void sendMessage() {
-        if(gui.getMessageField().getText() != "") {
+        if(!gui.getMessageField().getText().equals("")) {
             Packet packet = networkManager.constructPacket((byte) clientModel.get(gui.getCurrentView()).getId(), Protocol.DataType.TEXT, gui.getMessageField().getText().getBytes());
             networkManager.getOutgoingPacketHandler().send(packet);
 
@@ -154,7 +168,15 @@ public class MessageController implements DataListener, AckListener{
             gui.getList1().repaint();
         }else if(packet.getDataType() == Protocol.DataType.FILE){
             // If packet is of type Protocol.DataType.FILE, use FileReceiver to determine further actions.
-            fileReceiver.onReceive(packet);
+            final Packet finalPacket = packet;
+            new Thread(
+                    new Runnable() {
+
+                        public void run() {
+                            fileReceiver.onReceive(finalPacket);
+                        }
+                    }).start();
+
         }
     }
 
@@ -162,45 +184,52 @@ public class MessageController implements DataListener, AckListener{
      * Handles the file control. Splits up an packet and sends it to the NetworkManager as a packet.
      * @param path The path of the file that needs to be send
      */
-    public void sendFile(Path path){
-        FileHandler fileHandler = new FileHandler();
-        // Open file
-        byte[] bytearrayS = fileHandler.openFile(path);
-        //System.out.println("bytearrayS size: " + bytearrayS.length);
+    public void sendFile(final Path path){
+        new Thread(
+                new Runnable() {
+
+                    public void run() {
+                        FileHandler fileHandler = new FileHandler();
+                        // Open file
+                        byte[] bytearrayS = fileHandler.openFile(path);
+                        //System.out.println("bytearrayS size: " + bytearrayS.length);
 
 
-        // Split file to multiple byte arrays
-        List<byte[]> listbytearrayS = fileHandler.splitToPacketData(bytearrayS);
-        int listbytearraySlength = 0;
-        for(byte[] listbytearrayStocount: listbytearrayS){
-            listbytearraySlength += listbytearrayStocount.length;
-        }
-        //System.out.println("listbytearrayS size: " + listbytearraySlength);
+                        // Split file to multiple byte arrays
+                        List<byte[]> listbytearrayS = fileHandler.splitToPacketData(bytearrayS);
+                        int listbytearraySlength = 0;
+                        for(byte[] listbytearrayStocount: listbytearrayS){
+                            listbytearraySlength += listbytearrayStocount.length;
+                        }
+                        //System.out.println("listbytearrayS size: " + listbytearraySlength);
 
-        // Add file name to data
-        listbytearrayS.add(path.getFileName().toString().getBytes());
-        // Add information
-        filecount++;
-        List<byte[]> CS = fileHandler.addHeaders(listbytearrayS, filecount);
-        int CSlength = 0;
-        for(byte[] CStocount: CS){
-            CSlength += CStocount.length - 6;
-        }
+                        // Add file name to data
+                        listbytearrayS.add(path.getFileName().toString().getBytes());
+                        // Add information
+                        filecount++;
+                        List<byte[]> CS = fileHandler.addHeaders(listbytearrayS, filecount);
+                        int CSlength = 0;
+                        for(byte[] CStocount: CS){
+                            CSlength += CStocount.length - 6;
+                        }
 
-        // Send data to other client(s) using the NetworkManager
-        for(byte[] toSendData: CS){
-            Packet packet;
-            byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
-            packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
-            System.out.println("Sending packet to " + destination);
-            networkManager.getOutgoingPacketHandler().send(packet);
-        }
+                        // Send data to other client(s) using the NetworkManager
+                        for(byte[] toSendData: CS){
+                            Packet packet;
+                            byte destination = ByteBuffer.allocate(4).putInt(clientModel.get(gui.getCurrentView()).getId()).array()[3];
+                            packet = networkManager.constructPacket(destination, Protocol.DataType.FILE, toSendData);
+                            System.out.println("Sending packet to " + destination);
+                            networkManager.getOutgoingPacketHandler().send(packet);
+                        }
 
+
+                    }
+                }).start();
 
     }
 
-    // ------------------- Methods that can be called by onReceive ---------------------------------------------------------
 
+    // -----<=>-----< Sub-Methods for onReceive(Packet packet) >-----<=>----- \\
     /**
      * Add an entry to the chatmessages.
      * @param message The message that should be added
@@ -241,6 +270,7 @@ public class MessageController implements DataListener, AckListener{
     public void addProcessMessage(ProcessMessage pm) {
         processMessage.addElement(pm);
     }
+
     /**
      * Remove the client with <code>id</code> from <code>clientModel</code>.
      * @param id The id to delete
@@ -263,8 +293,8 @@ public class MessageController implements DataListener, AckListener{
         clientModel.addElement(new Client(id, name, new Date(), true));
     }
 
-    // ------------------- Getters (mostly used by Gui) ---------------------------------------------------------
 
+    // -----<=>-----< Getters (mostly used by GUI) >-----<=>----- \\
     /**
      * Returns the clientModel.
      * @return clientModel
