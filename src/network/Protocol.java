@@ -32,7 +32,7 @@ public class Protocol {
     public static final short MAX_PACKET_BUFFER_SIZE = 500;
 
 
-    //Number of simulanious packets before file packets are put in to a buffer.
+    //Number of simultaneous packets before file packets are put in to a buffer.
     public static final int FILE_SEND_BUFFER_SIZE = 40;
 
     //Payload and buffer size

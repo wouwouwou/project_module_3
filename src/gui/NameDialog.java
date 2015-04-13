@@ -55,11 +55,6 @@ public class NameDialog extends JDialog {
     // -----<=>-----< Methods >-----<=>----- \\
     private void onOK() {
         NetworkManager networkManager = new NetworkManager(textField1.getText());
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         MessageController gui = new MessageController(networkManager);
         dispose();
     }
