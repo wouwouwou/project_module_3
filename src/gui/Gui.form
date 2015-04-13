@@ -80,7 +80,7 @@
               </component>
             </children>
           </grid>
-          <grid id="a9752" binding="clientPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a9752" binding="clientPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <splitpane position="left"/>
@@ -100,6 +100,14 @@
                 <properties>
                   <foreground color="-5127222"/>
                   <selectionForeground color="-5127222"/>
+                </properties>
+              </component>
+              <component id="660d9" class="javax.swing.JCheckBox" binding="playSoundCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Play sound"/>
                 </properties>
               </component>
             </children>

@@ -3,6 +3,7 @@ package gui.controller;
 import file.FileHandler;
 import file.FileReceiver;
 import gui.Gui;
+import gui.SoundPlayer;
 import network.AckListener;
 import network.DataListener;
 import network.NetworkManager;
@@ -134,8 +135,12 @@ public class MessageController implements DataListener, AckListener{
                     break;
                 }
             }
+            if(gui.getSoundEnabled()) {
+                SoundPlayer.playSound();
+            }
             gui.getList1().revalidate();
             gui.getList1().repaint();
+
         }else if(packet.getDataType() == Protocol.DataType.PING){
             // If packet is of type Protocol.Datatype.PING, add a client to the clientModel and/or update the 'last seen' date
             int client = -1;
