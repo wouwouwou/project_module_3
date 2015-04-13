@@ -7,8 +7,8 @@ import network.packet.Packet;
 
 /**
  * @author Gerben Meijer
- * @since 10-4-15
- * Listens for pings and modifies the networkManager.connectedClients Map
+ * @since 10-4-15.
+ * Listens for pings and modifies/(resets) the networkManager.connectedClients Map
  */
 public class ClientMapPingListener implements DataListener {
 
