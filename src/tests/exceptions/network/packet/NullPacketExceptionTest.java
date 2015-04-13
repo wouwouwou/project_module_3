@@ -4,8 +4,6 @@ import exceptions.network.packet.NullPacketException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Unit test for exceptions.network.packet.NullPacketException
  * @author Wouter Bos

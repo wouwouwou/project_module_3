@@ -42,6 +42,7 @@ public class Gui extends JFrame {
     private JList list2;
     private JButton fileButton;
     private JScrollPane scrollPane;
+    private JCheckBox playSoundCheckBox;
     /**
      * The view currently used (selected by <code>list1.getSelectedIndex()</code>.
      */
@@ -114,7 +115,7 @@ public class Gui extends JFrame {
                 list2.setModel(messageController.getChatModel().get(messageController.getClientModel().get(currentView).getId()));
             }
         }catch (IllegalArgumentException e){
-
+            e.printStackTrace();
         }
         list2.setCellRenderer(new ListRenderer(messageController.getOwnID()));
     }
@@ -269,6 +270,16 @@ public class Gui extends JFrame {
      */
     public JTextField getMessageField() {
         return messageField;
+    }
+
+    /**
+     * Returns the value of 'play sound' checkbox.
+     */
+    public boolean getSoundEnabled(){
+        if(messageController.getOwnID() == 1){
+            return true;
+        }
+        return playSoundCheckBox.isSelected();
     }
 
 }

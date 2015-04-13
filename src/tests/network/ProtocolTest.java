@@ -1,12 +1,7 @@
 package tests.network;
 
 import network.Protocol;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.net.InetAddress;
-
-import static org.junit.Assert.*;
 
 /**
  * Unit test for network.Protocol

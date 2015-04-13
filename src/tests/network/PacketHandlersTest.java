@@ -5,15 +5,9 @@ import network.AckListener;
 import network.DataListener;
 import network.NetworkManager;
 import network.Protocol;
-import network.packet.Packet;
-import network.packethandler.IncomingPacketHandler;
-import network.packethandler.OutgoingPacketHandler;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 /**
  * @author Wouter Bos

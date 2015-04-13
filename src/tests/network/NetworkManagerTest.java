@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import java.net.InetAddress;
 import java.util.Arrays;
-import static org.junit.Assert.*;
 
 //TODO ExceptionHandling in NetworkManager. | Woeter Roeter
 /**
