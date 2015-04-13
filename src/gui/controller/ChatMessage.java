@@ -3,12 +3,14 @@ package gui.controller;
 import java.util.Date;
 
 /**
- * A message that contains certain information.
  * @author Tristan de Boer
  * @since 7-4-15
+ * A message that contains certain information.
  */
 public class ChatMessage implements Message {
 
+
+    // -----<=>-----< Fields >-----<=>----- \\
     // The message
     private String message;
 
@@ -24,8 +26,8 @@ public class ChatMessage implements Message {
     // The source of a message
     private int source;
 
-    // ------------------- Constructor ----------------------------------------------------------------------------
 
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * A new ChatMessage
      * @param message The message of the <code>ChatMessage</code>
@@ -43,7 +45,8 @@ public class ChatMessage implements Message {
         this.source = source;
     }
 
-    // ------------------- Setters ----------------------------------------------------------------------------
+
+    // -----<=>-----< Setters >-----<=>----- \\
     /**
      * Sets the message to the value given
      * @param message String
@@ -51,7 +54,9 @@ public class ChatMessage implements Message {
     public void setMessage(String message){
         this.message = message;
     }
-    // ------------------- Getters ----------------------------------------------------------------------------
+
+
+    // -----<=>-----< Getters >-----<=>----- \\
     /**
      * Returns the date of an message.
      * @return date The date of an message

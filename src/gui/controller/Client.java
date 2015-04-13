@@ -3,12 +3,14 @@ package gui.controller;
 import java.util.Date;
 
 /**
- * A client that is connected to this client.
  * @author Tistan de Boer
  * @since 7-4-15
+ * A client that is connected to this client.
  */
 public class Client {
 
+
+    // -----<=>-----< Fields >-----<=>----- \\
     // The name of a client
     private final String name;
 
@@ -21,8 +23,8 @@ public class Client {
     // Determines whether you've read the last messages of this client
     private Boolean read;
 
-    // ------------------- Constructor -------------------
 
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * Construct a client, based on a id, name, last seen date and whether the messages of this client have been read.
      * @param id The id of a client
@@ -37,7 +39,8 @@ public class Client {
         this.read = read;
     }
 
-    // ------------------- Getters -------------------
+
+    // -----<=>-----< Getters >-----<=>----- \\
     /**
      * Returns the date of an client.
      * @return date The date a client has been seen last

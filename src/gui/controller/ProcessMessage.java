@@ -4,10 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by tristan on 9-4-15.
+ * @author Tristan de Boer
+ * @since 9-4-15
  */
 public class ProcessMessage extends ChatMessage{
 
+
+    // -----<=>-----< Fields >-----<=>----- \\
     /**
      * The unique identifiers of a file
      */
@@ -19,6 +22,7 @@ public class ProcessMessage extends ChatMessage{
     private final int size;
 
 
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * A new message that describes the progress of sending/receiving a file.
      * @param fileid The unique identifiers of a file
@@ -35,6 +39,7 @@ public class ProcessMessage extends ChatMessage{
         this.size = size;
     }
 
+    // -----<=>-----< Getters >-----<=>----- \\
     /**
      * Returns the unique identifiers of the file message.
      * @return

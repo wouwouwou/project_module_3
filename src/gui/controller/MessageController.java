@@ -17,52 +17,67 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Controls the GUI.
  * @author Tistan de Boer
  * @since 8-4-15
+ * Controls the GUI. Implements network.DataListener and network.AckListener
  */
 public class MessageController implements DataListener, AckListener{
+
+
+    // -----<=>-----< Fields >-----<=>----- \\
     /**
      * The name of the user himself. In this case 'Ikzelf', which stands for 'I' in Dutch.
      */
     private static final String OWN_NAME = "Ikzelf";
+
     /**
      * The ID of the client himself, determined by the NetworkManager.
      */
     private static int OWN_ID;
+
     /**
      * The <code>Gui</code> that needs to be controlled.
      */
     private Gui gui;
+
     /**
      * The <code>NetworkManager</code> that is used to control the network.
      */
     private NetworkManager networkManager;
+
     /**
      * The <code>FileReceiver</code> that is used to control(and display the status) of the incoming files.
      */
     private FileReceiver fileReceiver;
+
     /**
      * The <code>FileReceiver</code> that is used to display the status of the outgoing files.
      */
     private FileReceiver fileAcker;
+
     /**
      * The Model that is used to store all chats (in <code>HashMap</code>. DefaultListModel is used because it can be used to easily populate a JList.
      */
     private HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
+
     /**
      * The Model that is used to store all clients. DefaultListModel is used because it can be used to easily populate a JList.
      */
     private DefaultListModel<Client> clientModel = new DefaultListModel<>();
+
     /**
      * The Model that is used to store all files that are transferred
      * @unused Since <code>ProcessMessage</code> is extending <code>ChatMessage</code>, it can be stored in <code>chatModel</code>.
      */
     private DefaultListModel<ProcessMessage> processMessage = new DefaultListModel<>();
+
     /**
      * The amount of files sent (used to determine the unique id)
      */
     private int filecount = 0;
+
+
+    // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      *  Creates a new GUI that is linked to field <code>gui</code>.
      *  @param networkManager The networkmanager that can be called.
@@ -87,8 +102,7 @@ public class MessageController implements DataListener, AckListener{
     }
 
 
-    // ------------------- Actions that can be called ----------------------------------------------------------------------------
-
+    // -----<=>-----< Actions that can be called >-----<=>----- \\
     /**
      * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>. Sends the message to it's own listener and to the NetworkLayer.
      */
@@ -214,8 +228,8 @@ public class MessageController implements DataListener, AckListener{
 
     }
 
-    // ------------------- Methods that can be called by onReceive ---------------------------------------------------------
 
+    // -----<=>-----< Sub-Methods for onReceive(Packet packet) >-----<=>----- \\
     /**
      * Add an entry to the chatmessages.
      * @param message The message that should be added
@@ -256,6 +270,7 @@ public class MessageController implements DataListener, AckListener{
     public void addProcessMessage(ProcessMessage pm) {
         processMessage.addElement(pm);
     }
+
     /**
      * Remove the client with <code>id</code> from <code>clientModel</code>.
      * @param id The id to delete
@@ -278,8 +293,8 @@ public class MessageController implements DataListener, AckListener{
         clientModel.addElement(new Client(id, name, new Date(), true));
     }
 
-    // ------------------- Getters (mostly used by Gui) ---------------------------------------------------------
 
+    // -----<=>-----< Getters (mostly used by GUI) >-----<=>----- \\
     /**
      * Returns the clientModel.
      * @return clientModel
