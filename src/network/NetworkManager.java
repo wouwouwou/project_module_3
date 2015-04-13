@@ -142,7 +142,7 @@ public class NetworkManager {
      * <p>
      *     This method adds or sets the given entry to the routingTable
      *     If this destination does not exist yet, it will be added
-     *     If this destination does exist, it will be updated.
+     *     If this destination does exist, it will be updated. Aswell as the connectedClients list (and the pings missed).
      * </p>
      * @param entry byte[destination, cost, next_hop]
      * @see <a href="https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit?usp=sharing">routingEntry</a>
@@ -355,7 +355,11 @@ public class NetworkManager {
     }
 
     /**
-     * Increases the pings missed on every entry in the connectedClients Map and resets DVR if changes have occured.
+     * Increases the pings missed in the connectedClients map
+     * <p>
+     *     Increases the pings missed on every entry in the connectedClients Map and resets DVR if changes have occured.
+     *     Method will mostly be called on every #Protocol.PING_INTERVAL
+     * </p>
      */
     public void increasePingRound() {
         for(Byte key: connectedClients.keySet()){

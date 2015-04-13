@@ -6,8 +6,9 @@ import network.Protocol;
 import network.packet.Packet;
 
 /**
- * Created by gerben on 10-4-15.
- * Listens for pings and modifies the networkManager.connectedClients Map
+ * @author Gerben Meijer
+ * @since 10-4-15.
+ * Listens for pings and modifies/(resets) the networkManager.connectedClients Map
  */
 public class ClientMapPingListener implements DataListener {
     NetworkManager networkManager;
