@@ -68,7 +68,7 @@ public class MessageController implements DataListener, AckListener{
 
     /**
      * The Model that is used to store all files that are transferred
-     * @unused Since <code>ProcessMessage</code> is extending <code>ChatMessage</code>, it can be stored in <code>chatModel</code>.
+     * Unused since <code>ProcessMessage</code> is extending <code>ChatMessage</code>, it can be stored in <code>chatModel</code>.
      */
     private DefaultListModel<ProcessMessage> processMessage = new DefaultListModel<>();
 
@@ -96,10 +96,6 @@ public class MessageController implements DataListener, AckListener{
 
         gui = new Gui(this);
         this.networkManager = networkManager;
-        if(this.networkManager == null){
-            //System.out.println("networkManager is null");
-            // Running this Class with a null networkManager is not possible.
-        }
 
         OWN_ID = Protocol.CLIENT_ID;
 
@@ -118,7 +114,7 @@ public class MessageController implements DataListener, AckListener{
             networkManager.getOutgoingPacketHandler().send(packet);
 
             // Send message to own list
-            ChatMessage message = new ChatMessage(gui.getMessageField().getText(), "ikzelf", new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
+            ChatMessage message = new ChatMessage(gui.getMessageField().getText(), OWN_NAME, new Date(), clientModel.get(gui.getCurrentView()).getId(), OWN_ID);
             addChatMessage(message);
             gui.getMessageField().setText("");
             gui.setupAutoScroll();
