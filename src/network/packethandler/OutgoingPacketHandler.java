@@ -44,7 +44,7 @@ public class OutgoingPacketHandler extends PacketHandler {
                 }
             }
 
-            if(System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.TABLE_DROP_INTERVAL || (networkManager.getConnectedClients().size() == 0 && System.currentTimeMillis() > networkManager.getLastTableDrop() + 100)){
+            if(System.currentTimeMillis() > networkManager.getLastTableDrop() + Protocol.TABLE_DROP_INTERVAL || (networkManager.getConnectedClients().size() == 0 && System.currentTimeMillis() > networkManager.getLastTableDrop() + 500)){
                 networkManager.dropTable();
                 networkManager.setDiscoverySequenceNum((short) (networkManager.getDiscoverySequenceNum() + 1));
                 networkManager.sendTable();
