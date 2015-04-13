@@ -160,7 +160,7 @@ public class MessageController implements DataListener, AckListener{
                     break;
                 }
             }
-            if(new String(packet.getData()).equals("/pinguplay")){
+            if(new String(packet.getData()).equals("!pinguplay")){
                 SoundPlayer.playSound(true);
             }else if(gui.getSoundEnabled()) {
                 SoundPlayer.playSound(false);
