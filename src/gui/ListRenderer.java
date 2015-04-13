@@ -2,7 +2,6 @@ package gui;
 
 import gui.controller.ChatMessage;
 import gui.controller.Client;
-import gui.controller.ProcessMessage;
 import network.Protocol;
 
 import javax.swing.*;
@@ -41,7 +40,7 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
     // -----<=>-----< Constructor(s) >-----<=>----- \\
 
     /**
-     * Generates a new <code>ListRenderer</code>
+     * Generates a new <code>ListRenderer</code>.
      * @param id
      */
     public ListRenderer(int id){
@@ -52,6 +51,20 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
 
 
     // -----<=>-----< Queries >-----<=>----- \\
+
+    /**
+     * Generate a new <code>ListCell</code> for a <code>ChatMessage</code> or a <code>Client</code> with certain information.
+     * <p>
+     *     <code>ChatMessage</code>: add a profileimage, senddate, and the message.
+     *     <code>Client</code>: add a last seen and a 'New Message' notification if the user has unread messages.
+     * </p>
+     * @param jList
+     * @param o
+     * @param i
+     * @param b
+     * @param b1
+     * @return
+     */
     @Override
     public Component getListCellRendererComponent(JList jList, Object o, int i, boolean b, boolean b1) {
         if(o instanceof ChatMessage) {
@@ -68,9 +81,6 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
             setForeground(Color.BLACK);
 
             return this;
-        }else if(o instanceof ProcessMessage){
-            // Update visuals of the ProcessMessage
-            return null;
         }else{
             Client entry = (Client) o;
             String lastseentext = "With free penguins!";
@@ -93,6 +103,11 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
         }
     }
 
+    /**
+     * Returns the 'last seen' as a string, rounded to seconds, minutes, hours, etc.
+     * @param date
+     * @return
+     */
     private String lastSeen(Date date){
         Date currentdate = new Date();
         long diff = currentdate.getTime() - date.getTime();
@@ -105,16 +120,26 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
         }else if(diffHours > 0){
             return diffHours + " uren";
         }else if(diffMinutes > 0){
-            return diffMinutes + " minuten";
+            if(diffMinutes == 1) {
+                return diffMinutes + " minuut";
+            }else{
+                return diffMinutes + " minuten";
+            }
         }else{
             if(diffSeconds > 15){
-                return (Math.round(diffSeconds/10) * 10) + "seconden";
+                return (Math.round(diffSeconds/10) * 10) + " seconden";
             }else{
-                return "enkele seconden";
+                // User is probably online :)
+                return "<font color='GREEN'>Online</font>";
             }
         }
     }
 
+    /**
+     * Return the profileimage of a user as a <code>ImageIcon</code> (with dimensions <code>NEW_WIDTH</code> and <code>NEW_HEIGHT</code>).
+     * @param entry The chatmessage, containing information about the user.
+     * @return ImageIcon
+     */
     private ImageIcon getImage(ChatMessage entry){
         int imagesource;
         if(entry.getSource() == 0){

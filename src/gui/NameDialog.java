@@ -68,12 +68,4 @@ public class NameDialog extends JDialog {
         // add your code here if necessary
         dispose();
     }
-
-    //TODO Should this be deleted? | Woeter Roeter
-    public static void main(String[] args) {
-        NameDialog dialog = new NameDialog();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
 }

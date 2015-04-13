@@ -118,6 +118,7 @@ public class Gui extends JFrame {
             e.printStackTrace();
         }
         list2.setCellRenderer(new ListRenderer(messageController.getOwnID()));
+        setupAutoScroll();
     }
 
     /**
@@ -157,7 +158,7 @@ public class Gui extends JFrame {
     }
 
     /**
-     * Refresh the <code>list1</code> every 1 second.
+     * Refresh the <code>list1</code> every 1 second (used to update the "last seen" messages).
      */
     private void setupThread() {
         (new Thread() {
@@ -276,7 +277,6 @@ public class Gui extends JFrame {
      * Returns the value of 'play sound' checkbox.
      */
     public boolean getSoundEnabled() {
-        return messageController.getOwnID() == 1 || playSoundCheckBox.isSelected();
+        return playSoundCheckBox.isSelected();
     }
-
 }
