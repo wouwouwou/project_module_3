@@ -7,9 +7,9 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /**
+ * Class for getting the name of the User.
  * @author Tristan de Boer
  * @since 10-4-15
- * Class for getting the name of the User.
  */
 public class NameDialog extends JDialog {
 

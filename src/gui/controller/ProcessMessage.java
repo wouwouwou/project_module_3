@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Class for showing the progress of a file-transfer to the user.
  * @author Tristan de Boer
  * @since 9-4-15
- * Class for showing the progress of a file-transfer to the user.
  */
 public class ProcessMessage extends ChatMessage{
 

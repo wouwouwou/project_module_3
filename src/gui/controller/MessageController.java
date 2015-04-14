@@ -18,9 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * Controls the GUI. Implements network.DataListener and network.AckListener
  * @author Tistan de Boer
  * @since 8-4-15
- * Controls the GUI. Implements network.DataListener and network.AckListener
  */
 public class MessageController implements DataListener, AckListener{
 

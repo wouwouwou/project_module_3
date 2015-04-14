@@ -11,9 +11,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
+ * GUI, controlled by a MessageController.
  * @author Tistan de Boer
  * @since 7-4-15
- * GUI, controlled by a MessageController.
  */
 public class Gui extends JFrame {
 

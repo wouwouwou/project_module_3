@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class for handling file transfers between clients.
  * @author Tristan de Boer
  * @since 8-4-15
- * Class for handling file transfers between clients.
  */
 public class FileHandler {
 

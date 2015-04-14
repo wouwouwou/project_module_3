@@ -3,9 +3,9 @@ package gui.controller;
 import java.util.Date;
 
 /**
+ * A client that is connected to this client.
  * @author Tistan de Boer
  * @since 7-4-15
- * A client that is connected to this client.
  */
 public class Client {
 

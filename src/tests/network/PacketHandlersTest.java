@@ -10,9 +10,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 /**
+ * Class for testing the OutgoingPacketHandler and the IncomingPacketHandler.
  * @author Wouter Bos
  * @since 10-4-15
- * Class for testing the OutgoingPacketHandler and the IncomingPacketHandler.
  */
 public class PacketHandlersTest {
 
