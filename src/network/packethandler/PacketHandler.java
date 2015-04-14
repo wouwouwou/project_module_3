@@ -5,9 +5,9 @@ import network.NetworkManager;
 import java.net.MulticastSocket;
 
 /**
+ * Abstract class for handling with packets.
  * @author Wouter Bos
  * @since 8-4-15.
- * Abstract class for handling with packets.
  */
 abstract class PacketHandler implements Runnable {
 

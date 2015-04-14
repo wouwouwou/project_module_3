@@ -14,9 +14,9 @@ import java.util.Enumeration;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Class for managing with the ad-hoc network.
  * @author Gerben Meijer
  * @since 7-4-15
- * Class for managing with the ad-hoc network.
  */
 public class NetworkManager {
 

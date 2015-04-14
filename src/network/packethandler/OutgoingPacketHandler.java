@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Class for handling with outgoing packets.
  * @author Gerben Meijer
  * @since 7-4-15
- * Class for handling with outgoing packets.
  */
 public class OutgoingPacketHandler extends PacketHandler {
 

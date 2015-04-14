@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Unit test for network.packet.FloatingPacket
  * @author Wouter Bos
  * @since 8-4-15
- * Unit test for network.packet.FloatingPacket
  */
 public class FloatingPacketTest {
 

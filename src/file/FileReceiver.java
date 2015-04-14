@@ -11,9 +11,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * Handles the packets that come in to the queue.
  * @author Tristan de Boer
  * @since 8-4-15
- * Handles the packets that come in to the queue.
  */
 public class FileReceiver {
 
