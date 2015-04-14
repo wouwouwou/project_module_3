@@ -10,7 +10,6 @@ import org.junit.Test;
 import java.net.InetAddress;
 import java.util.Arrays;
 
-//TODO ExceptionHandling in NetworkManager. | Woeter Roeter
 /**
  * Unit test for network.NetworkManager
  * @author Wouter Bos
