@@ -298,6 +298,9 @@ public class NetworkManager {
 
     /**
      * Constructs a packet with given variables
+     * <p>
+     *     A more detailed version of the Packet constructor
+     * </p>
      * @param destination   byte    destination for this packets, as a Protocol.CLIENT_ID
      * @param dataType      byte    represents the type of packet
      * @param data
@@ -319,12 +322,15 @@ public class NetworkManager {
     /**
      * Constructs a Acknowledgement packet
      * <p>
-     *     //TODO
+     *     Uses {@link Packet#Packet(byte[] data) Packet()} to make a default packet, then adding/replacing custom elements.
+     *     Destination will be the source of the {@param packet} and the Data and Packet type will be set accordingly to our protocol implementation //TODO
+     *     Also the Protocol.Flags.ACK will be set and an empty data field will be supplied.
      * </p>
      * @param packet That packet that will be used to construct an acknowledgement (also that packet that will be acknowledged)
      * @return the constructed packet
      * @throws InvalidPacketException if a malformed packet is used for construction
      */
+    //TODO Documenting especially in respect to Exception handling (correctly referring to our implementation) / Tim
     public Packet constructACK(Packet packet) throws InvalidPacketException {
         packet = new Packet(packet.toBytes());
         packet.setData(new byte[0]);
