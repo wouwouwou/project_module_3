@@ -114,7 +114,8 @@ public class OutgoingPacketHandler extends PacketHandler {
             //TODO Synchronized might break because it is called from a synchronized block in run()
             synchronized (floatingPacketMap) {
                 try {
-                    if (packet.getDataType() == Protocol.DataType.FILE && !packet.hasFlag(Protocol.Flags.ACK) && floatingPacketMap.size() > Protocol.FILE_SEND_BUFFER_SIZE){
+                    //TODO: Zorgen dat routing sneller is.
+                    if (packet.getDataType() == Protocol.DataType.FILE && !packet.hasFlag(Protocol.Flags.ACK) && packet.getSource() == Protocol.CLIENT_ID && floatingPacketMap.size() > Protocol.FILE_SEND_BUFFER_SIZE){
                         synchronized (filePacketBuffer) {
                             //ADD the file to a buffer.
                             filePacketBuffer.add(packet);
