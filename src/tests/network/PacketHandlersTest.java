@@ -12,9 +12,11 @@ import java.util.ArrayList;
 /**
  * @author Wouter Bos
  * @since 10-4-15
+ * Class for testing the OutgoingPacketHandler and the IncomingPacketHandler.
  */
 public class PacketHandlersTest {
 
+    // -----<=>-----< Fields >-----<=>----- \\
     private static final String NAME = "WoeterRoeter";
     private NetworkManager manager;
     private DataListener messageController;
@@ -27,8 +29,13 @@ public class PacketHandlersTest {
         ackListener = new MessageController(manager);
     }
 
+    /**
+     * Runs multiple tests for the IncomingPacketHandler class.
+     * Multiple getters, adders removers etc. are beïng tested here.
+     * @throws Exception When one of the tested methods does not work properly.
+     */
     @Test
-    public void testIncomingPacketHandler() {
+    public void testIncomingPacketHandler() throws Exception {
         testGetDataListeners();
         testRemoveDataListeners();
         testAddDataListener();
@@ -73,8 +80,12 @@ public class PacketHandlersTest {
         assert (datalisteners.contains(messageController));
     }
 
+    /**
+     * Runs a test for the OutgoingPacketHandler class.
+     * @throws Exception When one of the tested methods does not work properly.
+     */
     @Test
-    public void testOutgoingPacketHandler() {
+    public void testOutgoingPacketHandler() throws Exception {
         testGetLastPingSend();
     }
 
