@@ -26,7 +26,7 @@ public class NetworkManager {
     private IncomingPacketHandler incomingPacketHandler;
     private OutgoingPacketHandler outgoingPacketHandler;
     private InetAddress group;
-    private ArrayList<Byte> routingTable;
+    private final ArrayList<Byte> routingTable = new ArrayList<>();
     private ConcurrentHashMap<Byte, Byte> connectedClients;
     private short discoverySequenceNum = 0;
     private int sequenceNum;
@@ -54,8 +54,6 @@ public class NetworkManager {
             e.printStackTrace();
         }
 
-        //Create the routingTable
-        routingTable = new ArrayList<>();
 
         //Create the connected clients map, consisting of: Byte clientId -> Byte missedPingRounds
         connectedClients = new ConcurrentHashMap<>();
@@ -150,17 +148,19 @@ public class NetworkManager {
      * @see <a href="https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit?usp=sharing">routingEntry</a>
      */
     public void putTableEntry(byte[] entry) {
-        if(entry.length == 3){
-            int index = getTableIndexByDestination(entry[0]);
-            if(index != -1){
-                routingTable.set(index, entry[0]);
-                routingTable.set(index + 1, entry[1]);
-                routingTable.set(index + 2, entry[2]);
-            } else {
-                connectedClients.put(entry[0], (byte) 0);
-                routingTable.add(entry[0]);
-                routingTable.add(entry[1]);
-                routingTable.add(entry[2]);
+        synchronized(routingTable) {
+            if (entry.length == 3) {
+                int index = getTableIndexByDestination(entry[0]);
+                if (index != -1) {
+                    routingTable.set(index, entry[0]);
+                    routingTable.set(index + 1, entry[1]);
+                    routingTable.set(index + 2, entry[2]);
+                } else {
+                    connectedClients.put(entry[0], (byte) 0);
+                    routingTable.add(entry[0]);
+                    routingTable.add(entry[1]);
+                    routingTable.add(entry[2]);
+                }
             }
         }
     }
@@ -175,12 +175,14 @@ public class NetworkManager {
      * @return byte[destination, cost, next_hop]
      */
     public byte[] getTableEntryByDestination(byte destination){
-        for(int i = 0; i < routingTable.size(); i += 3){
-            if(routingTable.get(i) == destination){
-                return new byte[]{routingTable.get(i), routingTable.get(i+1), routingTable.get(i+2)};
+        synchronized(routingTable) {
+            for (int i = 0; i < routingTable.size(); i += 3) {
+                if (routingTable.get(i) == destination) {
+                    return new byte[]{routingTable.get(i), routingTable.get(i + 1), routingTable.get(i + 2)};
+                }
             }
+            return null;
         }
-        return null;
     }
 
     /**
@@ -193,13 +195,15 @@ public class NetworkManager {
      * @return int index in the routingTable.
      */
     public int getTableIndexByDestination(byte destination){
-        for(int i = 0; i < routingTable.size(); i += 3){
-            if(routingTable.get(i) == destination){
-                return i;
-            }
+        synchronized(routingTable) {
+            for (int i = 0; i < routingTable.size(); i += 3) {
+                if (routingTable.get(i) == destination) {
+                    return i;
+                }
 
+            }
+            return -1;
         }
-        return -1;
     }
 
     /**
@@ -209,17 +213,19 @@ public class NetworkManager {
      * </p>
      */
     public void dropTable(){
-        //Clear the table and
-        lastTableDrop = System.currentTimeMillis();
-        routingTable.clear();
-        // Add yourself to the routingTable
-        routingTable.add((byte) Protocol.CLIENT_ID);
-        routingTable.add((byte) 0);
-        routingTable.add((byte) Protocol.CLIENT_ID);
-        // Add the broadcast routingEntry to the routingTable
-        routingTable.add((byte) 0);
-        routingTable.add((byte) 0);
-        routingTable.add((byte) 0);
+        synchronized(routingTable) {
+            //Clear the table and
+            lastTableDrop = System.currentTimeMillis();
+            routingTable.clear();
+            // Add yourself to the routingTable
+            routingTable.add((byte) Protocol.CLIENT_ID);
+            routingTable.add((byte) 0);
+            routingTable.add((byte) Protocol.CLIENT_ID);
+            // Add the broadcast routingEntry to the routingTable
+            routingTable.add((byte) 0);
+            routingTable.add((byte) 0);
+            routingTable.add((byte) 0);
+        }
     }
 
     /**
@@ -229,32 +235,34 @@ public class NetworkManager {
      * </p>
      */
     public void sendTable(){
-        System.out.println(routingTable);
 
-        byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
+        synchronized(routingTable) {
 
-        packet[0] = Protocol.DISCOVERY_PACKET;
+            byte[] packet = new byte[Protocol.DISCOVERY_HEADER_LENGTH + routingTable.size()];
 
-        packet[1] = (byte) routingTable.size();
+            packet[0] = Protocol.DISCOVERY_PACKET;
 
-        packet[2] = (byte) (discoverySequenceNum << 8);
+            packet[1] = (byte) routingTable.size();
 
-        packet[3] = (byte) discoverySequenceNum;
+            packet[2] = (byte) (discoverySequenceNum << 8);
 
-        byte[] table = new byte[routingTable.size()];
+            packet[3] = (byte) discoverySequenceNum;
 
-        for(int i = 0; i < routingTable.size(); i+= 3){
-            table[i] = routingTable.get(i);
-            table[i + 1] = routingTable.get(i+1);
-            table[i + 2] = (byte) Protocol.CLIENT_ID;
-        }
+            byte[] table = new byte[routingTable.size()];
 
-        System.arraycopy(table, 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
-        try {
-            socket.send(new DatagramPacket(packet, packet.length, group, Protocol.GROUP_PORT));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            for (int i = 0; i < routingTable.size(); i += 3) {
+                table[i] = routingTable.get(i);
+                table[i + 1] = routingTable.get(i + 1);
+                table[i + 2] = (byte) Protocol.CLIENT_ID;
+            }
+
+            System.arraycopy(table, 0, packet, Protocol.DISCOVERY_HEADER_LENGTH, routingTable.size());
+            try {
+                socket.send(new DatagramPacket(packet, packet.length, group, Protocol.GROUP_PORT));
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -298,6 +306,9 @@ public class NetworkManager {
 
     /**
      * Constructs a packet with given variables
+     * <p>
+     *     A more detailed version of the Packet constructor
+     * </p>
      * @param destination   byte    destination for this packets, as a Protocol.CLIENT_ID
      * @param dataType      byte    represents the type of packet
      * @param data
@@ -316,6 +327,18 @@ public class NetworkManager {
         return packet;
     }
 
+    /**
+     * Constructs a Acknowledgement packet
+     * <p>
+     *     Uses {@link Packet#Packet(byte[] data) Packet()} to make a default packet, then adding/replacing custom elements.
+     *     Destination will be the source of the {@param packet} and the Data and Packet type will be set accordingly to our protocol implementation //TODO
+     *     Also the Protocol.Flags.ACK will be set and an empty data field will be supplied.
+     * </p>
+     * @param packet That packet that will be used to construct an acknowledgement (also that packet that will be acknowledged)
+     * @return the constructed packet
+     * @throws InvalidPacketException if a malformed packet is used for construction
+     */
+    //TODO Documenting especially in respect to Exception handling (correctly referring to our implementation) / Tim
     public Packet constructACK(Packet packet) throws InvalidPacketException {
         packet = new Packet(packet.toBytes());
         packet.setData(new byte[0]);

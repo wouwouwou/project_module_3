@@ -48,8 +48,9 @@ public class OutgoingPacketHandler extends PacketHandler {
                     }
 
                     for (FloatingPacket packet : floatingPacketMap.values()) {
-                        if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Protocol.MAX_RETRIES - packet.getRetries()) < System.currentTimeMillis()) {
-                            System.out.println(String.format("Resending packet %s, try: %s", packet.getSequenceNumber(), Protocol.MAX_RETRIES - packet.getRetries()));
+
+                        //If there are packets to be re-sent, do so. The timeout is exponential, this way slow networks can also keep up.
+                        if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Math.max(Protocol.MAX_RETRIES - packet.getRetries(), 5)) < System.currentTimeMillis()) {
                             this.send(packet);
                             packet.setSentOn(System.currentTimeMillis());
                         }
@@ -178,6 +179,14 @@ public class OutgoingPacketHandler extends PacketHandler {
         return this.lastPingSend;
     }
 
+    /**
+     * Schedules a packet for a resent
+     * <p>
+     *     Makes a new floating packet if necessary. Adding it to the floatingPacketMap if there are {@link FloatingPacket#retries resents left} for the packet
+     * </p>
+     * @param packet That must be resent
+     * @see FloatingPacket
+     */
     private void scheduleForResend(Packet packet) {
         boolean resend = true;
         FloatingPacket floatingPacket = null;

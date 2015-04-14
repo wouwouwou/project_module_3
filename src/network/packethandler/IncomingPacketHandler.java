@@ -206,10 +206,11 @@ public class IncomingPacketHandler extends PacketHandler {
                     if(!isDuplicate(p)) {
                         notifyDataListeners(p);
                         lastPackets.add(p.getFloatingKey());
-                        if(lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE){
+                        if (lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE) {
                             lastPackets.remove(0);
                         }
                     }
+
 
                 } catch (InvalidPacketException e) {
                     e.printStackTrace();
