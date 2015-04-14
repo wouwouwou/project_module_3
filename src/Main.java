@@ -10,5 +10,6 @@ public class Main {
         NameDialog dialog = new NameDialog();
         dialog.pack();
         dialog.setVisible(true);
+        //test
     }
 }
