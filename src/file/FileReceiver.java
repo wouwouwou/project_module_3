@@ -76,7 +76,7 @@ public class FileReceiver {
      *
      * </p>
      * @param packet The packet that needs to be added to the list.
-     * @see 'https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit#gid=0' for further information about the protocol used for file transfer. (link should go to our protocol documentation.)
+     * @see <a href="../../Project%20files/Protocol_design.pdf">Protocol Design</a>
      */
     public void onReceive(Packet packet) {
         lock.lock();

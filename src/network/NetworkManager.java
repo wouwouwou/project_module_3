@@ -149,7 +149,7 @@ public class NetworkManager {
      *     If this destination does exist, it will be updated, as well as the connectedClients list (and the pings missed).
      * </p>
      * @param entry Entry to be put in the routingTable.
-     * @see <a href="https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit?usp=sharing">routingEntry</a>
+     * @see <a href="../../Project%20files/Protocol_design.pdf">Protocol Design</a>
      */
     public void putTableEntry(byte[] entry) {
         synchronized(routingTable) {
@@ -427,7 +427,7 @@ public class NetworkManager {
      * Increases the pings missed in the connectedClients map
      * <p>
      *     Increases the pings missed on every entry in the connectedClients Map and resets DVR if changes have occurred.
-     *     Method will mostly be called on every #Protocol.PING_INTERVAL to increase the pings missed
+     *     Method will mostly be called on every {@link Protocol#PING_INTERVAL ping interval} to increase the pings missed
      *     Every time a ping comes in or a new discovery packet comes in, the pings missed for that client will be reset.
      * </p>
      * @see Protocol#PING_INTERVAL
