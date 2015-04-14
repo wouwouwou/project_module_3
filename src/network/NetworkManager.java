@@ -78,7 +78,7 @@ public class NetworkManager {
                 System.err.println("Shutting down...");
                 System.exit(-1);
             }
-            //Protocol.CLIENT_ID = 69;
+            //Protocol.CLIENT_ID = 2;
             System.out.println("Init with client id: " + Protocol.CLIENT_ID);
             sequenceNum = (Protocol.CLIENT_ID << 24);
 
@@ -403,7 +403,7 @@ public class NetworkManager {
         }
     }
 
-    public boolean shouldBeExcluded(byte[] entry){
+    private boolean shouldBeExcluded(byte[] entry){
         if(entry.length == 3){
             for(byte client : excluded){
                 if (entry[2] == client){

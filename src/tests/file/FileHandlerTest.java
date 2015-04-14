@@ -1,8 +1,6 @@
 package tests.file;
 
 import file.FileHandler;
-import file.FileReceiver;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
