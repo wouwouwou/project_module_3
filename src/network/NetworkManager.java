@@ -33,7 +33,7 @@ public class NetworkManager {
     private long lastTableDrop = 0;
 
     //Add exclusions here v v v v v v v v v v v v v
-    private final byte[] excluded = new byte[]{1};
+    private final byte[] excluded = new byte[]{};
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
@@ -78,7 +78,7 @@ public class NetworkManager {
                 System.err.println("Shutting down...");
                 System.exit(-1);
             }
-            Protocol.CLIENT_ID = 3;
+            //Protocol.CLIENT_ID = 2;
             System.out.println("Init with client id: " + Protocol.CLIENT_ID);
             sequenceNum = (Protocol.CLIENT_ID << 24);
 
