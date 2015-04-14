@@ -1,7 +1,5 @@
 package tests.network.packet;
 
-import exceptions.network.InvalidPacketException;
-import exceptions.network.packet.InvalidCommunicationHeaderLengthException;
 import network.Protocol;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +19,11 @@ public class PacketTest {
     @Before
     public void setUp() throws Exception {
         packet1 = new Packet();
+        packet2 = new Packet(packet1.toBytes());
     }
 
     @Test
     public void testExtraConstructor() throws Exception {
-        packet2 = new Packet(packet1.toBytes());
         assert (packet2.getData().length == 0);
         assert (packet2.getDataType() == 0);
         assert (packet2.getDestination() == 0);
