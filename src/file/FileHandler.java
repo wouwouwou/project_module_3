@@ -111,7 +111,7 @@ public class FileHandler {
      * @param filename
      * @return
      */
-    public boolean createDir(File filename){
+    private boolean createDir(File filename){
         return (filename.exists() || (!filename.exists() && filename.mkdir()));
     }
 
@@ -189,7 +189,7 @@ public class FileHandler {
      * @param b The byte array
      * @return int The integer representation of the byte
      */
-    public static int byteArrayToInt(byte[] b)
+    private static int byteArrayToInt(byte[] b)
     {
         int value = 0;
         for (int i = 0; i < 4; i++) {

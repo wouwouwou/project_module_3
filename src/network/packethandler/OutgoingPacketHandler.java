@@ -22,7 +22,7 @@ public class OutgoingPacketHandler extends PacketHandler {
 
     // -----<=>-----< Fields >-----<=>----- \\
     private final ConcurrentHashMap<List<Byte>, FloatingPacket> floatingPacketMap = new ConcurrentHashMap<>();
-    private NetworkManager networkManager;
+    private final NetworkManager networkManager;
     private long lastPingSend = 0;
     private final ArrayList<Packet> filePacketBuffer = new ArrayList<>();
 
@@ -155,6 +155,14 @@ public class OutgoingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Handles an Acknowledgement packet
+     * <p>
+     *     Finds the floating packet that has been acknowledged and
+     * </p>
+     * @param ackPacket
+     * @return
+     */
     //TODO Structure change? | Woeter Roeter
     public Packet handleACK(Packet ackPacket){
         if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
@@ -169,7 +177,7 @@ public class OutgoingPacketHandler extends PacketHandler {
         return this.lastPingSend;
     }
 
-    public void scheduleForResend(Packet packet) {
+    private void scheduleForResend(Packet packet) {
         boolean resend = true;
         FloatingPacket floatingPacket = null;
 

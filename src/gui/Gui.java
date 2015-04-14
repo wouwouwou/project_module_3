@@ -201,7 +201,7 @@ public class Gui extends JFrame {
     /**
      * Adds an action listener to the <code>sendButton</code>. The message will be send if this button is pressed.
      */
-    public void sendMessageButtonActionListener(){
+    private void sendMessageButtonActionListener(){
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -213,7 +213,7 @@ public class Gui extends JFrame {
     /**
      * Add an action listener to <code>list1</code>. Update the messageList if an other index has been selected.
      */
-    public void clientListActionListener(){
+    private void clientListActionListener(){
         list1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
@@ -228,7 +228,7 @@ public class Gui extends JFrame {
     /**
      * Add an action listener to <code>fileButton</code>. Show a dialog if the button is pressed.
      */
-    public void fileButtonActionListener(){
+    private void fileButtonActionListener(){
         fileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
