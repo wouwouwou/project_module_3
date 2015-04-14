@@ -10,9 +10,17 @@ Not the room and space or computers to test this entire network? You can run thi
 ```
   private final byte[] excluded = new byte[]{};
 ```  
+to
+```
+  private final byte[] excluded = new byte[]{1, 2, X};
+``` 
 You can manually set the computer id by uncommenting and changing the number of the following line in network/NetworkManager.java:
 ```
-  //Protocol.CLIENT_ID = 4;
+  //Protocol.CLIENT_ID = X;
+```
+to
+```
+  Protocol.CLIENT_ID = X;
 ```
 
 
