@@ -110,7 +110,7 @@ public class PacketTest {
 
     @Test
     public void testGetFloatingKey() throws Exception {
-        packet1.setSource((byte)10);
+        packet1.setSource((byte) 10);
         packet1.setDestination((byte)20);
 
         packet1.setFlags((byte) 2);
@@ -131,5 +131,4 @@ public class PacketTest {
         assert (result.get(3) == 0);
         assert (result.get(4) == 20);
     }
-
 }

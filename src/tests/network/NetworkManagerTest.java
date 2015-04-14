@@ -194,16 +194,10 @@ public class NetworkManagerTest {
     }
 
     @Test
-    public void testSetDiscoverySequenceNum() throws Exception {
+    public void testDiscoverySequenceNum() throws Exception {
         short a = 20;
         manager.setDiscoverySequenceNum(a);
         assert (manager.getDiscoverySequenceNum() == a);
-    }
-
-    @Test
-    public void testGetDiscoverySequenceNum() throws Exception {
-        short a = manager.getDiscoverySequenceNum();
-        assert (a == 0);
     }
 
     @Test
