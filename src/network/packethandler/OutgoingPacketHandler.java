@@ -49,7 +49,6 @@ public class OutgoingPacketHandler extends PacketHandler {
 
                     for (FloatingPacket packet : floatingPacketMap.values()) {
                         if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Protocol.MAX_RETRIES - packet.getRetries()) < System.currentTimeMillis()) {
-                            System.out.println(String.format("Resending packet %s, try: %s", packet.getSequenceNumber(), Protocol.MAX_RETRIES - packet.getRetries()));
                             this.send(packet);
                             packet.setSentOn(System.currentTimeMillis());
                         }

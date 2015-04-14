@@ -38,7 +38,7 @@ public class Protocol {
     //Payload and buffer size
     public static final int RECEIVE_BUFFER_BYTES_SIZE = 2048;
     public static final int MAX_COMMUNICATION_PAYLOAD_SIZE = RECEIVE_BUFFER_BYTES_SIZE - COMMUNICATION_HEADER_LENGTH;
-    public static final byte MAX_RETRIES = 8;
+    public static final byte MAX_RETRIES = 15;
     public static final Byte MAX_MISSED_PINGROUNDS = 4;
 
 

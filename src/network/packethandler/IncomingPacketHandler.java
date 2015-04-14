@@ -206,11 +206,9 @@ public class IncomingPacketHandler extends PacketHandler {
                     if(!isDuplicate(p)) {
                         notifyDataListeners(p);
                         lastPackets.add(p.getFloatingKey());
-                        if(lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE){
+                        if (lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE) {
                             lastPackets.remove(0);
                         }
-                    } else {
-                        System.out.println("Duplicate ACK sent for packet " + p.getSequenceNumber());
                     }
 
                 } catch (InvalidPacketException e) {
