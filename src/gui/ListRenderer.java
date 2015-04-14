@@ -12,9 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * Generates a ListCell based on a JLabel for use in an JList.
  * @author Tistan de Boer
  * @since 7-4-15
- * Generates a ListCell based on a JLabel for use in an JList.
  */
 public class ListRenderer extends JLabel implements ListCellRenderer {
 

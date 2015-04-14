@@ -1,9 +1,9 @@
 package gui.controller;
 
 /**
+ * The interface Message, used by some XXMessages that are send by the network-layer.
  * @author Tistan de Boer
  * @since 7-4-15
- * The interface Message, used by some XXMessages that are send by the network-layer.
  */
 interface Message {
 

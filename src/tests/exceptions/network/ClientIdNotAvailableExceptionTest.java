@@ -5,9 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Unit test for exceptions.network.packet.NullPacketException
  * @author Wouter Bos
  * @since 10-4-15
- * Unit test for exceptions.network.packet.NullPacketException
  */
 public class ClientIdNotAvailableExceptionTest {
 

@@ -1,9 +1,9 @@
 package network;
 
 /**
+ * Holds constants used in the Protocol and network.
  * @author Tim Hintzbergen
  * @since 7-4-15
- * Holds constants used in the Protocol and network.
  * @see Protocol Documentation.
  */
 public class Protocol {

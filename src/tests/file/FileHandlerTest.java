@@ -6,12 +6,12 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * @author Tristan de Boer
- * @since 8-4-15
  * Tests whether a certain file can be split up to a certain packet size.
  * Headers will be added. After that, we check that packets can be rejoined to a file.
  *
  * NB: This test has not been made for the JUnit4 framework. Should be tested separately.
+ * @author Tristan de Boer
+ * @since 8-4-15
  */
 public class FileHandlerTest {
 

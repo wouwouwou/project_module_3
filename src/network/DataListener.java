@@ -3,9 +3,9 @@ package network;
 import network.packet.Packet;
 
 /**
+ * Interface for a DataListener
  * @author Gerben Meijer
  * @since 7-4-15
- * Interface for a DataListener
  */
 public interface DataListener {
 

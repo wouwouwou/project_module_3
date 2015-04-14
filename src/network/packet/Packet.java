@@ -8,9 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Represents a packet for easy construction and reading.
  * @author Tim Hintzbergen
  * @since 7-4-15
- * Represents a packet for easy construction and reading.
  * @see Protocol documentation for further details on our protocol.
  */
 public class Packet {

@@ -11,9 +11,9 @@ import java.net.InetAddress;
 import java.util.Arrays;
 
 /**
+ * Unit test for network.NetworkManager
  * @author Wouter Bos
  * @since 8-4-15
- * Unit test for network.NetworkManager
  */
 public class NetworkManagerTest {
 

@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Handles all incoming packets.
  * @author Gerben Meijer
  * @since 7-4-15.
- * Handles all incoming packets.
  */
 public class IncomingPacketHandler extends PacketHandler {
 
@@ -59,7 +59,7 @@ public class IncomingPacketHandler extends PacketHandler {
      * Adds an AckListener to the list of AckListeners.
      * @param listener The AckListener to be added.
      */
-    public void addAckListener(AckListener listener){
+    public void addAckListener(AckListener listener) {
         ackListeners.add(listener);
     }
 
