@@ -11,12 +11,13 @@ import java.net.InetAddress;
 import java.util.Arrays;
 
 /**
- * Unit test for network.NetworkManager
  * @author Wouter Bos
  * @since 8-4-15
+ * Unit test for network.NetworkManager
  */
 public class NetworkManagerTest {
 
+    // -----<=>-----< Fields >-----<=>----- \\
     private final static String NAME = "eennaam";
     private NetworkManager manager;
 
@@ -25,6 +26,10 @@ public class NetworkManagerTest {
         manager = new NetworkManager(NAME);
     }
 
+    /**
+     * Tests the getTableEntryByDestination() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetTableEntryByDestination() throws Exception {
         byte[] entry = manager.getTableEntryByDestination((byte) Protocol.CLIENT_ID);
@@ -42,6 +47,10 @@ public class NetworkManagerTest {
         assert (manager.getTableEntryByDestination((byte) 12) == null);
     }
 
+    /**
+     * Tests the getTableIndexByDestination() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetTableIndexByDestination() throws Exception {
         int entry = manager.getTableIndexByDestination((byte) Protocol.CLIENT_ID);
@@ -53,6 +62,10 @@ public class NetworkManagerTest {
         assert (manager.getTableIndexByDestination((byte) 12) == -1);
     }
 
+    /**
+     * Tests the putTableEntry() method
+     * @throws Exception When the entry has not been put in the routingtable properly.
+     */
     @Test
     public void testPutTableEntry() throws Exception {
         byte[] entry = {8, 4, 8};
@@ -106,6 +119,10 @@ public class NetworkManagerTest {
         assert (manager.getTableEntryByDestination((byte)12) == null);
     }
 
+    /**
+     * Tests the dropTable() method
+     * @throws Exception When the table is not beïng dropped properly.
+     */
     @Test
     public void testDropTable() throws Exception {
         byte[] entry = {8, 4, 8};
@@ -155,6 +172,10 @@ public class NetworkManagerTest {
         assert (manager.getTableEntryByDestination((byte)12) == null);
     }
 
+    /**
+     * Tests the nextSequenceNum() method
+     * @throws Exception When the sequencenumber won't ++
+     */
     @Test
     public void testNextSequenceNum() throws Exception {
         int a = manager.nextSequenceNum();
@@ -168,6 +189,10 @@ public class NetworkManagerTest {
         assert (a == b + 1);
     }
 
+    /**
+     * Tests the getLastTableDrop() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetLastTableDrop() throws Exception {
         long first = manager.getLastTableDrop();
@@ -180,18 +205,30 @@ public class NetworkManagerTest {
         assert (first <= second && second <= third && third <= fourth);
     }
 
+    /**
+     * Tests the getIncomingPacketHandler() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetIncomingPacketHandler() throws Exception {
         IncomingPacketHandler handler = manager.getIncomingPacketHandler();
         assert (handler != null);
     }
 
+    /**
+     * Tests the getGroup() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetGroup() throws Exception {
         InetAddress address = manager.getGroup();
         assert(address.getHostName().equals(Protocol.GROUP_ADDRESS));
     }
 
+    /**
+     * Tests the discoverySequenceNum() method
+     * @throws Exception When the getter or the setter does not work.
+     */
     @Test
     public void testDiscoverySequenceNum() throws Exception {
         short a = 20;
@@ -199,12 +236,20 @@ public class NetworkManagerTest {
         assert (manager.getDiscoverySequenceNum() == a);
     }
 
+    /**
+     * Tests the getRoutingTable() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetRoutingTable() throws Exception {
         Object[] routingtable = manager.getRoutingTable();
         assert (routingtable.length > 0);
     }
 
+    /**
+     * Tests the constructPacket() method
+     * @throws Exception When the packet is not beïng constructed properly.
+     */
     @Test
     public void testConstructPacket() throws Exception {
         byte[] data = {7, 8, 9};
@@ -219,6 +264,10 @@ public class NetworkManagerTest {
         assert (packet.getFlags() == Protocol.Flags.DATA);
     }
 
+    /**
+     * Tests the constructACK() method
+     * @throws Exception When the ACK is not beïng constructed properly.
+     */
     @Test
     public void testConstructACK() throws Exception {
         byte[] data = {7, 8, 9};
@@ -234,12 +283,20 @@ public class NetworkManagerTest {
         assert (ack.getFlags() == Protocol.Flags.ACK);
     }
 
+    /**
+     * Tests the getOutGoingPacketHandler() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetOutgoingPacketHandler() throws Exception {
         OutgoingPacketHandler handler = manager.getOutgoingPacketHandler();
         assert (handler != null);
     }
 
+    /**
+     * Tests the getTableEntryByDestination() method
+     * @throws Exception When the ping is not beïng constructed properly.
+     */
     @Test
     public void testConstructPing() {
         Packet ping = manager.constructPing();
@@ -251,11 +308,19 @@ public class NetworkManagerTest {
         assert (ping.getFlags() == Protocol.Flags.DATA);
     }
 
+    /**
+     * Tests the getClientName() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetClientName() {
         assert (manager.getClientName().equals(NAME));
     }
 
+    /**
+     * Tests the getSocket() method
+     * @throws Exception When the getter does not work.
+     */
     @Test
     public void testGetSocket() {
         assert (manager.getSocket() != null);
