@@ -50,7 +50,7 @@ public class OutgoingPacketHandler extends PacketHandler {
                     for (FloatingPacket packet : floatingPacketMap.values()) {
 
                         //If there are packets to be re-sent, do so. The timeout is exponential, this way slow networks can also keep up.
-                        if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Math.min(Protocol.MAX_RETRIES - packet.getRetries(), 5)) < System.currentTimeMillis()) {
+                        if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Math.max(Protocol.MAX_RETRIES - packet.getRetries(), 5)) < System.currentTimeMillis()) {
                             this.send(packet);
                             packet.setSentOn(System.currentTimeMillis());
                         }
@@ -113,10 +113,8 @@ public class OutgoingPacketHandler extends PacketHandler {
                 }
             }
         } else {
-            //TODO Synchronized might break because it is called from a synchronized block in run()
             synchronized (floatingPacketMap) {
                 try {
-                    //TODO: Zorgen dat routing sneller is.
                     if (packet.getDataType() == Protocol.DataType.FILE && !packet.hasFlag(Protocol.Flags.ACK) && packet.getSource() == Protocol.CLIENT_ID && floatingPacketMap.size() > Protocol.FILE_SEND_BUFFER_SIZE){
                         synchronized (filePacketBuffer) {
                             //ADD the file to a buffer.
@@ -165,7 +163,6 @@ public class OutgoingPacketHandler extends PacketHandler {
      * @param ackPacket
      * @return
      */
-    //TODO Structure change? | Woeter Roeter
     public Packet handleACK(Packet ackPacket){
         if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
             Packet original = floatingPacketMap.get(ackPacket.getFloatingKey());

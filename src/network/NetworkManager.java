@@ -317,7 +317,6 @@ public class NetworkManager {
      * @param dataType      byte    represents the type of packet
      * @param data
      * @return
-     * @throws IOException
      */
     public Packet constructPacket(byte destination, byte dataType, byte[] data) {
         Packet packet = new Packet();
@@ -335,7 +334,8 @@ public class NetworkManager {
      * Constructs a Acknowledgement packet
      * <p>
      *     Uses {@link Packet#Packet(byte[] data) Packet()} to make a default packet, then adding/replacing custom elements.
-     *     Destination will be the source of the {@param packet} and the Data and Packet type will be set accordingly to our protocol implementation //TODO
+     *     Destination will be the source of the {@param packet} and the Data and Packet type will be set accordingly to our protocol implementation
+     *     //TODO reference to our protocol implementation
      *     Also the Protocol.Flags.ACK will be set and an empty data field will be supplied.
      * </p>
      * @param packet That packet that will be used to construct an acknowledgement (also that packet that will be acknowledged)
