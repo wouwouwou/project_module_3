@@ -8,7 +8,7 @@ import gui.NameDialog;
 public class Main {
     public static void main (String[] args){
         NameDialog dialog = new NameDialog();
-        //dialog.pack();
+        dialog.pack();
         dialog.setVisible(true);
     }
 }
