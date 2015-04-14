@@ -34,14 +34,13 @@ public class Packet {
     public Packet() {}
 
     /**
-     * Constructs a (Packet) from a (byte[])
+     * Constructs a Packet from a byte[]
      * <p>
-     *     This constructor will assign bytes from the byte[] to fields of the new Packet object.
-     *     An InvalidPacketException is thrown and caught if the packet doesn't fulfill the requirements of our protocol.
+     *     This constructor will assign bytes from the byte[] to fields of the newly initialized Packet object.
+     *     An InvalidPacketException is thrown and caught if the packet doesn't fulfill the requirements of <a href="../../../Project_files/Protocol_design.pdf">our protocol</a>.
      * </p>
      * @param packet byte[] Data to be constructed into a packet
      */
-    //TODO Documenting especially in respect to Exception handling (correctly referring to our implementation) / Woeter
     public Packet(byte[] packet) throws InvalidPacketException {
         if (packet.length < Protocol.COMMUNICATION_HEADER_LENGTH) {
             throw new InvalidCommunicationHeaderLengthException();
