@@ -298,7 +298,7 @@ public class NetworkManagerTest {
      * @throws Exception When the ping is not beïng constructed properly.
      */
     @Test
-    public void testConstructPing() {
+    public void testConstructPing() throws Exception {
         Packet ping = manager.constructPing();
         assert (ping.getDataType() == Protocol.DataType.PING);
         assert (Arrays.equals(ping.getData(), manager.getClientName().getBytes()));
@@ -313,7 +313,7 @@ public class NetworkManagerTest {
      * @throws Exception When the getter does not work.
      */
     @Test
-    public void testGetClientName() {
+    public void testGetClientName() throws Exception{
         assert (manager.getClientName().equals(NAME));
     }
 
@@ -322,7 +322,7 @@ public class NetworkManagerTest {
      * @throws Exception When the getter does not work.
      */
     @Test
-    public void testGetSocket() {
+    public void testGetSocket() throws Exception {
         assert (manager.getSocket() != null);
     }
 }

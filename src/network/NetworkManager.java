@@ -147,7 +147,7 @@ public class NetworkManager {
      * <p>
      *     This method adds or sets the given entry to the routingTable
      *     If this destination does not exist yet, it will be added
-     *     If this destination does exist, it will be updated. Aswell as the connectedClients list (and the pings missed).
+     *     If this destination does exist, it will be updated, as well as the connectedClients list (and the pings missed).
      * </p>
      * @param entry Entry to be put in the routingTable.
      * @see <a href="https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit?usp=sharing">routingEntry</a>
@@ -359,7 +359,7 @@ public class NetworkManager {
      * Constructs a Acknowledgement packet
      * <p>
      *     Uses {@link Packet#Packet(byte[] data) Packet()} to make a default packet, then adding/replacing custom elements.
-     *     Destination will be the source of the {@param packet} and the Data and Packet type will be set accordingly to our <a href="../../../Project_files/Protocol_design.pdf">protocol design</a>
+     *     Destination will be the source of the packet parameter and the Data and Packet type will be set accordingly to our <a href="../../../Project_files/Protocol_design.pdf">protocol design</a>
      *     Also the <a href="../../../Project_files/Protocol_design.pdf">Ack flag</a> will be set and an empty data field will be supplied.
      * </p>
      * @param packet That packet that will be used to construct an acknowledgement (also that packet that will be acknowledged)
@@ -427,7 +427,7 @@ public class NetworkManager {
     /**
      * Increases the pings missed in the connectedClients map
      * <p>
-     *     Increases the pings missed on every entry in the connectedClients Map and resets DVR if changes have occured.
+     *     Increases the pings missed on every entry in the connectedClients Map and resets DVR if changes have occurred.
      *     Method will mostly be called on every #Protocol.PING_INTERVAL to increase the pings missed
      *     Every time a ping comes in or a new discovery packet comes in, the pings missed for that client will be reset.
      * </p>

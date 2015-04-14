@@ -63,7 +63,7 @@ public class FileHandler {
     /**
      *  Removes the headers from an List of byte-arrays and returns this list.
      *  @param headerArray A list of byte-arrays with headers.
-     *  @return The list withoud headers.
+     *  @return The list without headers.
      */
     public List<byte[]> removeHeaders(List<byte[]> headerArray){
         List<byte[]> result = new ArrayList<>();

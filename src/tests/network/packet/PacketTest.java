@@ -22,6 +22,10 @@ public class PacketTest {
         packet2 = new Packet(packet1.toBytes());
     }
 
+    /**
+     * Tests the extra constructor of the Packet Class.
+     * @throws Exception If the constructor does not work properly.
+     */
     @Test
     public void testExtraConstructor() throws Exception {
         assert (packet2.getData().length == 0);
@@ -34,6 +38,10 @@ public class PacketTest {
         assert (packet2.getType() == Protocol.COMMUNICATION_PACKET);
     }
 
+    /**
+     * Tests getters of the Packet Class.
+     * @throws Exception If the getters do not work properly.
+     */
     @Test
     public void testGetters() throws Exception {
         assert (packet1.getData().length == 0);
@@ -46,6 +54,10 @@ public class PacketTest {
         assert (packet1.getType() == Protocol.COMMUNICATION_PACKET);
     }
 
+    /**
+     * Tests setters of the Packet Class.
+     * @throws Exception If the setters do not work properly.
+     */
     @Test
     public void testSetters() throws Exception {
         byte[] data = new byte[1];
@@ -76,6 +88,10 @@ public class PacketTest {
         assert (packet1.getType() == Protocol.DISCOVERY_PACKET);
     }
 
+    /**
+     * Tests toBytes() method of the Packet Class.
+     * @throws Exception If the method do not work properly.
+     */
     @Test
     public void testToBytes() throws Exception {
         byte[] data = new byte[1];
@@ -106,6 +122,10 @@ public class PacketTest {
         assert (packetInBytes[12] == 8);
     }
 
+    /**
+     * Tests getSequenceBytes() method of the Packet Class.
+     * @throws Exception If the method do not work properly.
+     */
     @Test
     public void testGetSequenceBytes() throws Exception {
         packet1.setSequenceNumber(5);
@@ -121,6 +141,10 @@ public class PacketTest {
         assert (result[3] == -128);
     }
 
+    /**
+     * Tests getFloatingKey() method of the Packet Class.
+     * @throws Exception If the method do not work properly.
+     */
     @Test
     public void testGetFloatingKey() throws Exception {
         packet1.setSource((byte) 10);
