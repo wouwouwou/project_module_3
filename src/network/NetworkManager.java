@@ -32,6 +32,9 @@ public class NetworkManager {
     private int sequenceNum;
     private long lastTableDrop = 0;
 
+    //Add exclusions here v v v v v v v v v v v v v
+    private final byte[] excluded = new byte[]{};
+
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
@@ -98,6 +101,7 @@ public class NetworkManager {
             e.printStackTrace();
         }
     }
+
 
     // -----<=>-----< Methods >-----<=>----- \\
     /**
@@ -399,5 +403,17 @@ public class NetworkManager {
                 sendTable();
                 connectedClients.remove(key); }
         }
+    }
+
+    public boolean shouldBeExcluded(byte[] entry){
+        if(entry.length == 3){
+            for(byte client : excluded){
+                if (entry[2] == client){
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
     }
 }
