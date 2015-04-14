@@ -10,7 +10,8 @@ import network.Protocol;
  * <p>
  *     Thrown when a packet is not at least the length of the header. This is therefore a faulty packet
  * </p>
- * @see //TODO reference to our protocol implementation
+ * @see <a href="../../../Project_files/Protocol_design.pdf">Protocol Design</a>
+ * @see {@link Protocol#COMMUNICATION_HEADER_LENGTH Header length constant}
  */
 public class InvalidCommunicationHeaderLengthException extends InvalidPacketException {
 

@@ -24,12 +24,10 @@ public class FloatingPacket extends Packet {
 
     // -----<=>-----< Constructors >-----<=>----- \\
     /**
-     * Constructing a floating packet from a (byte[])
+     * Constructing a floating packet from a byte[]
      * @param data byte[]
-     * @throws InvalidPacketException from super constructor
-     * @see network.packet.Packet#Packet(byte[])
+     * @throws InvalidPacketException from {@link Packet#Packet(byte[]) the super constructor}
      */
-    //TODO Documenting especially in respect to Exception handling (correctly referring to our implementation) / Woeter
     public FloatingPacket(byte[] data) throws InvalidPacketException {
         super(data);
         this.retries = Protocol.MAX_RETRIES;
