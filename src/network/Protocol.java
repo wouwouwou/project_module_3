@@ -22,7 +22,7 @@ public class Protocol {
     /**
      * This is the Timeout before a packet is resent.
      */
-    public static final int TIMEOUT = 1100;
+    public static final int TIMEOUT = 500;
 
     public static final int COMMUNICATION_HEADER_LENGTH = 12;
     public static final int DISCOVERY_HEADER_LENGTH = 4;
