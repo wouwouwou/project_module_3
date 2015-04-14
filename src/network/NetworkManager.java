@@ -153,7 +153,7 @@ public class NetworkManager {
      */
     public void putTableEntry(byte[] entry) {
         synchronized(routingTable) {
-            if (entry.length == 3) {
+            if (entry.length == 3 && !shouldBeExcluded(entry)) {
                 int index = getTableIndexByDestination(entry[0]);
                 if (index != -1) {
                     routingTable.set(index, entry[0]);
