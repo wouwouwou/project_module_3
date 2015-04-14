@@ -50,7 +50,7 @@ public class OutgoingPacketHandler extends PacketHandler {
                     for (FloatingPacket packet : floatingPacketMap.values()) {
 
                         //If there are packets to be re-sent, do so. The timeout is exponential, this way slow networks can also keep up.
-                        if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Math.max(Protocol.MAX_RETRIES - packet.getRetries(), 5)) < System.currentTimeMillis()) {
+                        if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Math.min(Protocol.MAX_RETRIES - packet.getRetries(), 5)) < System.currentTimeMillis()) {
                             this.send(packet);
                             packet.setSentOn(System.currentTimeMillis());
                         }
