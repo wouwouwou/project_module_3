@@ -20,7 +20,7 @@ public class FileReceiver {
 
     // -----<=>-----< Fields >-----<=>----- \\
     /**
-     * The controller used to control the GUI and messagerelated stuff.
+     * The controller used to control the GUI and message-related stuff.
      */
     private final MessageController messageController;
     /**
@@ -40,7 +40,7 @@ public class FileReceiver {
     // -----<=>-----< Constructor(s) >-----<=>----- \\
 
     /**
-     * New FileReceiver class
+     * FileReceiver Constructor
      * @param messageController The controller that controls messages.
      * @param isAck If is true, this class is only used to check the progress of a file transfer (used with ACK's).
      */
@@ -67,17 +67,16 @@ public class FileReceiver {
      *
      *     If <code>isAck != true</code>, a new file will be made. First, all headers of the data packets will be removed. After that, the last packet,
      *     containing the file name, will be removed from the list.
-     *     All bytes arrays that are left will be added together as a new (giant!) bytearray. This bytearray will be written
+     *     All bytes arrays that are left will be added together as a new (giant!) byte-array. This byte-array will be written
      *     to a file, with the filename that was removed from the list.
      *
      *     A sound will be played if the file transfer is complete (and sound is enabled!).
      *
      *     After all of this, the lock will be unlocked.
      *
-     *
      * </p>
      * @param packet The packet that needs to be added to the list.
-     * @see https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit#gid=0 for further information about the protocol used for file transfer.
+     * @see 'https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit#gid=0' for further information about the protocol used for file transfer. (link should go to our protocol documentation.)
      */
     public void onReceive(Packet packet) {
         lock.lock();

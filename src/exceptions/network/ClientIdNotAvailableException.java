@@ -17,6 +17,10 @@ import network.NetworkManager;
  */
 public class ClientIdNotAvailableException extends NetworkException {
 
+    /**
+     * Overrides the getMessage() method with an own message.
+     * @return Message of the Exception
+     */
     @Override
     public String getMessage() {
         return "No Client ID found by NetworkManager.getClientId()";

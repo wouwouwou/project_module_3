@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Gerben Meijer
  * @since 7-4-15
+ * Class for handling with outgoing packets.
  */
 public class OutgoingPacketHandler extends PacketHandler {
 
@@ -28,6 +29,11 @@ public class OutgoingPacketHandler extends PacketHandler {
 
     
     // -----<=>-----< Constructor(s) >-----<=>----- \\
+    /**
+     * Constructs a new OutgoingPacketHandler.
+     * The OutgoingPacketHandler is then started in a new Thread.
+     * @param networkManager The related NetworkManager.
+     */
     public OutgoingPacketHandler(NetworkManager networkManager){
         super(networkManager);
         this.networkManager = networkManager;
@@ -35,6 +41,10 @@ public class OutgoingPacketHandler extends PacketHandler {
 
 
     // -----<=>-----< Queries & Methods >-----<=>----- \\
+    /**
+     * A large method. It sends packets and also keeps track of packets
+     * which have to be resend.
+     */
     @Override
     public void run() {
         while (true) {
@@ -81,10 +91,7 @@ public class OutgoingPacketHandler extends PacketHandler {
                 lastPingSend = System.currentTimeMillis();
                 networkManager.increasePingRound();
             }
-
-
         }
-
     }
 
     /**
@@ -95,7 +102,6 @@ public class OutgoingPacketHandler extends PacketHandler {
      * </p>
      * @param packet Packet the packet that will be broadcasted to the multicast network
      */
-
     public void send(Packet packet) {
         InetAddress group = networkManager.getGroup();
         if (packet.getDestination() == 0) {
@@ -158,10 +164,11 @@ public class OutgoingPacketHandler extends PacketHandler {
     /**
      * Handles an Acknowledgement packet
      * <p>
-     *     Finds the floating packet that has been acknowledged and
+     *     Finds the floating packet that has been acknowledged and removes it from the map.
+     *     Then the packet does not get resend again, and again, and again, and again....
      * </p>
-     * @param ackPacket
-     * @return
+     * @param ackPacket The packet to be removed
+     * @return The original packet linked to this ACK.
      */
     public Packet handleACK(Packet ackPacket){
         if(floatingPacketMap.containsKey(ackPacket.getFloatingKey())){
@@ -172,6 +179,10 @@ public class OutgoingPacketHandler extends PacketHandler {
         return null;
     }
 
+    /**
+     * Gets the time when the last ping packet has been send as a long and in millis.
+     * @return Time of the last ping.
+     */
     public long getLastPingSend() {
         return this.lastPingSend;
     }
@@ -181,7 +192,7 @@ public class OutgoingPacketHandler extends PacketHandler {
      * <p>
      *     Makes a new floating packet if necessary. Adding it to the floatingPacketMap if there are {@link FloatingPacket#retries resents left} for the packet
      * </p>
-     * @param packet That must be resent
+     * @param packet The packet that must be resend.
      * @see FloatingPacket
      */
     private void scheduleForResend(Packet packet) {

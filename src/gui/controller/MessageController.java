@@ -57,7 +57,8 @@ public class MessageController implements DataListener, AckListener{
     private final FileReceiver fileAcker;
 
     /**
-     * The Model that is used to store all chats (in <code>HashMap</code>. DefaultListModel is used because it can be used to easily populate a JList.
+     * The Model that is used to store all chats (in <code>HashMap</code>. DefaultListModel
+     * is used because it can be used to easily populate a JList.
      */
     private final HashMap<Integer, DefaultListModel<ChatMessage>> chatModel = new HashMap<>();
 
@@ -82,8 +83,8 @@ public class MessageController implements DataListener, AckListener{
     /**
      *  Creates a new GUI that is linked to field <code>gui</code>.
      *  <p>
-     *      Start a new <code>MessageController</code>, with a fileReceiver (a class that handles incoming datapackets),
-     *      fileAcker (a class that handles incoming ACK's of sent datapackets), a <code>Gui</code>, a <code>networkManager</code>.
+     *      Start a new <code>MessageController</code>, with a fileReceiver (a class that handles incoming data-packets),
+     *      fileAcker (a class that handles incoming ACK's of sent data-packets), a <code>Gui</code>, a <code>networkManager</code>.
      *      It also adds an AckListener and a DataListener to the <code>FileReceiver</code>.
      *  </p>
      *  @param networkManager The networkmanager that can be called.
@@ -106,7 +107,8 @@ public class MessageController implements DataListener, AckListener{
 
     // -----<=>-----< Actions that can be called >-----<=>----- \\
     /**
-     * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>. Sends the message to it's own listener and to the NetworkLayer.
+     * Sends a message to recipient <code>currentView</code> with message <code>messageField.getText()</code>.
+     * Sends the message to it's own listener and to the NetworkLayer.
      */
     public void sendMessage() {
         if(!gui.getMessageField().getText().equals("")) {
@@ -211,11 +213,11 @@ public class MessageController implements DataListener, AckListener{
     /**
      * Handles the file control. Splits up an packet and sends it to the NetworkManager as a packet.
      * <p>
-     *     This thread opens a file and splits it to bytearrays of a certain length. Headers are added to the byte arrays
-     *     (see https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit#gid=0).
-     *     Packets are generated with that bytearrays and these packets are sent to the networkManager.
+     *     This thread opens a file and splits it to byte-arrays of a certain length. Headers are added to the byte arrays
+     *     Packets are generated with that byte-arrays and these packets are sent to the networkManager.
      * </p>
-     * @param path The path of the file that needs to be send
+     * @param path The path of the file that needs to be send.
+     * @see 'https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit#gid=0' Our protocol documentation.
      */
     public void sendFile(final Path path){
         new Thread(

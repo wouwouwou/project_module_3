@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * @author Gerben Meijer
  * @since 7-4-15.
+ * Handles all incoming packets.
  */
 public class IncomingPacketHandler extends PacketHandler {
 
@@ -28,9 +29,10 @@ public class IncomingPacketHandler extends PacketHandler {
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
-     * Constructs a new IncomingPacketHandler, this is done by the NetworkHandler.
+     * Constructs a new IncomingPacketHandler, which is done by the NetworkHandler.
      * The IncomingPacketHandler is then started in a new Thread
-     * @param buffersize
+     * @param buffersize The accepted buffersize of the incoming packets.
+     * @param networkManager The related NetworkManager.
      */
     public IncomingPacketHandler(NetworkManager networkManager, int buffersize){
         super(networkManager);
@@ -43,40 +45,76 @@ public class IncomingPacketHandler extends PacketHandler {
 
 
     // -----<=>-----< Queries & Methods >-----<=>----- \\
+    /**
+     * Adds a DataListener to the list of DataListeners.
+     * @param listener The DataListener to be added.
+     */
     public void addDataListener(DataListener listener){
         if (!dataListeners.contains(listener)) {
             dataListeners.add(listener);
         }
     }
 
+    /**
+     * Adds an AckListener to the list of AckListeners.
+     * @param listener The AckListener to be added.
+     */
     public void addAckListener(AckListener listener){
         ackListeners.add(listener);
     }
 
+    /**
+     * Removes a DataListener from the list of DataListeners.
+     * @param listener The DataListener to be removed.
+     */
     public void removeDataListener(DataListener listener){
         dataListeners.remove(listener);
     }
 
+    /**
+     * Returns true if lastPackets contains the floating key of a packet.
+     * @param packet Packet to be checked.
+     * @return True if the floatingkey of the packet is in lastPackets.
+     */
     private boolean isDuplicate(Packet packet){
         return lastPackets.contains(packet.getFloatingKey());
     }
 
+    /**
+     * Removes an AckListener from the list of AckListeners.
+     * @param listener The AckListener to be removed.
+     */
     public void removeAckListener(AckListener listener){
         ackListeners.remove(listener);
     }
 
+    /**
+     * Gets the list of AckListeners.
+     * @return The list of AckListeners.
+     */
     public ArrayList<AckListener> getAckListeners() {
         return ackListeners;
     }
 
+    /**
+     * Gets the list of DataListeners.
+     * @return The list of DataListeners.
+     */
     public ArrayList<DataListener> getDataListeners(){
         return dataListeners;
     }
 
+    /**
+     * Gets the content of the buffer.
+     * @return The buffer.
+     */
     public byte[] getBuffer(){
         return buffer;
     }
 
+    /**
+     * Receives the packets and calls the method handle() when a packet has been received.
+     */
     @Override
     public void run() {
         DatagramPacket recv = new DatagramPacket(buffer, buffer.length);
@@ -162,7 +200,6 @@ public class IncomingPacketHandler extends PacketHandler {
                 networkManager.putTableEntry(new byte[]{packet[i], (byte) (packet[i + 1] + 1), packet[i + 2]});
             }
 
-
         } else if (seq == networkManager.getDiscoverySequenceNum()){
             //If this is just an addition to the existing table
 
@@ -178,16 +215,16 @@ public class IncomingPacketHandler extends PacketHandler {
 
             }
         }
-
         //Forward this packet if we have to
         if(forward){
             networkManager.sendTable();
         }
-
-
-
     }
 
+    /**
+     * Handles with a CommunicationPacket.
+     * @param packet The CommunicationPacket to be handled.
+     */
     private void handleCommunication(byte[] packet){
         if(packet[3] == Protocol.CLIENT_ID){
             if ((packet[8] & Protocol.Flags.DATA) != 0){
@@ -230,6 +267,10 @@ public class IncomingPacketHandler extends PacketHandler {
 
     }
 
+    /**
+     * Method to notify all DataListeners.
+     * @param packet Notify all DataListeners that a packet has been received.
+     */
     private void notifyDataListeners(Packet packet) {
         if(packet != null) {
             for (DataListener listener : dataListeners) {
@@ -238,6 +279,10 @@ public class IncomingPacketHandler extends PacketHandler {
         }
     }
 
+    /**
+     * Method to notify all AckListeners.
+     * @param packet Notify all AckListeners that an ACK-packet has been received.
+     */
     private void notifyAckListeners(Packet packet) {
         if(packet != null) {
             for (AckListener listener : ackListeners) {

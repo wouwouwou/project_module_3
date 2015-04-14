@@ -5,6 +5,7 @@ import network.packet.Packet;
 /**
  * @author Gerben Meijer
  * @since 8-4-15
+ * Interface for an AckListener.
  */
 public interface AckListener {
 

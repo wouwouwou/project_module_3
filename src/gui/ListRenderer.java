@@ -41,7 +41,7 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
 
     /**
      * Generates a new <code>ListRenderer</code>.
-     * @param id
+     * @param id Has a huge amount of SWAG!
      */
     public ListRenderer(int id){
         this.id = id;
@@ -55,15 +55,15 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
     /**
      * Generate a new <code>ListCell</code> for a <code>ChatMessage</code> or a <code>Client</code> with certain information.
      * <p>
-     *     <code>ChatMessage</code>: add a profileimage, senddate, and the message.
+     *     <code>ChatMessage</code>: add a profile-image, send-date, and the message.
      *     <code>Client</code>: add a last seen and a 'New Message' notification if the user has unread messages.
      * </p>
-     * @param jList
-     * @param o
-     * @param i
-     * @param b
-     * @param b1
-     * @return
+     * @param jList JList to be populated
+     * @param o Instance of ChatMessage or Client that can be used to get information for this ListCellRenderer.
+     * @param i Standard parameter when implementing ListCellRenderer. Nothing is done with it...
+     * @param b Standard parameter when implementing ListCellRenderer. Nothing is done with it...
+     * @param b1 Standard parameter when implementing ListCellRenderer. Nothing is done with it...
+     * @return A component ListCell in the form of a JLabel.
      */
     @Override
     public Component getListCellRendererComponent(JList jList, Object o, int i, boolean b, boolean b1) {
@@ -109,8 +109,8 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
 
     /**
      * Returns the 'last seen' as a string, rounded to seconds, minutes, hours, etc.
-     * @param date
-     * @return
+     * @param date Date to be converted into a String.
+     * @return String representation of the date parameter.
      */
     private String lastSeen(Date date){
         Date currentdate = new Date();
@@ -140,9 +140,9 @@ public class ListRenderer extends JLabel implements ListCellRenderer {
     }
 
     /**
-     * Return the profileimage of a user as a <code>ImageIcon</code> (with dimensions <code>NEW_WIDTH</code> and <code>NEW_HEIGHT</code>).
+     * Return the profile-image of a user as a <code>ImageIcon</code> (with dimensions <code>NEW_WIDTH</code> and <code>NEW_HEIGHT</code>).
      * @param entry The chatmessage, containing information about the user.
-     * @return ImageIcon
+     * @return A niche profile-image. :)
      */
     private ImageIcon getImage(ChatMessage entry){
         int imagesource;

@@ -4,6 +4,7 @@ package network;
  * @author Tim Hintzbergen
  * @since 7-4-15
  * Holds constants used in the Protocol and network.
+ * @see Protocol Documentation.
  */
 public class Protocol {
 
@@ -66,8 +67,8 @@ public class Protocol {
     // -----<=>-----< Queries >-----<=>----- \\
     /**
      * Correctly converts a (byte) to a (int), keeping respect to signed bytes in java.
-     * @param data byte
-     * @return int correctly converted data (byte) to (int)
+     * @param data byte to be converted.
+     * @return The correctly converted data (byte) to (int)
      */
     public static int fixSign(byte data){
         //Function to fix signed stuff.

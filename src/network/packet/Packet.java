@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * @author Tim Hintzbergen
  * @since 7-4-15
- * Represents a packet
- * Sets up a basic packet, for easy construction and reading
+ * Represents a packet for easy construction and reading.
+ * @see Protocol documentation for further details on our protocol.
  */
 public class Packet {
 
@@ -191,78 +191,155 @@ public class Packet {
     }
 
     // -----<=>-----< Setters & Getters >-----<=>----- \\
+    /**
+     * Gets the data of this packet as a byte[].
+     * @return The data of this packet.
+     */
     public byte[] getData() {
         return this.data;
     }
 
+    /**
+     * Sets the data of this packet.
+     * @param data The data to be set.
+     */
     public void setData(byte[] data) {
         this.data = data;
     }
 
+    /**
+     * Gets the sequence-number of this packet as a long.
+     * @return The sequence-number of this packet.
+     */
     public long getSequenceNumber() {
         return sequenceNumber;
     }
 
+    /**
+     * Sets the sequence-number of this packet.
+     * @param sequenceNumber The sequence-number to be set.
+     */
     public void setSequenceNumber(int sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
 
+    /**
+     * Gets the type of this packet as a byte.
+     * @return The type of this packet.
+     */
     public byte getType() {
         return type;
     }
 
+    /**
+     * Sets the type of this packet.
+     * @param type The type to be set.
+     */
     public void setType(byte type) {
         this.type = type;
     }
 
+    /**
+     * Gets the data-type of this packet as a byte.
+     * @return The data-type of this packet.
+     */
     public byte getDataType() {
         return dataType;
     }
 
+    /**
+     * Sets the data-type of this packet.
+     * @param dataType The data-type to be set.
+     */
     public void setDataType(byte dataType) {
         this.dataType = dataType;
     }
 
+    /**
+     * Gets the source of this packet as a byte.
+     * @return The source of this packet.
+     */
     public byte getSource() {
         return source;
     }
 
+    /**
+     * Sets the source of this packet.
+     * @param source The source to be set.
+     */
     public void setSource(byte source) {
         this.source = source;
     }
 
+    /**
+     * Gets the destination of this packet as a byte.
+     * @return The destination of this packet.
+     */
     public byte getDestination(){
         return destination;
     }
 
+    /**
+     * Sets the destination of this packet.
+     * @param destination The destination to be set.
+     */
     public void setDestination(byte destination) {
         this.destination = destination;
     }
 
+    /**
+     * Gets the flags of this packet as a byte.
+     * @return The flags of this packet.
+     */
     public byte getFlags() {
         return flags;
     }
 
+    /**
+     * Sets the flags of this packet.
+     * @param flags The flags to be set.
+     */
     public void setFlags(byte flags) {
         this.flags = flags;
     }
 
+    /**
+     * Adds a flag to this packet.
+     * @param flag The flag to be added.
+     */
     public void addFlag(byte flag){
         flags |= flag;
     }
 
+    /**
+     * Removes a flag from this packet.
+     * @param flag The flag to be removed.
+     */
     public void removeFlag(byte flag){
         flags &= ~flag;
     }
 
+    /**
+     * Checks if this packet contains a flag.
+     * @param flag The flag to be checked.
+     * @return True if this packet contains the flag to be checked.
+     */
     public boolean hasFlag(byte flag){
         return (flags & flag) != 0;
     }
 
+    /**
+     * Gets the next-hop of this packet as a byte.
+     * @return The next-hop of this packet.
+     */
     public byte getNextHop() {
         return nextHop;
     }
 
+    /**
+     * Sets the next-hop of this packet.
+     * @param nextHop The next-hop to be set.
+     */
     public void setNextHop(byte nextHop) {
         this.nextHop = nextHop;
     }

@@ -17,7 +17,7 @@ public class ChatMessage implements Message {
     private String message;
 
     /**
-     * The name of the sender of a chatmessage.
+     * The name of the sender of a chat-message.
      */
     private final String name;
 
