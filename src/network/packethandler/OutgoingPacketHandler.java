@@ -51,7 +51,6 @@ public class OutgoingPacketHandler extends PacketHandler {
 
                         //If there are packets to be re-sent, do so. The timeout is exponential, this way slow networks can also keep up.
                         if (packet.getSentOn() + Protocol.TIMEOUT * Math.pow(2, Math.max(Protocol.MAX_RETRIES - packet.getRetries(), 5)) < System.currentTimeMillis()) {
-                            System.out.println(String.format("Resending packet %s, try: %s", packet.getSequenceNumber(), Protocol.MAX_RETRIES - packet.getRetries())); //TODO dont push this
                             this.send(packet);
                             packet.setSentOn(System.currentTimeMillis());
                         }
