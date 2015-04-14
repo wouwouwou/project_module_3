@@ -36,18 +36,34 @@ public class FloatingPacket extends Packet {
 
 
     // -----<=>-----< Getters & Setters >-----<=>----- \\
+    /**
+     * Gets the time in millis when this packet has been sent.
+     * @return Time in millis as a long.
+     */
     public long getSentOn(){
         return sentOn;
     }
 
+    /**
+     * Sets the time in millis when this packet has been sent.
+     * @param sentOn Time on which this packet has been send.
+     */
     public void setSentOn(long sentOn) {
         this.sentOn = sentOn;
     }
 
+    /**
+     * Gets the amount of send-retries.
+     * @return Amount of retries as a byte.
+     */
     public byte getRetries() {
         return retries;
     }
 
+    /**
+     * Sets the amount of send-retries.
+     * @param retries Amount of retries.
+     */
     public void setRetries(byte retries) {
         this.retries = retries;
     }
@@ -63,7 +79,7 @@ public class FloatingPacket extends Packet {
 
     /**
      * Returns a String representation of a Floating Packet using the super constructor
-     * @return String
+     * @return String representation of this packet.
      */
     public String toString(){
         String out = super.toString();

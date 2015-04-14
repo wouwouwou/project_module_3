@@ -2,7 +2,6 @@ package gui;
 
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
-
 import java.io.InputStream;
 
 /**
@@ -11,10 +10,10 @@ import java.io.InputStream;
  * @since 13-4-15
  */
 public class SoundPlayer {
+
     /**
-     * Plays a sound (in this case pingu.wav).
-     *
-     * @param b
+     * Plays a sound. In this case pingu.wav
+     * @param b Determines which sound has to be played.
      */
     public static synchronized void playSound(final boolean b) {
         new Thread(new Runnable() {

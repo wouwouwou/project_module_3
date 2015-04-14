@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * @author Tristan de Boer
  * @since 8-4-15
+ * Class for handling file transfers between clients.
  */
 public class FileHandler {
 
@@ -38,11 +39,11 @@ public class FileHandler {
 
     // -----<=>-----< Queries & Methods >-----<=>----- \\
     /**
-     *  Adds headers to a List of byte-arrays (to keep them in order and check if they all are available)
-     *  and returns the new list.
-     *  @param dataArray
-     *  @param filenumber
-     *  @return
+     *  Adds headers to a List of byte-arrays (to keep them in order and check
+     *  if they all are available) and returns the new list.
+     *  @param dataArray List of data-arrays on which the headers will be added.
+     *  @param filenumber Unique ID of the file.
+     *  @return The old list, but now with headers! :D
      */
     public List<byte[]> addHeaders(List<byte[]> dataArray, int filenumber){
         List<byte[]> result = new ArrayList<>();
@@ -61,8 +62,8 @@ public class FileHandler {
 
     /**
      *  Removes the headers from an List of byte-arrays and returns this list.
-     *  @param headerArray
-     *  @return
+     *  @param headerArray A list of byte-arrays with headers.
+     *  @return The list withoud headers.
      */
     public List<byte[]> removeHeaders(List<byte[]> headerArray){
         List<byte[]> result = new ArrayList<>();
@@ -77,7 +78,7 @@ public class FileHandler {
     /**
      * Opens a file from path and returns the byte array of the file
      * @param file The absolute path to the file.
-     * @return
+     * @return A byte array of the file.
      */
     public byte[] openFile(Path file){
         try {
@@ -108,17 +109,17 @@ public class FileHandler {
 
     /**
      * Create PenguinDir (if not exists).
-     * @param filename
-     * @return
+     * @param filename The directory. (In this case only Penguin is used).
+     * @return True if the directory has been created or if the directory already exists.
      */
     private boolean createDir(File filename){
         return (filename.exists() || (!filename.exists() && filename.mkdir()));
     }
 
     /**
-     * Converges a List of bytes to a single byte array.
+     * Converges a List of byte-arrays to a single byte array.
      * @param listData List of bytes
-     * @return res
+     * @return One single byte array.
      */
     public byte[] convergeToArray(List<byte[]> listData){
         int length = 0;
@@ -135,9 +136,9 @@ public class FileHandler {
     }
 
     /**
-     * Splits a single byte array to a list.
+     * Splits a single byte array to a list of byte-arrays.
      * @param data Single byte array
-     * @return reslist
+     * @return List of byte-arrays
      */
     public List<byte[]> splitToPacketData(byte[] data){
         List<byte[]> reslist = new ArrayList<>();
@@ -150,9 +151,9 @@ public class FileHandler {
     }
 
     /**
-     * Returns the sequence number of a packet.
-     * @param data
-     * @return
+     * Returns the sequence number of the byte-array of a packet.
+     * @param data byte-array representative of a packet.
+     * @return sequence number of the packet.
      */
     public int getSequenceNumber(byte[] data){
         byte[] countArray = new byte[4];
@@ -162,8 +163,8 @@ public class FileHandler {
 
     /**
      * Returns the total amount of packets to be expected for this file.
-     * @param data
-     * @return
+     * @param data The byte-array witch is file-data.
+     * @return The total amount of packets expected for transferring this file.
      */
     public int getTotalPackets(byte[] data){
         byte[] totalArray = new byte[4];
@@ -173,8 +174,8 @@ public class FileHandler {
 
     /**
      * Returns the number of this file.
-     * @param
-     * @return
+     * @param data byte-array representative of a file-packet.
+     * @return The unique file-number.
      */
     public int getFileNumber(byte[] data){
         byte[] fileArray = new byte[4];

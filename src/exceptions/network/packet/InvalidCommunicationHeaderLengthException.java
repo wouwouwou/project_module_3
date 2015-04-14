@@ -15,6 +15,10 @@ import network.Protocol;
  */
 public class InvalidCommunicationHeaderLengthException extends InvalidPacketException {
 
+    /**
+     * Overrides the getMessage() method with an own message.
+     * @return Message of the Exception
+     */
     @Override
     public String getMessage() {
         return ("ERROR: The length of the Communication Header is not " + Protocol.COMMUNICATION_HEADER_LENGTH + ".");

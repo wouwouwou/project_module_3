@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * @author Tristan de Boer
  * @since 9-4-15
+ * Class for showing the progress of a file-transfer to the user.
  */
 public class ProcessMessage extends ChatMessage{
 
@@ -42,7 +43,7 @@ public class ProcessMessage extends ChatMessage{
     // -----<=>-----< Getters >-----<=>----- \\
     /**
      * Returns the unique identifiers of the file message.
-     * @return
+     * @return The unique id of the file
      */
     public List getFileId() {
         return fileid;
@@ -50,7 +51,7 @@ public class ProcessMessage extends ChatMessage{
 
     /**
      * Returns the size of the file (packet size).
-     * @return
+     * @return The size of the file-packet.
      */
     public int getSize() {
         return size;

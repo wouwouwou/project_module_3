@@ -19,6 +19,10 @@ abstract class PacketHandler implements Runnable {
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
+    /**
+     * Constructor for this class. Also starts this class as a thread.
+     * @param networkManager The related NetworkManager.
+     */
     PacketHandler(NetworkManager networkManager) {
         this.socket = networkManager.getSocket();
         this.networkManager = networkManager;
@@ -29,7 +33,8 @@ abstract class PacketHandler implements Runnable {
 
     // -----<=>-----< Queries >-----<=>----- \\
     /**
-     * A method for nicely shutting down the application.
+     * A method for getting the thread related to this class.
+     * @return Thread of this class.
      */
     public Thread getThread(){
         return thread;

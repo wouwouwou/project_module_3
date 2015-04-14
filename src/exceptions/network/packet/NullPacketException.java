@@ -14,6 +14,10 @@ import exceptions.network.InvalidPacketException;
  */
 public class NullPacketException extends InvalidPacketException {
 
+    /**
+     * Overrides the getMessage() method with an own message.
+     * @return Message of the Exception
+     */
     @Override
     public String getMessage() {
         return ("ERROR: This is a Null-Packet!");

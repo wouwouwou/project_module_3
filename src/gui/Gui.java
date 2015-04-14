@@ -11,9 +11,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
- * Controlled by a MessageController
  * @author Tistan de Boer
  * @since 7-4-15
+ * GUI, controlled by a MessageController.
  */
 public class Gui extends JFrame {
 
@@ -52,6 +52,7 @@ public class Gui extends JFrame {
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
      * Setup the GUI.
+     * @param mc The MessageController which controls this GUI.
      */
     public Gui (MessageController mc){
         super("PC: Penguin Chat");
@@ -137,6 +138,7 @@ public class Gui extends JFrame {
 
         list1.setSelectedIndex(0);
     }
+
     /**
      * Set default look and feel to Ubuntu look and feel.
      */

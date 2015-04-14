@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Gerben Meijer
  * @since 7-4-15
+ * Class for managing with the ad-hoc network.
  */
 public class NetworkManager {
 
@@ -38,7 +39,7 @@ public class NetworkManager {
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
     /**
-     * Builds a network manager
+     * Constructs a NetworkManager
      * <p>
      *     Initializes the network manager.
      *      - Sets the multicast group address
@@ -105,7 +106,7 @@ public class NetworkManager {
     // -----<=>-----< Methods >-----<=>----- \\
     /**
      * Sends a packet via the broadcast socket
-     * @param packet Packet
+     * @param packet Packet to be send.
      */
     public void send(Packet packet){
         outgoingPacketHandler.send(packet);
@@ -147,7 +148,7 @@ public class NetworkManager {
      *     If this destination does not exist yet, it will be added
      *     If this destination does exist, it will be updated. Aswell as the connectedClients list (and the pings missed).
      * </p>
-     * @param entry byte[destination, cost, next_hop]
+     * @param entry Entry to be put in the routingTable.
      * @see <a href="https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit?usp=sharing">routingEntry</a>
      */
     public void putTableEntry(byte[] entry) {
@@ -169,13 +170,14 @@ public class NetworkManager {
     }
 
     /**
-     * Gives the byte[] where this destination occurs
+     * Checks if the destination is in the routingTable and returns the entry
+     * if the destination is in the routingTable.
      * <p>
      *     Loops over the routingTable for the entry which matches the given destination
      *     Gives the byte[destination, cost, next_hop] where the match occurs
      * </p>
-     * @param destination
-     * @return byte[destination, cost, next_hop]
+     * @param destination The destination to be checked.
+     * @return The routingTable entry if contains the destination
      */
     public byte[] getTableEntryByDestination(byte destination){
         synchronized(routingTable) {
@@ -189,13 +191,13 @@ public class NetworkManager {
     }
 
     /**
-     * Gives the index where this destination occurs
+     * Gives the index where this destination occurs, it it occurs.
      * <p>
      *     Loops over the routingTable for the entry which matches the given destination
      *     Gives the index of this entry
      * </p>
-     * @param destination byte
-     * @return int index in the routingTable.
+     * @param destination destination to be checked.
+     * @return index of the entry in the routingTable.
      */
     public int getTableIndexByDestination(byte destination){
         synchronized(routingTable) {
@@ -210,7 +212,7 @@ public class NetworkManager {
     }
 
     /**
-     * Clears the routingTable and reinitializes it
+     * Clears the routingTable and re-initializes it
      * <p>
      *     clears the routingTable and adds the routingEntry to this client
      * </p>
@@ -270,11 +272,11 @@ public class NetworkManager {
     }
 
     /**
-     * Increments the sequenceNumber
+     * Increments the sequenceNumber and returns the new sequence-number.
      * <p>
      *      Increments the sequenceNumber with one, and prints the old sequenceNumber to the standard out and returns the new sequenceNumber
      * </p>
-     * @return int sequenceNumber + 1
+     * @return The new sequence-number.
      */
     public int nextSequenceNum(){
         sequenceNum += 1;
@@ -282,27 +284,50 @@ public class NetworkManager {
     }
 
     // -----<=>-----< Getters & Setters >-----<=>----- \\
-
+    /**
+     * Gets the time of the last time that the routingTable has been dropped in millis and as a long.
+     * @return Time of the last routingTableDrop.
+     */
     public long getLastTableDrop(){
         return lastTableDrop;
     }
 
+    /**
+     * Gets the related IncomingPacketHandler.
+     * @return The related IncomingPacketHandler.
+     */
     public IncomingPacketHandler getIncomingPacketHandler() {
         return incomingPacketHandler;
     }
 
+    /**
+     * Gets the group as InetAddress.
+     * @return The group.
+     */
     public InetAddress getGroup() {
         return group;
     }
 
+    /**
+     * Sets the DiscoverySequenceNumber.
+     * @param sequenceNum The DiscoverySequenceNumber to be set.
+     */
     public void setDiscoverySequenceNum(short sequenceNum){
         discoverySequenceNum = sequenceNum;
     }
 
+    /**
+     * Gets the DiscoverySequenceNumber as a short.
+     * @return The DiscoverySequenceNumber.
+     */
     public short getDiscoverySequenceNum(){
         return discoverySequenceNum;
     }
 
+    /**
+     * Gets the RoutingTable as an array of objects.
+     * @return The routing-table.
+     */
     public Object[] getRoutingTable() {
         return routingTable.toArray();
     }
@@ -314,8 +339,8 @@ public class NetworkManager {
      * </p>
      * @param destination   byte    destination for this packets, as a Protocol.CLIENT_ID
      * @param dataType      byte    represents the type of packet
-     * @param data
-     * @return
+     * @param data          byte[]  the data of the packet.
+     * @return The constructed packet.
      */
     public Packet constructPacket(byte destination, byte dataType, byte[] data) {
         Packet packet = new Packet();
@@ -337,7 +362,7 @@ public class NetworkManager {
      *     Also the <a href="../../../Project_files/Protocol_design.pdf">Ack flag</a> will be set and an empty data field will be supplied.
      * </p>
      * @param packet That packet that will be used to construct an acknowledgement (also that packet that will be acknowledged)
-     * @return the constructed packet
+     * @return The constructed packet.
      * @throws InvalidPacketException if a malformed packet is used for construction
      */
     public Packet constructACK(Packet packet) throws InvalidPacketException {
@@ -366,18 +391,34 @@ public class NetworkManager {
         return ping;
     }
 
+    /**
+     * Gets the related OutgoingPacketHandler.
+     * @return The OutgoingPacketHandler.
+     */
     public OutgoingPacketHandler getOutgoingPacketHandler() {
         return outgoingPacketHandler;
     }
 
+    /**
+     * Gets the MulticastSocket.
+     * @return The MulticastSocket.
+     */
     public MulticastSocket getSocket() {
         return socket;
     }
 
+    /**
+     * Gets the name of the Client.
+     * @return The name of the Client.
+     */
     public String getClientName() {
         return clientName;
     }
 
+    /**
+     * Gets all connected clients as a ConcurrentHashMap.
+     * @return All connected clients.
+     */
     public ConcurrentHashMap<Byte,Byte> getConnectedClients() {
         return connectedClients;
     }
@@ -402,6 +443,13 @@ public class NetworkManager {
         }
     }
 
+    /**
+     * Method for excluding clients. Is used for manually send packets
+     * to a destination via another client. Returns true if
+     *
+     * @param entry The routingTableEntry which might be excluded.
+     * @return True if the entry corresponds to one of the clients who have to be excluded.
+     */
     private boolean shouldBeExcluded(byte[] entry){
         if(entry.length == 3){
             for(byte client : excluded){

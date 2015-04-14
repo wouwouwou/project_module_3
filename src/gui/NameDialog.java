@@ -6,6 +6,11 @@ import network.NetworkManager;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * @author Tristan de Boer
+ * @since 10-4-15
+ * Class for getting the name of the User.
+ */
 public class NameDialog extends JDialog {
 
 
@@ -17,6 +22,9 @@ public class NameDialog extends JDialog {
 
 
     // -----<=>-----< Constructor(s) >-----<=>----- \\
+    /**
+     * Constructor for a NameDialog.
+     */
     public NameDialog() {
         setContentPane(contentPane);
         setModal(true);
@@ -52,12 +60,18 @@ public class NameDialog extends JDialog {
 
 
     // -----<=>-----< Methods >-----<=>----- \\
+    /**
+     * ActionHandler for when the OK button has been pushed.
+     */
     private void onOK() {
         NetworkManager networkManager = new NetworkManager(textField1.getText());
         MessageController gui = new MessageController(networkManager);
         dispose();
     }
 
+    /**
+     * ActionHandler for when the Cancel button has been pushed.
+     */
     private void onCancel() {
         // add your code here if necessary
         dispose();
