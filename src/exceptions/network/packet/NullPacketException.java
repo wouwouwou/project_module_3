@@ -10,7 +10,7 @@ import exceptions.network.InvalidPacketException;
  *     Thrown if a Null-packet has been received. (A null packet is a packet that is empty, so the
  *     Packet.Type equals Protocol.NULL_PACKET)
  * </p>
- * @see //TODO reference to our protocol implementation
+ * @see <a href="../../../Project_files/Protocol_design.pdf">Protocol Design</a>
  */
 public class NullPacketException extends InvalidPacketException {
 
