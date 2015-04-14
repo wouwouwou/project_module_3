@@ -7,9 +7,13 @@ Now you're all set up! Open the program by running the Main-class!
 
 ## Simulation setup
 Not the room and space or computers to test this entire network? You can run this application multiple times with different computer numbers (and let computers 'ignore' eachother). Add numbers to of nodes you do not want to be neighbours of eachother to the following in line in network/NetworkManager.java:
+```
   private final byte[] excluded = new byte[]{};
+```  
 You can manually set the computer id by uncommenting and changing the number of the following line in network/NetworkManager.java:
+```
   //Protocol.CLIENT_ID = 4;
+```
 
 
 
