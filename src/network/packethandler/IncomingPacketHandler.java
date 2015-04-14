@@ -209,6 +209,8 @@ public class IncomingPacketHandler extends PacketHandler {
                         if(lastPackets.size() >= Protocol.MAX_PACKET_BUFFER_SIZE){
                             lastPackets.remove(0);
                         }
+                    } else {
+                        System.out.println("Duplicate ACK sent for packet " + p.getSequenceNumber());
                     }
 
                 } catch (InvalidPacketException e) {
