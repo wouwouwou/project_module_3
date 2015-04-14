@@ -177,6 +177,14 @@ public class OutgoingPacketHandler extends PacketHandler {
         return this.lastPingSend;
     }
 
+    /**
+     * Schedules a packet for a resent
+     * <p>
+     *     Makes a new floating packet if necessary. Adding it to the floatingPacketMap if there are {@link FloatingPacket#retries resents left} for the packet
+     * </p>
+     * @param packet That must be resent
+     * @see FloatingPacket
+     */
     private void scheduleForResend(Packet packet) {
         boolean resend = true;
         FloatingPacket floatingPacket = null;
