@@ -403,7 +403,7 @@ public class NetworkManager {
         }
     }
 
-    public boolean shouldBeExcluded(byte[] entry){
+    private boolean shouldBeExcluded(byte[] entry){
         if(entry.length == 3){
             for(byte client : excluded){
                 if (entry[2] == client){

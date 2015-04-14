@@ -1,25 +1,34 @@
 package tests.file;
 
 import file.FileHandler;
-import file.FileReceiver;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Tests whether a certain file can be split up to a certain packet size. Headers will be added. After that, we check
- * that packets can be rejoined to a file.
  * @author Tristan de Boer
  * @since 8-4-15
+ * Tests whether a certain file can be split up to a certain packet size.
+ * Headers will be added. After that, we check that packets can be rejoined to a file.
+ *
+ * NB: This test has not been made for the JUnit4 framework. Should be tested separately.
  */
 public class FileHandlerTest {
-    FileReceiver fr = new FileReceiver(null, false);
 
+
+    /**
+     * Main method for starting the test.
+     * @param args Starting arguments. Nothing is done with it.
+     */
     public static void main(String[] args){
         new FileHandlerTest();
     }
 
+
+    /**
+     * Actually tests the class.
+     * Change the path within the Path.get() method for the test to work.
+     */
     public FileHandlerTest(){
         Path path = Paths.get("/home/tristan/Documents/2.png");
         FileHandler fileHandler = new FileHandler();

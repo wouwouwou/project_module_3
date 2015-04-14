@@ -10,6 +10,11 @@ import org.junit.Test;
  */
 public class ProtocolTest {
 
+    /**
+     * Tests the static method of the Protocol class.
+     * This method is needed because Java sucks with signed bits / bytes.
+     * @throws Exception When fixSign does not fix the bits / bytes.
+     */
     @Test
     public void testFixSign() throws Exception {
         int a = Protocol.fixSign((byte)-120);
