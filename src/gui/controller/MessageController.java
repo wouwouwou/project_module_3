@@ -181,7 +181,7 @@ public class MessageController implements DataListener, AckListener{
             if(client > 0){
                 // Check if 'via' was changed.
                 for(int i = 0; i < clientModel.size(); i++){
-                    if(clientModel.get(i).getId() == networkManager.getTableEntryByDestination((byte)clientModel.get(client).getId())[2]){
+                    if(networkManager.getTableEntryByDestination((byte)clientModel.get(client).getId())!= null && clientModel.get(i).getId() == networkManager.getTableEntryByDestination((byte)clientModel.get(client).getId())[2]){
                         clientModel.get(client).setRoute(clientModel.get(i).getName());
                         break;
                     }
