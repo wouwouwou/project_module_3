@@ -11,7 +11,8 @@ import java.util.List;
  * @author Tim Hintzbergen
  * @since 7-4-15
  * Represents a packet for easy construction and reading.
- * @see Protocol documentation for further details on our protocol.
+ * @see <a href="../../../Project%20files/Protocol_design.pdf">Protocol Design</a>
+ * @see Protocol
  */
 public class Packet {
 

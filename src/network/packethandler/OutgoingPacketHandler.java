@@ -190,7 +190,7 @@ public class OutgoingPacketHandler extends PacketHandler {
     /**
      * Schedules a packet for a resent
      * <p>
-     *     Makes a new floating packet if necessary. Adding it to the floatingPacketMap if there are {@link FloatingPacket#retries resents left} for the packet
+     *     Makes a new floating packet if necessary. Adding it to the floatingPacketMap if there are {@link FloatingPacket#retries resends left} for the packet
      * </p>
      * @param packet The packet that must be resend.
      * @see FloatingPacket

@@ -217,7 +217,7 @@ public class MessageController implements DataListener, AckListener{
      *     Packets are generated with that byte-arrays and these packets are sent to the networkManager.
      * </p>
      * @param path The path of the file that needs to be send.
-     * @see 'https://docs.google.com/spreadsheets/d/1txMKaJt0YtHc6zTXJE2hnVJPlrHriVockRcA48qDHl0/edit#gid=0' Our protocol documentation.
+     * @see <a href="../../../Project%20files/Protocol_design.pdf">Protocol Design</a>
      */
     public void sendFile(final Path path){
         new Thread(

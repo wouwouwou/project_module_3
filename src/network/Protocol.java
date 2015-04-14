@@ -4,7 +4,7 @@ package network;
  * @author Tim Hintzbergen
  * @since 7-4-15
  * Holds constants used in the Protocol and network.
- * @see Protocol Documentation.
+ * @see <a href="../../Project%20files/Protocol_design.pdf">Protocol Design</a>
  */
 public class Protocol {
 

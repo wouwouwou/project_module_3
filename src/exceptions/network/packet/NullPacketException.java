@@ -10,7 +10,7 @@ import exceptions.network.InvalidPacketException;
  * </p>
  * @author Wouter Bos
  * @since 8-4-15
- * @see <a href="../../../Project_files/Protocol_design.pdf">Protocol Design</a>
+ * @see <a href="../../../../Project%20files/Protocol_design.pdf">Protocol Design</a>
  */
 public class NullPacketException extends InvalidPacketException {
 
