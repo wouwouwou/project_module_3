@@ -316,6 +316,15 @@ public class NetworkManager {
         return packet;
     }
 
+    /**
+     * Constructs a Acknowledgement packet
+     * <p>
+     *     //TODO
+     * </p>
+     * @param packet That packet that will be used to construct an acknowledgement (also that packet that will be acknowledged)
+     * @return the constructed packet
+     * @throws InvalidPacketException if a malformed packet is used for construction
+     */
     public Packet constructACK(Packet packet) throws InvalidPacketException {
         packet = new Packet(packet.toBytes());
         packet.setData(new byte[0]);
