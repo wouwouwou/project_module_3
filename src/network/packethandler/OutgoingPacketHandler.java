@@ -121,7 +121,7 @@ public class OutgoingPacketHandler extends PacketHandler {
         } else {
             synchronized (floatingPacketMap) {
                 try {
-                    if (packet.getDataType() == Protocol.DataType.FILE && !packet.hasFlag(Protocol.Flags.ACK) && packet.getSource() == Protocol.CLIENT_ID && floatingPacketMap.size() > Protocol.FILE_SEND_BUFFER_SIZE){
+                    if (!(packet instanceof FloatingPacket) && packet.getDataType() == Protocol.DataType.FILE && !packet.hasFlag(Protocol.Flags.ACK) && packet.getSource() == Protocol.CLIENT_ID && floatingPacketMap.size() > Protocol.FILE_SEND_BUFFER_SIZE){
                         synchronized (filePacketBuffer) {
                             //ADD the file to a buffer.
                             filePacketBuffer.add(packet);
